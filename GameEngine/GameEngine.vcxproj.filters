@@ -13,11 +13,17 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Shaders">
+      <UniqueIdentifier>{c04d5eef-0ff2-4061-bd09-5bafe2d5dbc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Models">
+      <UniqueIdentifier>{6f257b9a-2eea-410b-ac06-13268b2793c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities">
+      <UniqueIdentifier>{90026231-c4ef-41eb-be12-04a67f164315}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Config.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -27,50 +33,62 @@
     <ClInclude Include="Errors.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="FpsModel.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FPSShader.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Light.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Loader.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Maths.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NormalShader.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ReflectionShader.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderProgram.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="SkyboxModel.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FPSShader.h">
+      <Filter>Source Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalShader.h">
+      <Filter>Source Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="ReflectionShader.h">
+      <Filter>Source Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderProgram.h">
+      <Filter>Source Files\Shaders</Filter>
+    </ClInclude>
     <ClInclude Include="SkyboxShader.h">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="StaticShader.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stb_image.h">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="TessellationShader.h">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Source Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Source Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Loader.h">
+      <Filter>Source Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="FpsModel.h">
+      <Filter>Source Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Source Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Source Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>Source Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetLoader.h">
+      <Filter>Source Files\Models</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

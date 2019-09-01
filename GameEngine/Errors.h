@@ -8,7 +8,7 @@ public:
 	static void fileLoad(std::string filename, std::string type, bool success);
 };
 
-const bool Debug::debug = true;
+const bool Debug::debug = false;
 
 void Debug::fileLoad(std::string filename, std::string type, bool success)
 {
