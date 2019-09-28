@@ -1,7 +1,5 @@
 #pragma once
 
-#include <glm\glm\common.hpp>
-
 class Light {
 private:
 	glm::vec3 position;

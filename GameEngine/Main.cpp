@@ -13,6 +13,9 @@
 #include <assimp\scene.h>
 #include <assimp\postprocess.h>
 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/common.hpp>
+
 #include "stb_image.h"
 
 #include "TessellationShader.h"
@@ -22,8 +25,11 @@
 #include "NormalShader.h"
 #include "SkyboxShader.h"
 #include "SkyboxModel.h"
+#include "AssetLoader.h"
 #include "FPSShader.h"
 #include "FpsModel.h"
+#include "Texture.h"
+#include "Vertex.h"
 #include "Shader.h"
 #include "Loader.h"
 #include "Config.h"
@@ -32,6 +38,7 @@
 #include "Maths.h"
 #include "Model.h"
 #include "Light.h"
+#include "Mesh.h"
 
 const float ROTATE_SPEED = 100.0f;
 const float MOVE_SPEED = 100.0f;

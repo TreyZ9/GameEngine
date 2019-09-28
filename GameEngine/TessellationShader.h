@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include "ShaderProgram.h"
 #include "Camera.h"
 #include "Light.h"
