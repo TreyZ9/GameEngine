@@ -1,16 +1,5 @@
 #pragma once
 
-#include <glad\glad.h>
-#include <glfw\glfw3.h>
-
-#include <iostream>
-#include <sstream>
-#include <fstream>
-#include <string>
-
-#include <glm\glm\gtc\matrix_transform.hpp>
-#include <glm\glm\common.hpp>
-
 #include "Errors.h"
 
 class ShaderProgram {

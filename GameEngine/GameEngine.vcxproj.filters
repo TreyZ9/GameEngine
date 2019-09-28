@@ -22,26 +22,11 @@
     <Filter Include="Source Files\Entities">
       <UniqueIdentifier>{90026231-c4ef-41eb-be12-04a67f164315}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Toolbox">
+      <UniqueIdentifier>{4ce90b7b-0563-4ca8-a70a-cc0050f92ef8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Config.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DisplayManager.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Errors.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Maths.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SkyboxModel.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -88,6 +73,24 @@
       <Filter>Source Files\Models</Filter>
     </ClInclude>
     <ClInclude Include="AssetLoader.h">
+      <Filter>Source Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Maths.h">
+      <Filter>Source Files\Toolbox</Filter>
+    </ClInclude>
+    <ClInclude Include="Errors.h">
+      <Filter>Source Files\Toolbox</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Source Files\Toolbox</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Source Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="DisplayManager.h">
+      <Filter>Source Files\Toolbox</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyboxModel.h">
       <Filter>Source Files\Models</Filter>
     </ClInclude>
   </ItemGroup>

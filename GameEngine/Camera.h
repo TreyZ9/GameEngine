@@ -1,10 +1,5 @@
 #pragma once
 
-#include <iostream>
-
-#include <glm\glm\common.hpp>
-#include <glm\glm\gtc\matrix_transform.hpp>
-
 #include "DisplayManager.h"
 #include "Config.h"
 

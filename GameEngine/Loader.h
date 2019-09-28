@@ -1,9 +1,5 @@
 #pragma once
 
-#include <sstream>
-#include <vector>
-#include <string>
-
 #include "AssetLoader.h"
 #include "Model.h"
 

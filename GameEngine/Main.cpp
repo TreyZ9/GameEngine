@@ -13,6 +13,9 @@
 #include <assimp\scene.h>
 #include <assimp\postprocess.h>
 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/common.hpp>
+
 #include "stb_image.h"
 
 #include "TessellationShader.h"
