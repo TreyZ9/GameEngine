@@ -7,6 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <string>
 #include <map>
 
 #include <assimp\Importer.hpp>
@@ -26,15 +27,15 @@
 #include "SkyboxShader.h"
 #include "SkyboxModel.h"
 #include "AssetLoader.h"
+#include "ModelLoader.h"
 #include "FPSShader.h"
 #include "FpsModel.h"
 #include "Texture.h"
 #include "Vertex.h"
 #include "Shader.h"
-#include "Loader.h"
 #include "Config.h"
 #include "Camera.h"
-#include "Errors.h"
+#include "Debug.h"
 #include "Maths.h"
 #include "Model.h"
 #include "Light.h"
@@ -82,11 +83,8 @@ int main() {
 
 	SkyboxModel skyboxModel("res/skyboxDay");
 
-	std::vector<Model> assimpModels = Loader::loadModels("res/models.scene");
+	std::vector<Model> assimpModels = ModelLoader::loadModels("res/models.scene");
 	Model assimpModel = assimpModels[1];
-
-	// Render Modes
-	RenderModes::polygon(0); // 0 Regular, 1 Line, 2 Dot
 
 	DisplayManager::hideCursor();
 	//DisplayManager::showCursor();

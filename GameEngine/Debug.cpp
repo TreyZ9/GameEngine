@@ -1,14 +1,7 @@
-#pragma once
 
-struct Debug
-{
-private:
-	const static bool debug;
-public:
-	static void fileLoad(std::string filename, std::string type, bool success);
-};
+#include "Debug.h"
 
-const bool Debug::debug = true;
+#include <iostream>
 
 void Debug::fileLoad(std::string filename, std::string type, bool success)
 {
@@ -20,3 +13,5 @@ void Debug::fileLoad(std::string filename, std::string type, bool success)
 			std::cout << "[DEBUG][0] Loaded file {type:" << type << ", filename:" << filename << "}" << std::endl;
 	}
 }
+
+const bool Debug::debug = true;

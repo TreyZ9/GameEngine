@@ -127,11 +127,11 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="DisplayManager.h" />
-    <ClInclude Include="Errors.h" />
+    <ClInclude Include="Debug.h" />
     <ClInclude Include="FpsModel.h" />
     <ClInclude Include="FPSShader.h" />
     <ClInclude Include="Light.h" />
-    <ClInclude Include="Loader.h" />
+    <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="Maths.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
@@ -148,9 +148,29 @@
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AssetLoader.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="DisplayManager.cpp" />
+    <ClCompile Include="FpsModel.cpp" />
+    <ClCompile Include="FPSShader.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Maths.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ModelLoader.cpp" />
+    <ClCompile Include="NormalShader.cpp" />
+    <ClCompile Include="ReflectionShader.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="SkyboxModel.cpp" />
+    <ClCompile Include="SkyboxShader.cpp" />
+    <ClCompile Include="StaticShader.cpp" />
     <ClCompile Include="stb.cpp" />
+    <ClCompile Include="TessellationShader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
