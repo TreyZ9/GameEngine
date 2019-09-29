@@ -84,7 +84,7 @@ int main() {
 	SkyboxModel skyboxModel("res/skyboxDay");
 
 	std::vector<Model> assimpModels = ModelLoader::loadModels("res/models.scene");
-	Model assimpModel = assimpModels[1];
+	Model assimpModel = assimpModels[0];
 
 	DisplayManager::hideCursor();
 	//DisplayManager::showCursor();

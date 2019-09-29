@@ -172,6 +172,28 @@
     <ClCompile Include="stb.cpp" />
     <ClCompile Include="TessellationShader.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Notes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\fpsShader\fragmentShaderFPS.frag" />
+    <None Include="shaders\fpsShader\vertexShaderFPS.vert" />
+    <None Include="shaders\normalShader\normalShader.frag" />
+    <None Include="shaders\normalShader\normalShader.vert" />
+    <None Include="shaders\reflectionShader\shader.frag" />
+    <None Include="shaders\reflectionShader\shader.vert" />
+    <None Include="shaders\shader\shader.frag" />
+    <None Include="shaders\shader\shader.vert" />
+    <None Include="shaders\skyboxShader\shader.frag" />
+    <None Include="shaders\skyboxShader\shader.vert" />
+    <None Include="shaders\staticShader\staticShader.frag" />
+    <None Include="shaders\staticShader\staticShader.vert" />
+    <None Include="shaders\tessellationShader\control.tesc" />
+    <None Include="shaders\tessellationShader\evaluation.tese" />
+    <None Include="shaders\tessellationShader\fragment.frag" />
+    <None Include="shaders\tessellationShader\geometry.geom" />
+    <None Include="shaders\tessellationShader\vertex.vert" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

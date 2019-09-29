@@ -58,6 +58,30 @@
     <Filter Include="Header Files\Models\Primitives">
       <UniqueIdentifier>{58c57273-ac37-41a7-8362-1c0f6d2807be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\EngineTester">
+      <UniqueIdentifier>{6190fcb0-95ae-464e-9d38-4b9e9bff8018}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\Children\FPSShader">
+      <UniqueIdentifier>{52de3084-f53d-43bc-bad4-6245248b52bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\Children\NormalShader">
+      <UniqueIdentifier>{c92093d0-ed93-4b9d-a396-387d7e157375}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\Children\ReflectionShader">
+      <UniqueIdentifier>{40854b44-23df-40ed-97e8-e28c95f6bc11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\Children\Shader">
+      <UniqueIdentifier>{3687f09b-969e-40f2-8258-81d25eded5e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\Children\SkyboxShader">
+      <UniqueIdentifier>{1126f27b-0a28-410b-9459-b0b2cbbbdf70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\Children\StaticShader">
+      <UniqueIdentifier>{1c8bb2d1-3ab2-48da-8807-93ae84313108}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\Children\TessellationShader">
+      <UniqueIdentifier>{5dd20589-9266-449c-851f-040f22d8b480}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
@@ -131,9 +155,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="stb.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
@@ -161,17 +182,11 @@
     <ClCompile Include="Model.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="NormalShader.cpp">
-      <Filter>Source Files\Shaders\Children</Filter>
-    </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="FpsModel.cpp">
       <Filter>Source Files\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="FPSShader.cpp">
-      <Filter>Source Files\Shaders\Children</Filter>
     </ClCompile>
     <ClCompile Include="ShaderProgram.cpp">
       <Filter>Source Files\Shaders\Parent</Filter>
@@ -179,26 +194,93 @@
     <ClCompile Include="ModelLoader.cpp">
       <Filter>Source Files\Loaders</Filter>
     </ClCompile>
-    <ClCompile Include="ReflectionShader.cpp">
-      <Filter>Source Files\Shaders\Children</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Source Files\Shaders\Children</Filter>
-    </ClCompile>
-    <ClCompile Include="SkyboxShader.cpp">
-      <Filter>Source Files\Shaders\Children</Filter>
-    </ClCompile>
-    <ClCompile Include="StaticShader.cpp">
-      <Filter>Source Files\Shaders\Children</Filter>
-    </ClCompile>
-    <ClCompile Include="TessellationShader.cpp">
-      <Filter>Source Files\Shaders\Children</Filter>
-    </ClCompile>
     <ClCompile Include="Config.cpp">
       <Filter>Source Files\Toolbox</Filter>
     </ClCompile>
     <ClCompile Include="Maths.cpp">
       <Filter>Source Files\Toolbox</Filter>
     </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files\EngineTester</Filter>
+    </ClCompile>
+    <ClCompile Include="FPSShader.cpp">
+      <Filter>Source Files\Shaders\Children\FPSShader</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalShader.cpp">
+      <Filter>Source Files\Shaders\Children\NormalShader</Filter>
+    </ClCompile>
+    <ClCompile Include="ReflectionShader.cpp">
+      <Filter>Source Files\Shaders\Children\ReflectionShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\Shaders\Children\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyboxShader.cpp">
+      <Filter>Source Files\Shaders\Children\SkyboxShader</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticShader.cpp">
+      <Filter>Source Files\Shaders\Children\StaticShader</Filter>
+    </ClCompile>
+    <ClCompile Include="TessellationShader.cpp">
+      <Filter>Source Files\Shaders\Children\TessellationShader</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Notes.txt">
+      <Filter>Source Files\Toolbox</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\fpsShader\fragmentShaderFPS.frag">
+      <Filter>Source Files\Shaders\Children\FPSShader</Filter>
+    </None>
+    <None Include="shaders\fpsShader\vertexShaderFPS.vert">
+      <Filter>Source Files\Shaders\Children\FPSShader</Filter>
+    </None>
+    <None Include="shaders\normalShader\normalShader.frag">
+      <Filter>Source Files\Shaders\Children\NormalShader</Filter>
+    </None>
+    <None Include="shaders\normalShader\normalShader.vert">
+      <Filter>Source Files\Shaders\Children\NormalShader</Filter>
+    </None>
+    <None Include="shaders\reflectionShader\shader.frag">
+      <Filter>Source Files\Shaders\Children\ReflectionShader</Filter>
+    </None>
+    <None Include="shaders\reflectionShader\shader.vert">
+      <Filter>Source Files\Shaders\Children\ReflectionShader</Filter>
+    </None>
+    <None Include="shaders\shader\shader.frag">
+      <Filter>Source Files\Shaders\Children\Shader</Filter>
+    </None>
+    <None Include="shaders\shader\shader.vert">
+      <Filter>Source Files\Shaders\Children\Shader</Filter>
+    </None>
+    <None Include="shaders\skyboxShader\shader.frag">
+      <Filter>Source Files\Shaders\Children\SkyboxShader</Filter>
+    </None>
+    <None Include="shaders\skyboxShader\shader.vert">
+      <Filter>Source Files\Shaders\Children\SkyboxShader</Filter>
+    </None>
+    <None Include="shaders\staticShader\staticShader.frag">
+      <Filter>Source Files\Shaders\Children\StaticShader</Filter>
+    </None>
+    <None Include="shaders\staticShader\staticShader.vert">
+      <Filter>Source Files\Shaders\Children\StaticShader</Filter>
+    </None>
+    <None Include="shaders\tessellationShader\control.tesc">
+      <Filter>Source Files\Shaders\Children\TessellationShader</Filter>
+    </None>
+    <None Include="shaders\tessellationShader\evaluation.tese">
+      <Filter>Source Files\Shaders\Children\TessellationShader</Filter>
+    </None>
+    <None Include="shaders\tessellationShader\fragment.frag">
+      <Filter>Source Files\Shaders\Children\TessellationShader</Filter>
+    </None>
+    <None Include="shaders\tessellationShader\geometry.geom">
+      <Filter>Source Files\Shaders\Children\TessellationShader</Filter>
+    </None>
+    <None Include="shaders\tessellationShader\vertex.vert">
+      <Filter>Source Files\Shaders\Children\TessellationShader</Filter>
+    </None>
   </ItemGroup>
 </Project>
