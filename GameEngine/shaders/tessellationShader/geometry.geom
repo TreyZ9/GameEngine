@@ -3,10 +3,13 @@
 
 uniform mat4 Modelview;
 uniform mat3 NormalMatrix;
+
 layout(triangles) in;
 layout(triangle_strip, max_vertices = 3) out;
+
 in vec3 tePosition[3];
 in vec3 tePatchDistance[3];
+
 out vec3 gFacetNormal;
 out vec3 gPatchDistance;
 out vec3 gTriDistance;

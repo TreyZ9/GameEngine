@@ -1,6 +1,1 @@
-﻿  Main.cpp
-D:\Programming\Github Repositories\GameEngine-Cpp\GameEngine\Main.cpp(95,58): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\Programming\Github Repositories\GameEngine-Cpp\GameEngine\Main.cpp(95,21): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\Programming\Github Repositories\GameEngine-Cpp\GameEngine\Main.cpp(100,49): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-D:\Programming\Github Repositories\GameEngine-Cpp\GameEngine\Main.cpp(103,49): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-  GameEngine.vcxproj -> D:\Programming\Github Repositories\GameEngine-Cpp\Debug\GameEngine.exe
+﻿  GameEngine.vcxproj -> D:\Programming\Github Repositories\GameEngine-Cpp\Debug\GameEngine.exe

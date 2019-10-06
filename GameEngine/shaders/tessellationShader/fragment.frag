@@ -17,7 +17,6 @@ uniform sampler2D texture_displacement0;
 
 void main()
 {
-
 	vec3 unitNormal = normalize(worldNormal_fs);
 	vec3 unitLightVector = normalize(lightPosition - worldVertexPosition_fs);
 	
