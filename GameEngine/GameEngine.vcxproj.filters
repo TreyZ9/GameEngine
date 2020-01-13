@@ -82,6 +82,12 @@
     <Filter Include="Source Files\Shaders\Children\TessellationShader">
       <UniqueIdentifier>{5dd20589-9266-449c-851f-040f22d8b480}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Audio">
+      <UniqueIdentifier>{fd13127b-a03f-4364-bd85-4bbdd1652eae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Audio">
+      <UniqueIdentifier>{8103a33e-8c13-464a-ac6d-8d6fb95c39c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
@@ -152,6 +158,15 @@
     </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>Header Files\Models\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\openAL\al.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\openAL\alc.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio.h">
+      <Filter>Header Files\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -224,6 +239,9 @@
     <ClCompile Include="TessellationShader.cpp">
       <Filter>Source Files\Shaders\Children\TessellationShader</Filter>
     </ClCompile>
+    <ClCompile Include="Audio.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Notes.txt">
@@ -274,9 +292,6 @@
       <Filter>Source Files\Shaders\Children\TessellationShader</Filter>
     </None>
     <None Include="shaders\tessellationShader\fragment.frag">
-      <Filter>Source Files\Shaders\Children\TessellationShader</Filter>
-    </None>
-    <None Include="shaders\tessellationShader\geometry.geom">
       <Filter>Source Files\Shaders\Children\TessellationShader</Filter>
     </None>
     <None Include="shaders\tessellationShader\vertex.vert">

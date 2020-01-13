@@ -18,7 +18,8 @@ public:
 	TessellationShader();
 	// Constructor
 	TessellationShader(std::string vertexShaderFilename, std::string fragmentShaderFilename, 
-		std::string tessellationControlFilename, std::string tessellationEvaluationFilename);
+		std::string tessellationControlFilename, std::string tessellationEvaluationFilename,
+		std::string geometryFilename = "null");
 	~TessellationShader();
 	void bindAttributes();
 	void getAllUniformLocations();

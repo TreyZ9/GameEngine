@@ -12,6 +12,7 @@ protected:
 	int fragmentShaderID;
 	int tessellationControlShaderID;
 	int tessellationEvaluationShaderID;
+	int geometryShaderID;
 
 	int getUniformLocation(std::string uniformName);
 	virtual void getAllUniformLocations() = 0 {};
@@ -25,7 +26,7 @@ protected:
 
 public:
 	ShaderProgram();
-	ShaderProgram(std::string vertexFilename, std::string fragmentFilename, std::string tessellationControlFilename = "null", std::string tessellationEvaluationFilename = "null");
+	ShaderProgram(std::string vertexFilename, std::string fragmentFilename, std::string tessellationControlFilename = "null", std::string tessellationEvaluationFilename = "null", std::string geometryFilename = "null");
 	~ShaderProgram();
 
 	void cleanUp();

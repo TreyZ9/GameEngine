@@ -83,7 +83,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>assimp-vc140-mt.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc140-mt.lib;glfw3.lib;opengl32.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -123,7 +123,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Include\openAL\al.h" />
+    <ClInclude Include="..\Include\openAL\alc.h" />
     <ClInclude Include="AssetLoader.h" />
+    <ClInclude Include="Audio.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="DisplayManager.h" />
@@ -149,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssetLoader.cpp" />
+    <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="Debug.cpp" />
@@ -191,7 +195,6 @@
     <None Include="shaders\tessellationShader\control.tesc" />
     <None Include="shaders\tessellationShader\evaluation.tese" />
     <None Include="shaders\tessellationShader\fragment.frag" />
-    <None Include="shaders\tessellationShader\geometry.geom" />
     <None Include="shaders\tessellationShader\vertex.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

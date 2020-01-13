@@ -17,6 +17,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/common.hpp>
 
+#include <openAL/al.h>
+#include <openAL/alc.h>
+
 #include "stb_image.h"
 
 #include "TessellationShader.h"
@@ -35,6 +38,7 @@
 #include "Shader.h"
 #include "Config.h"
 #include "Camera.h"
+#include "Audio.h"
 #include "Debug.h"
 #include "Maths.h"
 #include "Model.h"
@@ -45,6 +49,8 @@ const float ROTATE_SPEED = 100.0f;
 const float MOVE_SPEED = 100.0f;
 
 int main() {
+	Audio audio = Audio();
+
 	DisplayManager::createDisplay(Config::Display::WIDTH, Config::Display::HEIGHT);
 
 	Shader shader = Shader(
@@ -64,6 +70,7 @@ int main() {
 		"shaders/tessellationShader/fragment.frag",
 		"shaders/tessellationShader/control.tesc",
 		"shaders/tessellationShader/evaluation.tese");
+		// "shaders/tessellationShader/geometry.geom");
 
 	ReflectionShader reflectionShader = ReflectionShader(
 		"shaders/reflectionShader/shader.vert",
@@ -89,6 +96,7 @@ int main() {
 	DisplayManager::hideCursor();
 	//DisplayManager::showCursor();
 
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	while (!glfwWindowShouldClose(DisplayManager::window) && !glfwGetKey(DisplayManager::window, GLFW_KEY_ESCAPE)) {
 		double xPos, yPos;
 		glfwGetCursorPos(DisplayManager::window, &xPos, &yPos);
@@ -96,13 +104,6 @@ int main() {
 		glfwSetCursorPos(DisplayManager::window, Config::Display::WIDTH / 2, Config::Display::HEIGHT / 2);
 
 		// Model Manipulation
-		if (glfwGetKey(DisplayManager::window, GLFW_KEY_E))
-			Config::Display::FOV += DisplayManager::DELTA;
-			//gamma += DisplayManager::DELTA;
-		if (glfwGetKey(DisplayManager::window, GLFW_KEY_Q))
-			Config::Display::FOV -= DisplayManager::DELTA;
-			//gamma -= DisplayManager::DELTA;
-
 		assimpModel.increaseRotation(glm::vec3(0.0f, 0.1f, 0.0f));
 
 		// Clear Screen Buffers
@@ -162,6 +163,8 @@ int main() {
 	fpsShader.cleanUp();
 	AssetLoader::cleanUp();
 	DisplayManager::closeDisplay();
+
+	audio.cleanUp();
 
 	system("pause");
 }

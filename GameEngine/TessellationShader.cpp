@@ -7,9 +7,9 @@
 TessellationShader::TessellationShader() {}
 
 TessellationShader::TessellationShader(std::string vertexShaderFilename, std::string fragmentShaderFilename,
-	std::string tessellationControlFilename, std::string tessellationEvaluationFilename)
+	std::string tessellationControlFilename, std::string tessellationEvaluationFilename, std::string geometryFilename)
 	: ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename, tessellationControlFilename,
-		tessellationEvaluationFilename) {
+		tessellationEvaluationFilename, geometryFilename) {
 	this->getAllUniformLocations();
 }
 
@@ -19,6 +19,8 @@ void TessellationShader::bindAttributes() {
 	this->bindAttribute(0, "position");
 	this->bindAttribute(1, "textureCoords");
 	this->bindAttribute(2, "normal");
+	this->bindAttribute(3, "tangent");
+	this->bindAttribute(4, "bitangent");
 }
 
 void TessellationShader::getAllUniformLocations() {

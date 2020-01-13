@@ -12,7 +12,7 @@
 
 ShaderProgram::ShaderProgram() {}
 
-ShaderProgram::ShaderProgram(std::string vertexFilename, std::string fragmentFilename, std::string tessellationControlFilename, std::string tessellationEvaluationFilename)
+ShaderProgram::ShaderProgram(std::string vertexFilename, std::string fragmentFilename, std::string tessellationControlFilename, std::string tessellationEvaluationFilename, std::string geometryFilename)
 {
 	this->vertexShaderID = this->loadShader(vertexFilename, GL_VERTEX_SHADER);
 	this->fragmentShaderID = this->loadShader(fragmentFilename, GL_FRAGMENT_SHADER);
@@ -23,6 +23,9 @@ ShaderProgram::ShaderProgram(std::string vertexFilename, std::string fragmentFil
 	if (tessellationEvaluationFilename != "null")
 		this->tessellationEvaluationShaderID = this->loadShader(tessellationEvaluationFilename, GL_TESS_EVALUATION_SHADER);
 
+	if (geometryFilename != "null")
+		this->geometryShaderID = this->loadShader(geometryFilename, GL_GEOMETRY_SHADER);
+
 	this->programID = glCreateProgram();
 	glAttachShader(this->programID, this->vertexShaderID);
 
@@ -31,6 +34,9 @@ ShaderProgram::ShaderProgram(std::string vertexFilename, std::string fragmentFil
 
 	if (tessellationControlFilename != "null")
 		glAttachShader(this->programID, this->tessellationControlShaderID);
+
+	if (geometryFilename != "null")
+		glAttachShader(this->programID, this->geometryShaderID);
 
 	glAttachShader(this->programID, this->fragmentShaderID);
 	this->bindAttributes();
