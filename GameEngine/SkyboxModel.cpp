@@ -45,7 +45,7 @@ void SkyboxModel::draw(SkyboxShader shader)
 	glBindVertexArray(this->vao);
 	glEnableVertexAttribArray(0);
 
-	glDrawArrays(GL_TRIANGLES, 0, vertices.size() / 3);
+	glDrawArrays(GL_TRIANGLES, 0, (GLsizei) vertices.size() / 3);
 
 	glDisableVertexAttribArray(0);
 	glBindVertexArray(0);

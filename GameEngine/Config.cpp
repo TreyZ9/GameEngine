@@ -17,8 +17,8 @@ float Config::Display::FAR_PLANE = 1000.0f;
 float Config::Display::FOV = 70.0f;
 
 
-const float Config::Camera::MOVEMENT_SPEED = 40.0f;
-const float Config::Camera::LOOK_SPEED = 20.0f;
+const float Config::Camera::MOVEMENT_SPEED = 10.0f;
+const float Config::Camera::LOOK_SPEED = 15.0f;
 
 float Config::Camera::PITCH_MIN = -90.0f;
 float Config::Camera::PITCH_MAX = 90.0f;

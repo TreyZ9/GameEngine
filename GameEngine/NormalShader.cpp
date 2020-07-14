@@ -4,7 +4,16 @@
 #include "Camera.h"
 #include "Maths.h"
 
-NormalShader::NormalShader() {}
+NormalShader::NormalShader() 
+{
+	this->location_transformationMatrix = NULL;
+	this->location_projectionMatrix = NULL;
+	this->location_viewMatrix = NULL;
+	this->location_lightPosition = NULL;
+	this->location_lightColor = NULL;
+	this->location_gamma = NULL;
+	this->location_cameraPosition = NULL;
+}
 
 NormalShader::NormalShader(std::string vertexShaderFilename, std::string fragmentShaderFilename) : ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename)
 {
@@ -37,9 +46,7 @@ void NormalShader::loadProjectionMatrix(glm::mat4 matrix) { this->loadMat4(this-
 
 void NormalShader::loadViewMatrix()
 {
-	glm::mat4 view;
-	Maths::createViewMatrix(view);
-	this->loadMat4(this->location_viewMatrix, view);
+	this->loadMat4(this->location_viewMatrix, Camera::viewMatrix);
 }
 
 void NormalShader::loadLight(Light light)

@@ -1,7 +1,9 @@
 
+// OpenGL
 #include <glad\glad.h>
 #include <glfw\glfw3.h>
 
+// Standard
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -10,6 +12,7 @@
 #include <string>
 #include <map>
 
+// Include Libraries
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
 #include <assimp\postprocess.h>
@@ -22,34 +25,36 @@
 
 #include "stb_image.h"
 
+// Headers
 #include "TessellationShader.h"
 #include "ReflectionShader.h"
+#include "OpenALFunctions.h"
 #include "DisplayManager.h"
 #include "StaticShader.h"
 #include "NormalShader.h"
 #include "SkyboxShader.h"
 #include "SkyboxModel.h"
 #include "AssetLoader.h"
-#include "ModelLoader.h"
 #include "FPSShader.h"
 #include "FpsModel.h"
+#include "Listener.h"
 #include "Texture.h"
+#include "Source.h"
 #include "Vertex.h"
 #include "Shader.h"
 #include "Config.h"
 #include "Camera.h"
-#include "Audio.h"
 #include "Debug.h"
 #include "Maths.h"
 #include "Model.h"
 #include "Light.h"
 #include "Mesh.h"
 
-const float ROTATE_SPEED = 100.0f;
-const float MOVE_SPEED = 100.0f;
-
 int main() {
-	Audio audio = Audio();
+	Listener listener = Listener();
+
+	Source source1("res/audio/ambientMono.wav", glm::vec3(-4.25f, 0.125f, -4.25f), glm::vec3(0.0f), 1.0f, 1.0f, 0.0f, 10.0f, 1.0f, AL_FALSE);
+	Source source2("res/audio/heavy.wav", glm::vec3(-4.25f, 0.125f, 4.25f));
 
 	DisplayManager::createDisplay(Config::Display::WIDTH, Config::Display::HEIGHT);
 
@@ -90,21 +95,31 @@ int main() {
 
 	SkyboxModel skyboxModel("res/skyboxDay");
 
-	std::vector<Model> assimpModels = ModelLoader::loadModels("res/models.scene");
-	Model assimpModel = assimpModels[0];
+	std::vector<Model> assimpModels = AssetLoader::loadModels("res/models.scene");
 
 	DisplayManager::hideCursor();
 	//DisplayManager::showCursor();
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	source1.play();
+
 	while (!glfwWindowShouldClose(DisplayManager::window) && !glfwGetKey(DisplayManager::window, GLFW_KEY_ESCAPE)) {
+
+		if (glfwGetKey(DisplayManager::window, GLFW_KEY_0))
+			source2.play();
+		source2.setPosition(Camera::position);
+
 		double xPos, yPos;
 		glfwGetCursorPos(DisplayManager::window, &xPos, &yPos);
-		Camera::move(xPos - (Config::Display::WIDTH / 2), yPos - (Config::Display::HEIGHT / 2));
+		Camera::move((float)xPos - (Config::Display::WIDTH / 2), (float)yPos - (Config::Display::HEIGHT / 2));
 		glfwSetCursorPos(DisplayManager::window, Config::Display::WIDTH / 2, Config::Display::HEIGHT / 2);
+		Camera::updateViewMatrix();
+
+		listener.updatePosition();
 
 		// Model Manipulation
-		assimpModel.increaseRotation(glm::vec3(0.0f, 0.1f, 0.0f));
+		// assimpModel.increaseRotation(glm::vec3(0.0f, 0.1f, 0.0f));
 
 		// Clear Screen Buffers
 		glClearColor(0, 1, 1, 1);
@@ -112,35 +127,48 @@ int main() {
 
 		// Shader Cycle
 		shader.start();
-		assimpModel.draw(shader);
+		for (Model assimpModel : assimpModels)
+			assimpModel.draw(shader);
 		shader.stop();
 
 		// Static Shader Cycle
 		staticShader.start();
-		assimpModel.increasePosition(glm::vec3(-30.0f, 0.0f, 0.0f));
-		assimpModel.draw(staticShader, light);
-		assimpModel.increasePosition(glm::vec3( 30.0f, 0.0f, 0.0f));
+		for (Model assimpModel : assimpModels)
+		{
+			assimpModel.increasePosition(glm::vec3(-10.0f, 0.0f, 0.0f));
+			assimpModel.draw(staticShader, light);
+			assimpModel.increasePosition(glm::vec3(10.0f, 0.0f, 0.0f));
+		}
 		staticShader.stop();
 
 		// Normal Shader Cycle
 		normalShader.start();
-		assimpModel.increasePosition(glm::vec3(-60.0f, 0.0f, 0.0f));
-		assimpModel.draw(normalShader, light);
-		assimpModel.increasePosition(glm::vec3( 60.0f, 0.0f, 0.0f));
+		for (Model assimpModel : assimpModels)
+		{
+			assimpModel.increasePosition(glm::vec3(-20.0f, 0.0f, 0.0f));
+			assimpModel.draw(normalShader, light);
+			assimpModel.increasePosition(glm::vec3(20.0f, 0.0f, 0.0f));
+		}
 		normalShader.stop();
 
 		// Tessellation Shader Cycle
 		tessShader.start();
-		assimpModel.increasePosition(glm::vec3(-90.0f, 0.0f, 0.0f));
-		assimpModel.draw(tessShader, light);
-		assimpModel.increasePosition(glm::vec3( 90.0f, 0.0f, 0.0f));
+		for (Model assimpModel : assimpModels)
+		{
+			assimpModel.increasePosition(glm::vec3(-30.0f, 0.0f, 0.0f));
+			assimpModel.draw(tessShader, light);
+			assimpModel.increasePosition(glm::vec3(30.0f, 0.0f, 0.0f));
+		}
 		tessShader.stop();
 
 		// Reflection Shader Cycle
 		reflectionShader.start();
-		assimpModel.increasePosition(glm::vec3(-120.0f, 0.0f, 0.0f));
-		assimpModel.draw(reflectionShader, light);
-		assimpModel.increasePosition(glm::vec3(120.0f, 0.0f, 0.0f));
+		for (Model assimpModel : assimpModels)
+		{
+			assimpModel.increasePosition(glm::vec3(-40.0f, 0.0f, 0.0f));
+			assimpModel.draw(reflectionShader, light);
+			assimpModel.increasePosition(glm::vec3(40.0f, 0.0f, 0.0f));
+		}
 		reflectionShader.stop();
 
 		// Skybox Shader Cycle
@@ -163,8 +191,4 @@ int main() {
 	fpsShader.cleanUp();
 	AssetLoader::cleanUp();
 	DisplayManager::closeDisplay();
-
-	audio.cleanUp();
-
-	system("pause");
 }

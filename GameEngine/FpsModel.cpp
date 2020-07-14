@@ -15,7 +15,7 @@ FpsModel::FpsModel()
 	AssetLoader::storeDataInAttributeList(0, 3, vertices);
 	AssetLoader::storeDataInAttributeList(1, 2, textureCoords);
 	AssetLoader::bindIndicesArray(indices);
-	this->vertexCount = indices.size();
+	this->vertexCount = (int) indices.size();
 
 	this->fpsTextures['0'] = AssetLoader::loadTexture("res/fpsTextures/0.png", "diffuse").id;
 	this->fpsTextures['1'] = AssetLoader::loadTexture("res/fpsTextures/1.png", "diffuse").id;

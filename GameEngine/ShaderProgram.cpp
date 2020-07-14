@@ -112,22 +112,22 @@ int ShaderProgram::loadShader(std::string filename, int type) {
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 	if (!success) {
 		if (type == GL_VERTEX_SHADER)
-			Debug::fileLoad(filename, "vertexShader", false);
+			Debug::fileLoad(__FILE__, __LINE__, filename, "vertexShader", false);
 		else if (type == GL_FRAGMENT_SHADER)
-			Debug::fileLoad(filename, "fragmentShader", false);
+			Debug::fileLoad(__FILE__, __LINE__, filename, "fragmentShader", false);
 		else if (type == GL_TESS_CONTROL_SHADER)
-			Debug::fileLoad(filename, "controlShader", false);
+			Debug::fileLoad(__FILE__, __LINE__, filename, "controlShader", false);
 		else if (type == GL_TESS_EVALUATION_SHADER)
-			Debug::fileLoad(filename, "evaluationShader", false);
+			Debug::fileLoad(__FILE__, __LINE__, filename, "evaluationShader", false);
 		else if (type == GL_GEOMETRY_SHADER)
-			Debug::fileLoad(filename, "geometryShader", false);
+			Debug::fileLoad(__FILE__, __LINE__, filename, "geometryShader", false);
 		else
-			Debug::fileLoad(filename, "unknownShader", false);
+			Debug::fileLoad(__FILE__, __LINE__, filename, "unknownShader", false);
 
 		glGetShaderInfoLog(shader, 1024, NULL, infoLog);
 		std::cout << infoLog << std::endl;
 	}
-	Debug::fileLoad(filename, "shader", true);
+	Debug::fileLoad(__FILE__, __LINE__, filename, "shader", true);
 
 	return shader;
 }

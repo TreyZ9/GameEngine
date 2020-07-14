@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Texture.h"
+#include "Sound.h"
+#include "Model.h"
 
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
@@ -8,14 +10,24 @@
 #include <string>
 #include <vector>
 #include <map>
+//#include <bit>
 
 struct AssetLoader
 {
 public:
 	static std::map<std::string, Texture> textures;
+	static std::map<std::string, Sound> sounds;
 	static std::vector<GLuint> vaos;
 	static std::vector<GLuint> vbos;
 	static std::vector<GLuint> ebos;
+
+	// accepted flags : model|texture|position|rotation|scale|gamma
+	static std::vector<Model> loadModels(const std::string& filename);
+	static std::vector<std::string> splitString(std::string input, std::string delimiter);
+
+	static std::int32_t convertToInt(char* buffer, std::size_t len);
+	static bool loadWavFileHeader(std::ifstream& file, Sound& sound);
+	static Sound loadWav(const std::string &filename);
 
 	static Texture loadTexture(const std::string& filename, const std::string& type, bool gamma = false);
 	static Texture loadCubeMap(const std::string& directory);
@@ -42,6 +54,5 @@ template <typename dataType_t> void AssetLoader::storeDataInAttributeList(int at
 template <typename dataSize_t, typename offset_t> void AssetLoader::createAttibutePointer(int attributeNumber, int coordinateSize, dataSize_t dataSize, offset_t offset)
 {
 	glEnableVertexAttribArray(attributeNumber);
-	glVertexAttribPointer(attributeNumber, coordinateSize, GL_FLOAT, GL_FALSE, dataSize, offset);
+	glVertexAttribPointer(attributeNumber, coordinateSize, GL_FLOAT, GL_FALSE, (GLsizei) dataSize, offset);
 }
-

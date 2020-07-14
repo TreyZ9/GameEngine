@@ -28,7 +28,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -70,8 +70,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>D:\Programming\Github Repositories\GameEngine-Cpp\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Programming\Github Repositories\GameEngine-Cpp\Libraries;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\treys\Desktop\GameEngine\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\treys\Desktop\GameEngine\Libraries;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>D:\Programming\Github Repositories\GameEngine\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Programming\Github Repositories\GameEngine\Libraries;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -81,6 +85,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\Programming\C++ Workspace\GameEngine\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>assimp-vc140-mt.lib;glfw3.lib;opengl32.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -92,7 +97,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>assimp-vc141-mtd.lib;common.lib;ex-common.lib;glfw3.lib;glfw3dll.lib;LinearMath_vs2010_debug.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -126,7 +136,6 @@
     <ClInclude Include="..\Include\openAL\al.h" />
     <ClInclude Include="..\Include\openAL\alc.h" />
     <ClInclude Include="AssetLoader.h" />
-    <ClInclude Include="Audio.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="DisplayManager.h" />
@@ -134,16 +143,19 @@
     <ClInclude Include="FpsModel.h" />
     <ClInclude Include="FPSShader.h" />
     <ClInclude Include="Light.h" />
-    <ClInclude Include="ModelLoader.h" />
+    <ClInclude Include="Listener.h" />
     <ClInclude Include="Maths.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="NormalShader.h" />
+    <ClInclude Include="OpenALFunctions.h" />
     <ClInclude Include="ReflectionShader.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="SkyboxModel.h" />
     <ClInclude Include="SkyboxShader.h" />
+    <ClInclude Include="Sound.h" />
+    <ClInclude Include="Source.h" />
     <ClInclude Include="StaticShader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="TessellationShader.h" />
@@ -152,7 +164,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssetLoader.cpp" />
-    <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="Debug.cpp" />
@@ -161,17 +172,19 @@
     <ClCompile Include="FPSShader.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Listener.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Maths.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
-    <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="NormalShader.cpp" />
+    <ClCompile Include="OpenALFunctions.cpp" />
     <ClCompile Include="ReflectionShader.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="SkyboxModel.cpp" />
     <ClCompile Include="SkyboxShader.cpp" />
+    <ClCompile Include="Source.cpp" />
     <ClCompile Include="StaticShader.cpp" />
     <ClCompile Include="stb.cpp" />
     <ClCompile Include="TessellationShader.cpp" />

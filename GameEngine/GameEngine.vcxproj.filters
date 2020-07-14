@@ -83,10 +83,13 @@
       <UniqueIdentifier>{5dd20589-9266-449c-851f-040f22d8b480}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Audio">
-      <UniqueIdentifier>{fd13127b-a03f-4364-bd85-4bbdd1652eae}</UniqueIdentifier>
+      <UniqueIdentifier>{37512c48-cd89-462b-b6ee-620b083a3404}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Audio">
-      <UniqueIdentifier>{8103a33e-8c13-464a-ac6d-8d6fb95c39c3}</UniqueIdentifier>
+      <UniqueIdentifier>{beeeb00e-88b8-4501-966a-3e0b9a49b1cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Audio\Primitives">
+      <UniqueIdentifier>{a043f7d0-1b28-48e4-87f6-872b05379503}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -103,9 +106,6 @@
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="AssetLoader.h">
-      <Filter>Header Files\Loaders</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelLoader.h">
       <Filter>Header Files\Loaders</Filter>
     </ClInclude>
     <ClInclude Include="FpsModel.h">
@@ -165,7 +165,16 @@
     <ClInclude Include="..\Include\openAL\alc.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="Audio.h">
+    <ClInclude Include="Source.h">
+      <Filter>Header Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Header Files\Audio\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenALFunctions.h">
+      <Filter>Header Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Listener.h">
       <Filter>Header Files\Audio</Filter>
     </ClInclude>
   </ItemGroup>
@@ -206,9 +215,6 @@
     <ClCompile Include="ShaderProgram.cpp">
       <Filter>Source Files\Shaders\Parent</Filter>
     </ClCompile>
-    <ClCompile Include="ModelLoader.cpp">
-      <Filter>Source Files\Loaders</Filter>
-    </ClCompile>
     <ClCompile Include="Config.cpp">
       <Filter>Source Files\Toolbox</Filter>
     </ClCompile>
@@ -239,7 +245,13 @@
     <ClCompile Include="TessellationShader.cpp">
       <Filter>Source Files\Shaders\Children\TessellationShader</Filter>
     </ClCompile>
-    <ClCompile Include="Audio.cpp">
+    <ClCompile Include="Source.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenALFunctions.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Listener.cpp">
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
   </ItemGroup>

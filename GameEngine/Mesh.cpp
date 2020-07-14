@@ -5,7 +5,12 @@
 #include "Config.h"
 #include "Camera.h"
 
-Mesh::Mesh() {}
+Mesh::Mesh() 
+{
+	this->VAO = NULL;
+	this->VBO = NULL;
+	this->EBO = NULL;
+}
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures) : vertices(vertices), indices(indices), textures(textures)
 {
@@ -81,7 +86,7 @@ void Mesh::draw(Shader shader, glm::mat4 transformationMatrix, Light unusedLight
 	glEnableVertexAttribArray(2);
 	glEnableVertexAttribArray(3);
 	glEnableVertexAttribArray(4);
-	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, (GLsizei)this->indices.size(), GL_UNSIGNED_INT, 0);
 	glDisableVertexAttribArray(4);
 	glDisableVertexAttribArray(3);
 	glDisableVertexAttribArray(2);
@@ -110,7 +115,7 @@ void Mesh::draw(StaticShader shader, glm::mat4 transformationMatrix, Light light
 	glEnableVertexAttribArray(3);
 	glEnableVertexAttribArray(4);
 
-	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, (GLsizei)this->indices.size(), GL_UNSIGNED_INT, 0);
 
 	glDisableVertexAttribArray(4);
 	glDisableVertexAttribArray(3);
@@ -141,7 +146,7 @@ void Mesh::draw(NormalShader shader, glm::mat4 transformationMatrix, Light light
 	glEnableVertexAttribArray(3);
 	glEnableVertexAttribArray(4);
 
-	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, (GLsizei)this->indices.size(), GL_UNSIGNED_INT, 0);
 
 	glDisableVertexAttribArray(4);
 	glDisableVertexAttribArray(3);
@@ -174,7 +179,7 @@ void Mesh::draw(TessellationShader shader, glm::mat4 transformationMatrix, Light
 	glEnableVertexAttribArray(4);
 
 	glPatchParameteri(GL_PATCH_VERTICES, 3);
-	glDrawElements(GL_PATCHES, this->indices.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_PATCHES, (GLsizei)this->indices.size(), GL_UNSIGNED_INT, 0);
 
 	glDisableVertexAttribArray(4);
 	glDisableVertexAttribArray(3);
@@ -206,7 +211,7 @@ void Mesh::draw(ReflectionShader shader, glm::mat4 transformationMatrix, Light l
 	glEnableVertexAttribArray(3);
 	glEnableVertexAttribArray(4);
 
-	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, (GLsizei)this->indices.size(), GL_UNSIGNED_INT, 0);
 
 	glDisableVertexAttribArray(4);
 	glDisableVertexAttribArray(3);

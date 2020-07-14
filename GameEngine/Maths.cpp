@@ -19,3 +19,12 @@ void Maths::createViewMatrix(glm::mat4& mat) {
 	mat = glm::rotate(mat, glm::radians(Camera::roll), glm::vec3(0.0f, 0.0f, 1.0f));
 	mat = glm::translate(mat, -Camera::position);
 }
+
+void Maths::createViewMatrixAL(glm::mat4& mat)
+{
+	float yaw = Camera::yaw + 180.0f;
+	mat = glm::mat4(1.0f);
+	mat = glm::rotate(mat, glm::radians(Camera::pitch), glm::vec3(1.0f, 0.0f, 0.0f));
+	mat = glm::rotate(mat, glm::radians(yaw), glm::vec3(0.0f, 1.0f, 0.0f));
+	mat = glm::rotate(mat, glm::radians(Camera::roll), glm::vec3(0.0f, 0.0f, 1.0f));
+}

@@ -4,7 +4,17 @@
 #include "Camera.h"
 #include "Maths.h"
 
-ReflectionShader::ReflectionShader() {}
+ReflectionShader::ReflectionShader() 
+{
+	this->location_transformationMatrix = NULL;
+	this->location_projectionMatrix = NULL;
+	this->location_viewMatrix = NULL;
+	this->location_lightPosition = NULL;
+	this->location_lightColor = NULL;
+	this->location_gamma = NULL;
+	this->location_useSpecularMap = NULL;
+	this->location_cameraPosition = NULL;
+}
 
 ReflectionShader::ReflectionShader(std::string vertexShaderFilename, std::string fragmentShaderFilename) : ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename)
 {
@@ -38,9 +48,7 @@ void ReflectionShader::loadProjectionMatrix(glm::mat4 matrix) { this->loadMat4(t
 
 void ReflectionShader::loadViewMatrix()
 {
-	glm::mat4 view;
-	Maths::createViewMatrix(view);
-	this->loadMat4(this->location_viewMatrix, view);
+	this->loadMat4(this->location_viewMatrix, Camera::viewMatrix);
 }
 
 void ReflectionShader::loadLight(Light light)
