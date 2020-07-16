@@ -74,8 +74,8 @@
     <LibraryPath>C:\Users\treys\Desktop\GameEngine\Libraries;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\Programming\Github Repositories\GameEngine\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Programming\Github Repositories\GameEngine\Libraries;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\Libraries;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
