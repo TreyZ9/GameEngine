@@ -1,7 +1,7 @@
 
 #version 450 core
 
-layout(triangles, equal_spacing, cw) in;
+layout(triangles, equal_spacing, ccw) in;
 
 in vec3 worldVertexPosition_es[];
 in vec2 worldTextureCoords_es[];
@@ -14,7 +14,6 @@ out vec3 worldNormal_fs;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 
-uniform sampler2D texture_diffuse0;
 uniform sampler2D texture_displacement0;
 
 vec2 interpolate2D(vec2 v0, vec2 v1, vec2 v2)
@@ -34,8 +33,8 @@ void main()
 	worldNormal_fs = normalize(worldNormal_fs);
 	worldVertexPosition_fs = interpolate3D(worldVertexPosition_es[0], worldVertexPosition_es[1], worldVertexPosition_es[2]);
 	
-	float displacement = texture(texture_displacement0, worldTextureCoords_fs.xy).x;
-	worldVertexPosition_fs += worldNormal_fs * displacement / 1.0f;
+	float displacement = texture(texture_displacement0, worldTextureCoords_fs.xy).r * 0.5f;
+	worldVertexPosition_fs += worldNormal_fs * displacement;
 	
 	gl_Position = projectionMatrix * viewMatrix * vec4(worldVertexPosition_fs.xyz, 1.0);
 }
