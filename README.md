@@ -1,2 +1,3 @@
-# GameEngine-Cpp
- Game engine base written in c++ using glfw, glad, stb_image, bullet3, etc.
+# GameEngine
+
+WIP Game engine utilizing OpenGL (Graphics), OpenAL (Audio), and eventually Bullet (Physics)
