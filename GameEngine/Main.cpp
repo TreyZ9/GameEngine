@@ -10,6 +10,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <chrono>
 #include <map>
 
 // Include Libraries
@@ -51,10 +52,12 @@
 #include "Mesh.h"
 
 int main() {
+	std::chrono::time_point loadTimeStart = std::chrono::high_resolution_clock::now();
+
 	Listener listener = Listener();
 
 	Source source1("res/audio/ambientMono.wav", glm::vec3(-4.25f, 0.125f, -4.25f), glm::vec3(0.0f), 1.0f, 1.0f, 0.0f, 10.0f, 1.0f, AL_FALSE);
-	Source source2("res/audio/heavy.wav", glm::vec3(-4.25f, 0.125f, 4.25f));
+	Source source2("res/audio/heavy.wav");
 
 	DisplayManager::createDisplay(Config::Display::WIDTH, Config::Display::HEIGHT);
 
@@ -92,15 +95,17 @@ int main() {
 	Light light(glm::vec3(60.0f, 100.0f, 100.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 
 	FpsModel fpsModel = FpsModel();
-
 	SkyboxModel skyboxModel("res/skyboxDay");
-
 	std::vector<Model> assimpModels = AssetLoader::loadModels("res/models.scene");
 
 	DisplayManager::hideCursor();
 	//DisplayManager::showCursor();
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	std::chrono::time_point loadTimeEnd = std::chrono::high_resolution_clock::now();
+	std::chrono::microseconds executionTime = std::chrono::duration_cast<std::chrono::microseconds>(loadTimeEnd - loadTimeStart);
+	std::cout << "Execution Time: " << executionTime.count() << std::endl;
 
 	source1.play();
 
@@ -110,16 +115,9 @@ int main() {
 			source2.play();
 		source2.setPosition(Camera::position);
 
-		double xPos, yPos;
-		glfwGetCursorPos(DisplayManager::window, &xPos, &yPos);
-		Camera::move((float)xPos - (Config::Display::WIDTH / 2), (float)yPos - (Config::Display::HEIGHT / 2));
-		glfwSetCursorPos(DisplayManager::window, Config::Display::WIDTH / 2, Config::Display::HEIGHT / 2);
-		Camera::updateViewMatrix();
+		Camera::move();
 
 		listener.updatePosition();
-
-		// Model Manipulation
-		// assimpModel.increaseRotation(glm::vec3(0.0f, 0.1f, 0.0f));
 
 		// Clear Screen Buffers
 		glClearColor(0, 1, 1, 1);

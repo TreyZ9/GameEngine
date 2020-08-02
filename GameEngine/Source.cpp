@@ -4,9 +4,7 @@
 #include "AssetLoader.h"
 #include "Debug.h"
 
-#pragma warning(disable : 26495)
 Source::Source() {}
-#pragma warning(restore : 26495)
 
 Source::Source(const std::string filename, glm::vec3 position, glm::vec3 velocity, ALfloat pitch, ALfloat gain,
 	ALfloat referenceDistance, ALfloat maxDistance, ALfloat rolloffFactor, ALboolean looping) :

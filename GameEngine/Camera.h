@@ -6,8 +6,6 @@
 struct Camera {
 public:
 	static void move();
-	static void move(float x, float y);
-	static void updateViewMatrix();
 
 	static glm::mat4 viewMatrix;
 	static glm::vec3 position;

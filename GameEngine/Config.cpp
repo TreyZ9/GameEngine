@@ -10,7 +10,7 @@ int Config::Display::OPENGL_VERSION_MAJOR = 4;
 int Config::Display::OPENGL_VERSION_MINOR = 0;
 
 int Config::Display::FPS_BUFFER_SIZE = 20; // Set 1 for no buffer
-int Config::Display::FPS_CAP = 120;
+int Config::Display::FPS_CAP = 144;
 
 float Config::Display::NEAR_PLANE = 0.1f;
 float Config::Display::FAR_PLANE = 1000.0f;
