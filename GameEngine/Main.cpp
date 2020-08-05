@@ -130,6 +130,11 @@ int main() {
 		for (Model assimpModel : assimpModels)
 			assimpModel.draw(shader);
 		shader.stop();
+
+		// Skybox Shader Cycle
+		skyboxShader.start();
+		skyboxModel.draw(skyboxShader);
+		skyboxShader.stop();
 		fbo.unbind();
 
 		// Clear Screen Buffers
@@ -137,13 +142,13 @@ int main() {
 		glCall(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Shader Cycle
-		GLuint tempTexID = assimpModels[0].meshes[0].textures[0].id;
-		assimpModels[0].meshes[0].textures[0].id = fbo.textureColorID;
+		GLuint tempTexID = assimpModels[4].meshes[0].textures[0].id;
+		assimpModels[4].meshes[0].textures[0].id = fbo.textureColorID;
 		shader.start();
 		for (Model assimpModel : assimpModels)
 			assimpModel.draw(shader);
 		shader.stop();
-		assimpModels[0].meshes[0].textures[0].id = tempTexID;
+		assimpModels[4].meshes[0].textures[0].id = tempTexID;
 
 		// Static Shader Cycle
 		staticShader.start();

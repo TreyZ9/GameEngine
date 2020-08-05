@@ -36,3 +36,11 @@ position:-4.25:0.25:-4.25
 rotation:0:315:0
 scale:1
 model:end
+
+model:res/testScene/mirror.obj
+texture:res/testScene/gridTexture.png:diffuse
+texture:res/skyboxDay:cubeMap
+position:-4.9:1.5:0
+rotation:90:0:270
+scale:1
+model:end

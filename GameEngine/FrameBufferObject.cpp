@@ -1,6 +1,7 @@
 #include "FrameBufferObject.h"
 
 #include "OpenGLFunctions.h"
+#include "Config.h"
 
 FrameBufferObject::FrameBufferObject()
 {
@@ -27,7 +28,9 @@ FrameBufferObject::FrameBufferObject()
 
 FrameBufferObject::~FrameBufferObject()
 {
-
+	glCall(glDeleteFramebuffers, 1, &this->fbo);
+	glCall(glDeleteTextures, 1, &this->textureColorID);
+	glCall(glDeleteRenderbuffers, 1, &this->rbo);
 }
 
 void FrameBufferObject::bind()
@@ -35,9 +38,11 @@ void FrameBufferObject::bind()
 	glCall(glBindFramebuffer, GL_FRAMEBUFFER, this->fbo);
 	glCall(glClearColor, 0.0f, 1.0f, 1.0f, 1.0f);
 	glCall(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glCall(glViewport, 0, 0, 1024, 1024);
 }
 
 void FrameBufferObject::unbind()
 {
 	glCall(glBindFramebuffer, GL_FRAMEBUFFER, 0);
+	glCall(glViewport, 0, 0, Config::Display::WIDTH, Config::Display::HEIGHT);
 }
