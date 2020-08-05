@@ -142,6 +142,7 @@
     <ClInclude Include="Debug.h" />
     <ClInclude Include="FpsModel.h" />
     <ClInclude Include="FPSShader.h" />
+    <ClInclude Include="FrameBufferObject.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Listener.h" />
     <ClInclude Include="Maths.h" />
@@ -171,6 +172,7 @@
     <ClCompile Include="DisplayManager.cpp" />
     <ClCompile Include="FpsModel.cpp" />
     <ClCompile Include="FPSShader.cpp" />
+    <ClCompile Include="FrameBufferObject.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Listener.cpp" />
