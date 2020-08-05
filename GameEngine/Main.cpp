@@ -108,6 +108,29 @@ int main() {
 	std::chrono::microseconds executionTime = std::chrono::duration_cast<std::chrono::microseconds>(loadTimeEnd - loadTimeStart);
 	std::cout << "Execution Time: " << executionTime.count() << std::endl;
 
+
+	GLuint frameBuffer;
+	glGenFramebuffers(1, &frameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+
+	GLuint textureColorBuffer;
+	glGenTextures(1, &textureColorBuffer);
+	glBindTexture(GL_TEXTURE_2D, textureColorBuffer);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 1024, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorBuffer, 0);
+
+	GLuint renderBuffer;
+	glGenRenderbuffers(1, &renderBuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 1024, 1024);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "[ERROR] Framebuffer Incomplete" << std::endl;
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
 	source1.play();
 
 	while (!glfwWindowShouldClose(DisplayManager::window) && !glfwGetKey(DisplayManager::window, GLFW_KEY_ESCAPE)) {
@@ -120,15 +143,31 @@ int main() {
 
 		listener.updatePosition();
 
+
+		// Buffered Shader Cycle
+		glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+		glCall(glClearColor, 0.0f, 1.0f, 1.0f, 1.0f);
+		glCall(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		shader.start();
+		for (Model assimpModel : assimpModels)
+			assimpModel.draw(shader);
+		shader.stop();
+
+
+		glCall(glBindFramebuffer, GL_FRAMEBUFFER, 0);
 		// Clear Screen Buffers
 		glCall(glClearColor, 0.0f, 1.0f, 1.0f, 1.0f);
 		glCall(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Shader Cycle
+		GLuint tempTexID = assimpModels[0].meshes[0].textures[0].id;
+		assimpModels[0].meshes[0].textures[0].id = textureColorBuffer;
 		shader.start();
 		for (Model assimpModel : assimpModels)
 			assimpModel.draw(shader);
 		shader.stop();
+		assimpModels[0].meshes[0].textures[0].id = tempTexID;
 
 		// Static Shader Cycle
 		staticShader.start();
