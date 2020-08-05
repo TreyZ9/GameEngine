@@ -30,6 +30,7 @@
 #include "TessellationShader.h"
 #include "ReflectionShader.h"
 #include "OpenALFunctions.h"
+#include "OpenGLFunctions.h"
 #include "DisplayManager.h"
 #include "StaticShader.h"
 #include "NormalShader.h"
@@ -120,8 +121,8 @@ int main() {
 		listener.updatePosition();
 
 		// Clear Screen Buffers
-		glClearColor(0, 1, 1, 1);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glCall(glClearColor, 0.0f, 1.0f, 1.0f, 1.0f);
+		glCall(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Shader Cycle
 		shader.start();

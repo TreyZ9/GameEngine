@@ -91,6 +91,12 @@
     <Filter Include="Header Files\Audio\Primitives">
       <UniqueIdentifier>{a043f7d0-1b28-48e4-87f6-872b05379503}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Graphics">
+      <UniqueIdentifier>{119b0a36-92ee-42c9-9106-27ae9b406c02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{052e349d-3495-4cbc-8908-46c9e06e6762}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
@@ -177,6 +183,9 @@
     <ClInclude Include="Listener.h">
       <Filter>Header Files\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="OpenGLFunctions.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stb.cpp">
@@ -253,6 +262,9 @@
     </ClCompile>
     <ClCompile Include="Listener.cpp">
       <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGLFunctions.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

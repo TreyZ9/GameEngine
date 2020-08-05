@@ -1,6 +1,7 @@
 
 #include "FpsModel.h"
 
+#include "OpenGLFunctions.h"
 #include "DisplayManager.h"
 #include "AssetLoader.h"
 #include "Maths.h"
@@ -61,15 +62,15 @@ void FpsModel::render(FPSShader shader)
 		Maths::createTransformationMatrix(translationMatrix, glm::vec3(x, 0.8f, 0.0f), 0.0f, 0.0f, 0.0f, 0.1f);
 		shader.loadTransformationMatrix(translationMatrix);
 
-		glBindVertexArray(this->vaoID);
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, this->getTexture(this->fps[i]));
-		glDrawElements(GL_TRIANGLES, this->vertexCount, GL_UNSIGNED_INT, 0);
-		glDisableVertexAttribArray(1);
-		glDisableVertexAttribArray(0);
-		glBindVertexArray(0);
+		glCall(glBindVertexArray, this->vaoID);
+		glCall(glEnableVertexAttribArray, 0);
+		glCall(glEnableVertexAttribArray, 1);
+		glCall(glActiveTexture, GL_TEXTURE0);
+		glCall(glBindTexture, GL_TEXTURE_2D, this->getTexture(this->fps[i]));
+		glDrawElements(GL_TRIANGLES, this->vertexCount, GL_UNSIGNED_INT, 0); // Currently Incompatible With glCall, Needs Fixed
+		glCall(glDisableVertexAttribArray, 1);
+		glCall(glDisableVertexAttribArray, 0);
+		glCall(glBindVertexArray, 0);
 	}
 	shader.stop();
 }

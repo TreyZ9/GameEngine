@@ -1,6 +1,7 @@
 
 #include "Mesh.h"
 
+#include "OpenGLFunctions.h"
 #include "AssetLoader.h"
 #include "Config.h"
 #include "Camera.h"
@@ -41,7 +42,7 @@ void Mesh::bindTextures(ShaderProgram* shader)
 	unsigned int cubeMapNr = 0;
 	for (unsigned int i = 0; i < textures.size(); i++)
 	{
-		glActiveTexture(GL_TEXTURE0 + i);
+		glCall(glActiveTexture, GL_TEXTURE0 + i);
 
 		std::string number;
 		std::string name = "texture_" + textures[i].type;
@@ -60,13 +61,13 @@ void Mesh::bindTextures(ShaderProgram* shader)
 
 		if (name == "texture_cubeMap")
 		{
-			glUniform1i(glGetUniformLocation(shader->getProgramID(), (name + number).c_str()), i);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, textures[i].id);
+			glCall(glUniform1i, glGetUniformLocation(shader->getProgramID(), (name + number).c_str()), i);
+			glCall(glBindTexture, GL_TEXTURE_CUBE_MAP, textures[i].id);
 		}
 		else
 		{
-			glUniform1i(glGetUniformLocation(shader->getProgramID(), (name + number).c_str()), i);
-			glBindTexture(GL_TEXTURE_2D, textures[i].id);
+			glCall(glUniform1i, glGetUniformLocation(shader->getProgramID(), (name + number).c_str()), i);
+			glCall(glBindTexture, GL_TEXTURE_2D, textures[i].id);
 		}
 	}
 }
@@ -80,21 +81,21 @@ void Mesh::draw(Shader shader, glm::mat4 transformationMatrix, Light unusedLight
 	shader.loadProjectionMatrix(projectionMatrix);
 	shader.loadViewMatrix();
 
-	glBindVertexArray(this->VAO);
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
-	glEnableVertexAttribArray(3);
-	glEnableVertexAttribArray(4);
-	glDrawElements(GL_TRIANGLES, (GLsizei)this->indices.size(), GL_UNSIGNED_INT, 0);
-	glDisableVertexAttribArray(4);
-	glDisableVertexAttribArray(3);
-	glDisableVertexAttribArray(2);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(0);
+	glCall(glBindVertexArray, this->VAO);
+	glCall(glEnableVertexAttribArray, 0);
+	glCall(glEnableVertexAttribArray, 1);
+	glCall(glEnableVertexAttribArray, 2);
+	glCall(glEnableVertexAttribArray, 3);
+	glCall(glEnableVertexAttribArray, 4);
+	glDrawElements(GL_TRIANGLES, (GLsizei)this->indices.size(), GL_UNSIGNED_INT, 0); // Currently Incompatible With glCall, Needs Fixed
+	glCall(glDisableVertexAttribArray, 4);
+	glCall(glDisableVertexAttribArray, 3);
+	glCall(glDisableVertexAttribArray, 2);
+	glCall(glDisableVertexAttribArray, 1);
+	glCall(glDisableVertexAttribArray, 0);
 
-	glBindVertexArray(0);
-	glActiveTexture(GL_TEXTURE0);
+	glCall(glBindVertexArray, 0);
+	glCall(glActiveTexture, GL_TEXTURE0);
 }
 
 void Mesh::draw(StaticShader shader, glm::mat4 transformationMatrix, Light light)
@@ -108,23 +109,21 @@ void Mesh::draw(StaticShader shader, glm::mat4 transformationMatrix, Light light
 	shader.loadGamma(this->gamma);
 	shader.loadLight(light);
 
-	glBindVertexArray(this->VAO);
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
-	glEnableVertexAttribArray(3);
-	glEnableVertexAttribArray(4);
+	glCall(glBindVertexArray, this->VAO);
+	glCall(glEnableVertexAttribArray, 0);
+	glCall(glEnableVertexAttribArray, 1);
+	glCall(glEnableVertexAttribArray, 2);
+	glCall(glEnableVertexAttribArray, 3);
+	glCall(glEnableVertexAttribArray, 4);
+	glDrawElements(GL_TRIANGLES, (GLsizei)this->indices.size(), GL_UNSIGNED_INT, 0); // Currently Incompatible With glCall, Needs Fixed
+	glCall(glDisableVertexAttribArray, 4);
+	glCall(glDisableVertexAttribArray, 3);
+	glCall(glDisableVertexAttribArray, 2);
+	glCall(glDisableVertexAttribArray, 1);
+	glCall(glDisableVertexAttribArray, 0);
 
-	glDrawElements(GL_TRIANGLES, (GLsizei)this->indices.size(), GL_UNSIGNED_INT, 0);
-
-	glDisableVertexAttribArray(4);
-	glDisableVertexAttribArray(3);
-	glDisableVertexAttribArray(2);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(0);
-
-	glBindVertexArray(0);
-	glActiveTexture(GL_TEXTURE0);
+	glCall(glBindVertexArray, 0);
+	glCall(glActiveTexture, GL_TEXTURE0);
 }
 
 void Mesh::draw(NormalShader shader, glm::mat4 transformationMatrix, Light light)
@@ -139,23 +138,21 @@ void Mesh::draw(NormalShader shader, glm::mat4 transformationMatrix, Light light
 	shader.loadLight(light);
 	shader.loadCameraPosition(Camera::position);
 
-	glBindVertexArray(this->VAO);
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
-	glEnableVertexAttribArray(3);
-	glEnableVertexAttribArray(4);
+	glCall(glBindVertexArray, this->VAO);
+	glCall(glEnableVertexAttribArray, 0);
+	glCall(glEnableVertexAttribArray, 1);
+	glCall(glEnableVertexAttribArray, 2);
+	glCall(glEnableVertexAttribArray, 3);
+	glCall(glEnableVertexAttribArray, 4);
+	glDrawElements(GL_TRIANGLES, (GLsizei)this->indices.size(), GL_UNSIGNED_INT, 0); // Currently Incompatible With glCall, Needs Fixed
+	glCall(glDisableVertexAttribArray, 4);
+	glCall(glDisableVertexAttribArray, 3);
+	glCall(glDisableVertexAttribArray, 2);
+	glCall(glDisableVertexAttribArray, 1);
+	glCall(glDisableVertexAttribArray, 0);
 
-	glDrawElements(GL_TRIANGLES, (GLsizei)this->indices.size(), GL_UNSIGNED_INT, 0);
-
-	glDisableVertexAttribArray(4);
-	glDisableVertexAttribArray(3);
-	glDisableVertexAttribArray(2);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(0);
-
-	glBindVertexArray(0);
-	glActiveTexture(GL_TEXTURE0);
+	glCall(glBindVertexArray, 0);
+	glCall(glActiveTexture, GL_TEXTURE0);
 }
 
 void Mesh::draw(TessellationShader shader, glm::mat4 transformationMatrix, Light light)
@@ -171,24 +168,24 @@ void Mesh::draw(TessellationShader shader, glm::mat4 transformationMatrix, Light
 	shader.loadBlackPoint(0.03f);
 	shader.loadCameraPosition(Camera::position);
 
-	glBindVertexArray(this->VAO);
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
-	glEnableVertexAttribArray(3);
-	glEnableVertexAttribArray(4);
+	glCall(glBindVertexArray, this->VAO);
+	glCall(glEnableVertexAttribArray, 0);
+	glCall(glEnableVertexAttribArray, 1);
+	glCall(glEnableVertexAttribArray, 2);
+	glCall(glEnableVertexAttribArray, 3);
+	glCall(glEnableVertexAttribArray, 4);
 
-	glPatchParameteri(GL_PATCH_VERTICES, 3);
-	glDrawElements(GL_PATCHES, (GLsizei)this->indices.size(), GL_UNSIGNED_INT, 0);
+	glCall(glPatchParameteri, GL_PATCH_VERTICES, 3);
+	glDrawElements(GL_PATCHES, (GLsizei)this->indices.size(), GL_UNSIGNED_INT, 0); // Currently Incompatible With glCall, Needs Fixed
 
-	glDisableVertexAttribArray(4);
-	glDisableVertexAttribArray(3);
-	glDisableVertexAttribArray(2);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(0);
+	glCall(glDisableVertexAttribArray, 4);
+	glCall(glDisableVertexAttribArray, 3);
+	glCall(glDisableVertexAttribArray, 2);
+	glCall(glDisableVertexAttribArray, 1);
+	glCall(glDisableVertexAttribArray, 0);
 
-	glBindVertexArray(0);
-	glActiveTexture(GL_TEXTURE0);
+	glCall(glBindVertexArray, 0);
+	glCall(glActiveTexture, GL_TEXTURE0);
 }
 
 void Mesh::draw(ReflectionShader shader, glm::mat4 transformationMatrix, Light light)
@@ -204,32 +201,30 @@ void Mesh::draw(ReflectionShader shader, glm::mat4 transformationMatrix, Light l
 	shader.loadCameraPosition(Camera::position);
 	shader.setUseSpecularMap(this->useSpecularMap);
 
-	glBindVertexArray(this->VAO);
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
-	glEnableVertexAttribArray(3);
-	glEnableVertexAttribArray(4);
+	glCall(glBindVertexArray, this->VAO);
+	glCall(glEnableVertexAttribArray, 0);
+	glCall(glEnableVertexAttribArray, 1);
+	glCall(glEnableVertexAttribArray, 2);
+	glCall(glEnableVertexAttribArray, 3);
+	glCall(glEnableVertexAttribArray, 4);
+	glDrawElements(GL_TRIANGLES, (GLsizei)this->indices.size(), GL_UNSIGNED_INT, 0); // Currently Incompatible With glCall, Needs Fixed
+	glCall(glDisableVertexAttribArray, 4);
+	glCall(glDisableVertexAttribArray, 3);
+	glCall(glDisableVertexAttribArray, 2);
+	glCall(glDisableVertexAttribArray, 1);
+	glCall(glDisableVertexAttribArray, 0);
 
-	glDrawElements(GL_TRIANGLES, (GLsizei)this->indices.size(), GL_UNSIGNED_INT, 0);
-
-	glDisableVertexAttribArray(4);
-	glDisableVertexAttribArray(3);
-	glDisableVertexAttribArray(2);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(0);
-
-	glBindVertexArray(0);
-	glActiveTexture(GL_TEXTURE0);
+	glCall(glBindVertexArray, 0);
+	glCall(glActiveTexture, GL_TEXTURE0);
 }
 
 void Mesh::setupMesh()
 {
 	VAO = AssetLoader::createVAO();
 
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
+	glCall(glGenBuffers, 1, &VBO);
+	glCall(glBindBuffer, GL_ARRAY_BUFFER, VBO);
+	glCall(glBufferData, GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 
 	EBO = AssetLoader::bindIndicesArray(indices);
 
@@ -239,7 +234,7 @@ void Mesh::setupMesh()
 	AssetLoader::createAttibutePointer(3, 3, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
 	AssetLoader::createAttibutePointer(4, 3, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
 
-	glBindVertexArray(0);
+	glCall(glBindVertexArray, 0);
 
 	AssetLoader::vaos.push_back(VAO);
 	AssetLoader::vbos.push_back(VBO);

@@ -1,6 +1,7 @@
 
 #include "DisplayManager.h"
 
+#include "OpenGLFunctions.h"
 #include "Config.h"
 
 #include <iostream>
@@ -35,12 +36,12 @@ int DisplayManager::createDisplay(int width, int height) {
 		return -1;
 	}
 
-	glViewport(0, 0, Config::Display::WIDTH, Config::Display::HEIGHT);
+	glCall(glViewport, 0, 0, Config::Display::WIDTH, Config::Display::HEIGHT);
 	glfwSetFramebufferSizeCallback(window, DisplayManager::framebuffer_size_callback);
 
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glEnable(GL_DEPTH_TEST);
+	glCall(glEnable, GL_CULL_FACE);
+	glCall(glCullFace, GL_BACK);
+	glCall(glEnable, GL_DEPTH_TEST);
 
 	DisplayManager::window = window;
 
@@ -61,7 +62,7 @@ void DisplayManager::updateDisplay() {
 void DisplayManager::closeDisplay() { glfwTerminate(); }
 
 void DisplayManager::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-	glViewport(0, 0, width, height);
+	glCall(glViewport, 0, 0, width, height);
 	Config::Display::WIDTH = width;
 	Config::Display::HEIGHT = height;
 }

@@ -149,6 +149,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="NormalShader.h" />
     <ClInclude Include="OpenALFunctions.h" />
+    <ClInclude Include="OpenGLFunctions.h" />
     <ClInclude Include="ReflectionShader.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="NormalShader.cpp" />
     <ClCompile Include="OpenALFunctions.cpp" />
+    <ClCompile Include="OpenGLFunctions.cpp" />
     <ClCompile Include="ReflectionShader.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />

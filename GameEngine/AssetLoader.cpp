@@ -1,6 +1,7 @@
 
 #include "AssetLoader.h"
 
+#include "OpenGLFunctions.h"
 #include "stb_image.h"
 #include "Debug.h"
 
@@ -251,7 +252,8 @@ Texture AssetLoader::loadTexture(const std::string& filename, const std::string&
 	if (AssetLoader::textures.count(filename) == 0)
 	{
 		unsigned int textureID;
-		glGenTextures(1, &textureID);
+		glCall(glGenTextures, 1, &textureID);
+		// glGenTextures(1, &textureID);
 
 		int width, height, nrComponents;
 		stbi_set_flip_vertically_on_load(true);
@@ -266,14 +268,14 @@ Texture AssetLoader::loadTexture(const std::string& filename, const std::string&
 			else if (nrComponents == 4)
 				format = GL_RGBA;
 
-			glBindTexture(GL_TEXTURE_2D, textureID);
-			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-			glGenerateMipmap(GL_TEXTURE_2D);
+			glCall(glBindTexture, GL_TEXTURE_2D, textureID);
+			glCall(glTexImage2D, GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+			glCall(glGenerateMipmap, GL_TEXTURE_2D);
 
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glCall(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glCall(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glCall(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glCall(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 			stbi_image_free(data);
 
@@ -305,9 +307,9 @@ Texture AssetLoader::loadCubeMap(const std::string& directory)
 		std::vector<std::string> faces = { directory + "/right.png", directory + "/left.png", directory + "/top.png",
 			directory + "/bottom.png", directory + "/back.png", directory + "/front.png" };
 
-		unsigned int textureID;
-		glGenTextures(1, &textureID);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+		GLuint textureID;
+		glCall(glGenTextures, 1, &textureID);
+		glCall(glBindTexture, GL_TEXTURE_CUBE_MAP, textureID);
 
 		stbi_set_flip_vertically_on_load(false);
 		for (unsigned int i = 0; i < faces.size(); i++)
@@ -316,7 +318,7 @@ Texture AssetLoader::loadCubeMap(const std::string& directory)
 			unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
 			if (data)
 			{
-				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+				glCall(glTexImage2D, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 				stbi_image_free(data);
 
 				LOG_fileLoad(faces[i], "cubeMap", true);
@@ -327,11 +329,12 @@ Texture AssetLoader::loadCubeMap(const std::string& directory)
 				LOG_fileLoad(faces[i], "cubeMap", false);
 			}
 		}
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+		glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
 		Texture texture;
 		texture.id = textureID;
@@ -350,28 +353,28 @@ void AssetLoader::cleanUp()
 {
 
 	for (GLuint vao : AssetLoader::vaos)
-		glDeleteVertexArrays(1, &vao);
+		glCall(glDeleteVertexArrays, 1, &vao);
 	for (GLuint vbo : AssetLoader::vbos)
-		glDeleteBuffers(1, &vbo);
+		glCall(glDeleteBuffers, 1, &vbo);
 	for (GLuint ebo : AssetLoader::ebos)
-		glDeleteBuffers(1, &ebo);
+		glCall(glDeleteBuffers, 1, &ebo);
 	for (auto const& pair : AssetLoader::textures)
-		glDeleteTextures(1, &pair.second.id);
+		glCall(glDeleteTextures, 1, &pair.second.id);
 }
 
 GLuint AssetLoader::bindIndicesArray(std::vector<GLuint> indices) {
 	GLuint EBO;
-	glGenBuffers(1, &EBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(float), &indices[0], GL_STATIC_DRAW);
+	glCall(glGenBuffers, 1, &EBO);
+	glCall(glBindBuffer, GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glCall(glBufferData, GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(float), &indices[0], GL_STATIC_DRAW);
 	return EBO;
 }
 
 GLuint AssetLoader::createVAO() {
 	GLuint vaoID;
-	glGenVertexArrays(1, &vaoID);
-	glBindVertexArray(vaoID);
+	glCall(glGenVertexArrays, 1, &vaoID);
+	glCall(glBindVertexArray, vaoID);
 	return vaoID;
 }
 
-void AssetLoader::unbindVAO() { glBindVertexArray(0); }
+void AssetLoader::unbindVAO() { glCall(glBindVertexArray, 0); }
