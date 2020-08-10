@@ -1,66 +1,28 @@
-
 #include "Model.h"
 
-#include "AssetLoader.h"
-#include "Maths.h"
+#include "stb_image.h"
 
 #include <iostream>
 
-Model::Model() {}
+#include "OpenGLFunctions.h"
 
-Model::Model(std::string const& path, glm::vec3 position, glm::vec3 rotation, float scale, bool gamma) : position(position), rotation(rotation), scale(scale), gammaCorrection(gamma)
+Model::Model(const std::string& path, bool gamma) : gammaCorrection(gamma)
 {
-	loadModel(path);
-	updateTransformationMatrix();
+	this->loadModel(path);
 }
 
-void Model::setPosition(glm::vec3 position)
+void Model::draw(Shader shader, glm::mat4 transformationMatrix)
 {
-	this->position = position;
-	updateTransformationMatrix();
+	for (unsigned int i = 0; i < this->meshes.size(); i++)
+		this->meshes[i].draw(shader, transformationMatrix);
 }
 
-void Model::setRotation(glm::vec3 rotation)
-{
-	this->rotation = rotation;
-	updateTransformationMatrix();
-}
-
-void Model::setScale(float scale)
-{
-	this->scale = scale;
-	updateTransformationMatrix();
-}
-
-void Model::increasePosition(glm::vec3 position)
-{
-	this->position += position;
-	updateTransformationMatrix();
-}
-
-void Model::increaseRotation(glm::vec3 rotation)
-{
-	this->rotation += rotation;
-	updateTransformationMatrix();
-}
-
-void Model::increaseScale(float scale)
-{
-	this->scale += scale;
-	updateTransformationMatrix();
-}
-
-void Model::updateTransformationMatrix()
-{
-	Maths::createTransformationMatrix(this->transformationMatrix, this->position, this->rotation.x, this->rotation.y, this->rotation.z, this->scale);
-}
-
-void Model::loadModel(std::string const& path)
+void Model::loadModel(const std::string& path)
 {
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_CalcTangentSpace);
+	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_FlipUVs);
 
-	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
+	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
 		std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
 		return;
@@ -78,11 +40,9 @@ void Model::processNode(aiNode* node, const aiScene* scene)
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		meshes.push_back(processMesh(mesh, scene));
 	}
-	for (unsigned int i = 0; i < node->mNumChildren; i++)
-	{
-		processNode(node->mChildren[i], scene);
-	}
 
+	for (unsigned int i = 0; i < node->mNumChildren; i++)
+		processNode(node->mChildren[i], scene);
 }
 
 Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
@@ -114,7 +74,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 			vertex.TexCoords = vec;
 		}
 		else
-			vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+			vertex.TexCoords = glm::vec2(0.0f);
 
 		vector.x = mesh->mTangents[i].x;
 		vector.y = mesh->mTangents[i].y;
@@ -125,6 +85,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 		vector.y = mesh->mBitangents[i].y;
 		vector.z = mesh->mBitangents[i].z;
 		vertex.Bitangent = vector;
+
 		vertices.push_back(vertex);
 	}
 
@@ -136,28 +97,29 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	}
 
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+	Material mat;
+	aiColor3D color;
+
+	material->Get(AI_MATKEY_COLOR_AMBIENT, color);
+	mat.Ka = glm::vec4(color.r, color.g, color.b, 1.0f);
+	material->Get(AI_MATKEY_COLOR_DIFFUSE, color);
+	mat.Kd = glm::vec4(color.r, color.g, color.b, 1.0f);
+	material->Get(AI_MATKEY_COLOR_SPECULAR, color);
+	mat.Ks = glm::vec4(color.r, color.g, color.b, 1.0f);
 
 	std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-	std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+	std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_specular");
 	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
-	std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+	std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_normal");
 	textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 
-	std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+	std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_height");
 	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
-	std::vector<Texture> displacementMaps = loadMaterialTextures(material, aiTextureType_DISPLACEMENT, "texture_displacement");
-	textures.insert(textures.end(), displacementMaps.begin(), displacementMaps.end());
-
-	for (Texture texture : textures)
-	{
-		std::cout << texture.path << std::endl;
-	}
-
-	return Mesh(vertices, indices, textures);
+	return Mesh(vertices, indices, textures, mat);
 }
 
 std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
@@ -167,7 +129,28 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType 
 	{
 		aiString str;
 		mat->GetTexture(type, i, &str);
-		textures.push_back(AssetLoader::loadTexture(str.C_Str() + '/' + this->directory, typeName));
+
+		bool skip = false;
+		for (unsigned int j = 0; j < this->texturesLoaded.size(); j++)
+		{
+			if (std::strcmp(this->texturesLoaded[j].Path.data(), str.C_Str()) == 0)
+			{
+				textures.push_back(texturesLoaded[j]);
+				skip = true;
+				break;
+			}
+		}
+
+		if (!skip)
+		{
+			Texture texture;
+			texture.ID = Loader::loadTextureFromPath(str.C_Str(), this->directory);
+			texture.Type = typeName;
+			texture.Path = str.C_Str();
+			textures.push_back(texture);
+			texturesLoaded.push_back(texture);
+		}
 	}
+
 	return textures;
 }

@@ -26,12 +26,7 @@ FrameBufferObject::FrameBufferObject()
 	glCall(glBindFramebuffer, GL_FRAMEBUFFER, 0);
 }
 
-FrameBufferObject::~FrameBufferObject()
-{
-	glCall(glDeleteFramebuffers, 1, &this->fbo);
-	glCall(glDeleteTextures, 1, &this->textureColorID);
-	glCall(glDeleteRenderbuffers, 1, &this->rbo);
-}
+FrameBufferObject::~FrameBufferObject() {}
 
 void FrameBufferObject::bind()
 {
@@ -45,4 +40,11 @@ void FrameBufferObject::unbind()
 {
 	glCall(glBindFramebuffer, GL_FRAMEBUFFER, 0);
 	glCall(glViewport, 0, 0, Config::Display::WIDTH, Config::Display::HEIGHT);
+}
+
+void FrameBufferObject::destroy()
+{
+	glCall(glDeleteFramebuffers, 1, &this->fbo);
+	glCall(glDeleteTextures, 1, &this->textureColorID);
+	glCall(glDeleteRenderbuffers, 1, &this->rbo);
 }

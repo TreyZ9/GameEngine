@@ -54,8 +54,6 @@
 #include "Mesh.h"
 
 int main() {
-	std::chrono::time_point loadTimeStart = std::chrono::high_resolution_clock::now();
-
 	Listener listener = Listener();
 
 	Source source1 = Source("res/audio/ambientMono.wav", glm::vec3(-4.25f, 0.125f, -4.25f), glm::vec3(0.0f), 1.0f, 1.0f, 0.0f, 10.0f, 1.0f, AL_FALSE);
@@ -98,16 +96,13 @@ int main() {
 
 	FpsModel fpsModel = FpsModel();
 	SkyboxModel skyboxModel = SkyboxModel("res/skyboxDay");
-	std::vector<Model> assimpModels = AssetLoader::loadModels("res/models.scene");
+
+	Model model = Model("res/TestScene/testScene.obj");
 
 	DisplayManager::hideCursor();
 	//DisplayManager::showCursor();
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-	std::chrono::time_point loadTimeEnd = std::chrono::high_resolution_clock::now();
-	std::chrono::microseconds executionTime = std::chrono::duration_cast<std::chrono::microseconds>(loadTimeEnd - loadTimeStart);
-	std::cout << "Execution Time: " << executionTime.count() << std::endl;
 
 	FrameBufferObject fbo = FrameBufferObject();
 
@@ -123,15 +118,12 @@ int main() {
 
 		listener.updatePosition();
 
-
 		// Buffered Shader Cycle
 		fbo.bind();
 		shader.start();
-		for (Model assimpModel : assimpModels)
-			assimpModel.draw(shader);
+		model.draw(shader, glm::mat4(1.0f));
 		shader.stop();
 
-		// Skybox Shader Cycle
 		skyboxShader.start();
 		skyboxModel.draw(skyboxShader);
 		skyboxShader.stop();
@@ -142,53 +134,14 @@ int main() {
 		glCall(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Shader Cycle
-		GLuint tempTexID = assimpModels[4].meshes[0].textures[0].id;
-		assimpModels[4].meshes[0].textures[0].id = fbo.textureColorID;
+		unsigned int tempTexture = model.meshes[1].textures[0].ID;
+		model.meshes[1].textures[0].ID = fbo.textureColorID;
+
 		shader.start();
-		for (Model assimpModel : assimpModels)
-			assimpModel.draw(shader);
+		model.draw(shader, glm::mat4(1.0f));
 		shader.stop();
-		assimpModels[4].meshes[0].textures[0].id = tempTexID;
 
-		// Static Shader Cycle
-		staticShader.start();
-		for (Model assimpModel : assimpModels)
-		{
-			assimpModel.increasePosition(glm::vec3(-10.0f, 0.0f, 0.0f));
-			assimpModel.draw(staticShader, light);
-			assimpModel.increasePosition(glm::vec3(10.0f, 0.0f, 0.0f));
-		}
-		staticShader.stop();
-
-		// Normal Shader Cycle
-		normalShader.start();
-		for (Model assimpModel : assimpModels)
-		{
-			assimpModel.increasePosition(glm::vec3(-20.0f, 0.0f, 0.0f));
-			assimpModel.draw(normalShader, light);
-			assimpModel.increasePosition(glm::vec3(20.0f, 0.0f, 0.0f));
-		}
-		normalShader.stop();
-
-		// Tessellation Shader Cycle
-		tessShader.start();
-		for (Model assimpModel : assimpModels)
-		{
-			assimpModel.increasePosition(glm::vec3(-30.0f, 0.0f, 0.0f));
-			assimpModel.draw(tessShader, light);
-			assimpModel.increasePosition(glm::vec3(30.0f, 0.0f, 0.0f));
-		}
-		tessShader.stop();
-
-		// Reflection Shader Cycle
-		reflectionShader.start();
-		for (Model assimpModel : assimpModels)
-		{
-			assimpModel.increasePosition(glm::vec3(-40.0f, 0.0f, 0.0f));
-			assimpModel.draw(reflectionShader, light);
-			assimpModel.increasePosition(glm::vec3(40.0f, 0.0f, 0.0f));
-		}
-		reflectionShader.stop();
+		model.meshes[1].textures[0].ID = tempTexture;
 
 		// Skybox Shader Cycle
 		skyboxShader.start();
@@ -203,6 +156,7 @@ int main() {
 		DisplayManager::updateDisplay();
 	}
 
+	fbo.destroy();
 	shader.cleanUp();
 	staticShader.cleanUp();
 	normalShader.cleanUp();

@@ -2,9 +2,9 @@
 
 #include <string>
 
-struct Texture {
-	unsigned int id = NULL;
-	std::string type;
-	std::string path;
-	float gamma = NULL;
+struct Texture
+{
+	unsigned int ID;
+	std::string Type;
+	std::string Path;
 };

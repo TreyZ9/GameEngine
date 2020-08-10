@@ -2,27 +2,24 @@
 #include "SkyboxModel.h"
 
 #include "OpenGLFunctions.h"
-#include "AssetLoader.h"
+#include "Loader.h"
 #include "Camera.h"
 #include "Config.h"
 #include "Maths.h"
 
 SkyboxModel::SkyboxModel(const std::string& directory)
 {
-	this->vao = AssetLoader::createVAO();
+	this->vao = Loader::createVAO();
 
 	glCall(glGenBuffers, 1, &this->vbo);
 	glCall(glBindBuffer, GL_ARRAY_BUFFER, this->vbo);
 	glCall(glBufferData, GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &this->vertices[0], GL_STATIC_DRAW);
 
-	AssetLoader::createAttibutePointer(0, 3, sizeof(float) * 3, (void*)0);
+	Loader::createAttibutePointer(0, 3, sizeof(float) * 3, (void*)0);
 
 	glCall(glBindVertexArray, 0);
 
-	AssetLoader::vaos.push_back(this->vao);
-	AssetLoader::vbos.push_back(this->vbo);
-
-	this->texture = AssetLoader::loadCubeMap(directory);
+	this->texture = Loader::loadCubeMap(directory);
 }
 
 SkyboxModel::~SkyboxModel() {}
@@ -31,7 +28,7 @@ void SkyboxModel::draw(SkyboxShader shader)
 {
 	glCall(glActiveTexture, GL_TEXTURE0);
 	glCall(glUniform1i, glGetUniformLocation(shader.getProgramID(), "texture_cubeMap0"), 0);
-	glCall(glBindTexture, GL_TEXTURE_CUBE_MAP, texture.id);
+	glCall(glBindTexture, GL_TEXTURE_CUBE_MAP, texture.ID);
 
 	glm::mat4 projectionMatrix = glm::perspective(Config::Display::FOV,
 		(float)Config::Display::WIDTH / (float)Config::Display::HEIGHT,

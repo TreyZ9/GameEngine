@@ -3,7 +3,8 @@
 
 #include "OpenGLFunctions.h"
 #include "DisplayManager.h"
-#include "AssetLoader.h"
+#include "Vertex.h"
+#include "Loader.h"
 #include "Maths.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -12,22 +13,24 @@
 
 FpsModel::FpsModel()
 {
-	this->vaoID = AssetLoader::createVAO();
-	AssetLoader::storeDataInAttributeList(0, 3, vertices);
-	AssetLoader::storeDataInAttributeList(1, 2, textureCoords);
-	AssetLoader::bindIndicesArray(indices);
+	glCall(glGenVertexArrays, 1, &this->vaoID);
+	glCall(glBindVertexArray, this->vaoID);
+
+	Loader::storeDataInAttributeList(0, 3, vertices);
+	Loader::storeDataInAttributeList(1, 2, textureCoords);
+	Loader::bindIndicesArray(indices);
 	this->vertexCount = (int) indices.size();
 
-	this->fpsTextures['0'] = AssetLoader::loadTexture("res/fpsTextures/0.png", "diffuse").id;
-	this->fpsTextures['1'] = AssetLoader::loadTexture("res/fpsTextures/1.png", "diffuse").id;
-	this->fpsTextures['2'] = AssetLoader::loadTexture("res/fpsTextures/2.png", "diffuse").id;
-	this->fpsTextures['3'] = AssetLoader::loadTexture("res/fpsTextures/3.png", "diffuse").id;
-	this->fpsTextures['4'] = AssetLoader::loadTexture("res/fpsTextures/4.png", "diffuse").id;
-	this->fpsTextures['5'] = AssetLoader::loadTexture("res/fpsTextures/5.png", "diffuse").id;
-	this->fpsTextures['6'] = AssetLoader::loadTexture("res/fpsTextures/6.png", "diffuse").id;
-	this->fpsTextures['7'] = AssetLoader::loadTexture("res/fpsTextures/7.png", "diffuse").id;
-	this->fpsTextures['8'] = AssetLoader::loadTexture("res/fpsTextures/8.png", "diffuse").id;
-	this->fpsTextures['9'] = AssetLoader::loadTexture("res/fpsTextures/9.png", "diffuse").id;
+	this->fpsTextures['0'] = Loader::loadTexture("res/fpsTextures/0.png", "diffuse").ID;
+	this->fpsTextures['1'] = Loader::loadTexture("res/fpsTextures/1.png", "diffuse").ID;
+	this->fpsTextures['2'] = Loader::loadTexture("res/fpsTextures/2.png", "diffuse").ID;
+	this->fpsTextures['3'] = Loader::loadTexture("res/fpsTextures/3.png", "diffuse").ID;
+	this->fpsTextures['4'] = Loader::loadTexture("res/fpsTextures/4.png", "diffuse").ID;
+	this->fpsTextures['5'] = Loader::loadTexture("res/fpsTextures/5.png", "diffuse").ID;
+	this->fpsTextures['6'] = Loader::loadTexture("res/fpsTextures/6.png", "diffuse").ID;
+	this->fpsTextures['7'] = Loader::loadTexture("res/fpsTextures/7.png", "diffuse").ID;
+	this->fpsTextures['8'] = Loader::loadTexture("res/fpsTextures/8.png", "diffuse").ID;
+	this->fpsTextures['9'] = Loader::loadTexture("res/fpsTextures/9.png", "diffuse").ID;
 }
 
 FpsModel::~FpsModel() {}

@@ -1,56 +1,34 @@
 #pragma once
 
-#include <glad/glad.h>
-#include <glfw/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-#include "TessellationShader.h"
-#include "ReflectionShader.h"
-#include "ShaderProgram.h"
-#include "NormalShader.h"
-#include "StaticShader.h"
+#include <vector>
+#include <string>
+
+#include "Material.h"
 #include "Texture.h"
 #include "Shader.h"
 #include "Vertex.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-
-#include <string>
-#include <vector>
-
-class Mesh {
-public:
-	std::vector<GLuint> vaos;
-	std::vector<GLuint> vbos;
-	std::vector<GLuint> ebos;
-
-	std::vector<Vertex> vertices;
-	std::vector<GLuint> indices;
-	std::vector<Texture> textures;
-	float gamma = 1.0f;
-	float useSpecularMap = false;
-	GLuint VAO;
-
-	Mesh();
-
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
-
-	// type = "diffuse|specular|normal|height|displacement"
-	void applyTexture(const std::string& filename, std::string type, float gamma = false);
-
-	void bindTextures(ShaderProgram* shader);
-
-	void draw(Shader shader, glm::mat4 transformationMatrix, Light unusedLight);
-
-	void draw(StaticShader shader, glm::mat4 transformationMatrix, Light light);
-
-	void draw(NormalShader shader, glm::mat4 transformationMatrix, Light light);
-
-	void draw(TessellationShader shader, glm::mat4 transformationMatrix, Light light);
-
-	void draw(ReflectionShader shader, glm::mat4 transformationMatrix, Light light);
-
+class Mesh
+{
 private:
-	GLuint VBO, EBO;
+	unsigned int vbo = NULL;
+	unsigned int ebo = NULL;
 
 	void setupMesh();
+	void bindTextures(Shader& shader);
+
+public:
+	std::vector<Vertex> vertices;
+	std::vector<unsigned int> indices;
+	std::vector<Texture> textures;
+	Material mat;
+	unsigned int vao = NULL;
+	unsigned int uniformBlockIndex;
+
+	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material mat);
+
+	void draw(Shader shader, glm::mat4 transformationMatrix);
 };

@@ -33,8 +33,8 @@ private:
 	std::vector<int> fpsBuffer = std::vector<int>(Config::Display::FPS_BUFFER_SIZE, 60);
 	std::string fps = "60";
 
-	int vaoID;
-	int vertexCount;
+	unsigned int vaoID;
+	unsigned int vertexCount;
 
 	std::map<char, GLuint> fpsTextures;
 

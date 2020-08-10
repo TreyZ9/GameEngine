@@ -97,6 +97,9 @@
     <Filter Include="Source Files\Graphics">
       <UniqueIdentifier>{052e349d-3495-4cbc-8908-46c9e06e6762}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shaders\Children\BasicShader">
+      <UniqueIdentifier>{06ceff3f-3801-48f8-b591-c3feb19db548}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
@@ -106,9 +109,6 @@
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="AssetLoader.h">
@@ -159,12 +159,6 @@
     <ClInclude Include="Config.h">
       <Filter>Header Files\Toolbox</Filter>
     </ClInclude>
-    <ClInclude Include="Vertex.h">
-      <Filter>Header Files\Models\Primitives</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Header Files\Models\Primitives</Filter>
-    </ClInclude>
     <ClInclude Include="..\Include\openAL\al.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
@@ -188,6 +182,24 @@
     </ClInclude>
     <ClInclude Include="FrameBufferObject.h">
       <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicShader.h">
+      <Filter>Header Files\Shaders\Children</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Header Files\Models\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files\Models\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>Header Files\Models\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Loader.h">
+      <Filter>Header Files\Loaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -214,9 +226,6 @@
     </ClCompile>
     <ClCompile Include="SkyboxModel.cpp">
       <Filter>Source Files\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Source Files\Entities</Filter>
@@ -272,6 +281,15 @@
     <ClCompile Include="FrameBufferObject.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicShader.cpp">
+      <Filter>Source Files\Shaders\Children\BasicShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Loader.cpp">
+      <Filter>Source Files\Loaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Notes.txt">
@@ -326,6 +344,12 @@
     </None>
     <None Include="shaders\tessellationShader\vertex.vert">
       <Filter>Source Files\Shaders\Children\TessellationShader</Filter>
+    </None>
+    <None Include="shaders\basicShader\basicShader.frag">
+      <Filter>Source Files\Shaders\Children\BasicShader</Filter>
+    </None>
+    <None Include="shaders\basicShader\basicShader.vert">
+      <Filter>Source Files\Shaders\Children\BasicShader</Filter>
     </None>
   </ItemGroup>
 </Project>

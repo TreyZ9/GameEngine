@@ -8,70 +8,7 @@
 #include <fstream>
 #include <iostream>
 
-std::map<std::string, Texture> AssetLoader::textures = {};
 std::map<std::string, Sound> AssetLoader::sounds = {};
-std::vector<GLuint> AssetLoader::vaos = {};
-std::vector<GLuint> AssetLoader::vbos = {};
-std::vector<GLuint> AssetLoader::ebos = {};
-
-// accepted flags : model|texture|position|rotation|scale|gamma
-std::vector<Model> AssetLoader::loadModels(const std::string& filename)
-{
-	std::ifstream infile(filename);
-	std::string line;
-
-	std::vector<Model> models;
-	Model activeModel = Model();
-
-	while (std::getline(infile, line))
-	{
-		if (!line.empty())
-		{
-			std::vector<std::string> elements = AssetLoader::splitString(line, ":");
-			if (elements[0] == "model")
-			{
-				if (elements[1] != "end")
-					activeModel = Model(elements[1]);
-				else
-					models.push_back(activeModel);
-			}
-			if (elements[0] == "texture")
-				activeModel.meshes[0].applyTexture(elements[1], elements[2]);
-			if (elements[0] == "position")
-				activeModel.setPosition(glm::vec3(std::stof(elements[1]), std::stof(elements[2]), std::stof(elements[3])));
-			if (elements[0] == "rotation")
-				activeModel.setRotation(glm::vec3(std::stof(elements[1]), std::stof(elements[2]), std::stof(elements[3])));
-			if (elements[0] == "scale")
-				activeModel.setScale(std::stof(elements[1]));
-			if (elements[0] == "gamma")
-			{
-				if (elements[1] == "true")
-					activeModel.meshes[0].gamma = std::stof(elements[2]);
-				else
-					activeModel.meshes[0].gamma = 1;
-			}
-		}
-	}
-
-	return models;
-}
-
-std::vector<std::string> AssetLoader::splitString(std::string input, std::string delimiter)
-{
-	std::vector<std::string> tokens;
-	size_t prev = 0, pos = 0;
-	while (pos < input.length() && prev < input.length())
-	{
-		pos = input.find(delimiter, prev);
-		if (pos == std::string::npos)
-			pos = input.length();
-		std::string token = input.substr(prev, pos - prev);
-		if (!token.empty()) tokens.push_back(token);
-		prev = pos + delimiter.length();
-	}
-
-	return tokens;
-}
 
 std::int32_t AssetLoader::convertToInt(char* buffer, std::size_t len)
 {
@@ -247,134 +184,46 @@ Sound AssetLoader::loadWav(const std::string& filename)
 	}
 }
 
-Texture AssetLoader::loadTexture(const std::string& filename, const std::string& type, bool gamma)
+Texture AssetLoader::loadCubeMap(const std::string& directory)
 {
-	if (AssetLoader::textures.count(filename) == 0)
-	{
-		unsigned int textureID;
-		glCall(glGenTextures, 1, &textureID);
-		// glGenTextures(1, &textureID);
+	std::vector<std::string> faces = { directory + "/right.png", directory + "/left.png", directory + "/top.png",
+		directory + "/bottom.png", directory + "/back.png", directory + "/front.png" };
 
-		int width, height, nrComponents;
-		stbi_set_flip_vertically_on_load(true);
-		unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
+	GLuint textureID;
+	glCall(glGenTextures, 1, &textureID);
+	glCall(glBindTexture, GL_TEXTURE_CUBE_MAP, textureID);
+
+	stbi_set_flip_vertically_on_load(false);
+	for (unsigned int i = 0; i < faces.size(); i++)
+	{
+		int width, height, nrChannels;
+		unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
 		if (data)
 		{
-			GLenum format;
-			if (nrComponents == 1)
-				format = GL_RED;
-			else if (nrComponents == 3)
-				format = GL_RGB;
-			else if (nrComponents == 4)
-				format = GL_RGBA;
-
-			glCall(glBindTexture, GL_TEXTURE_2D, textureID);
-			glCall(glTexImage2D, GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-			glCall(glGenerateMipmap, GL_TEXTURE_2D);
-
-			glCall(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glCall(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			glCall(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			glCall(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+			glCall(glTexImage2D, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 			stbi_image_free(data);
 
-			LOG_fileLoad(filename, type, true);
+			LOG_fileLoad(faces[i], "cubeMap", true);
 		}
 		else
 		{
-			LOG_fileLoad(filename, type, false);
 			stbi_image_free(data);
+			LOG_fileLoad(faces[i], "cubeMap", false);
 		}
-
-		Texture texture;
-		texture.id = textureID;
-		texture.type = type;
-		texture.path = filename;
-		texture.gamma = gamma;
-		AssetLoader::textures.insert(std::pair<std::string, Texture>(filename, texture));
-
-		return texture;
 	}
-	else
-		return AssetLoader::textures[filename];
+
+	glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	Texture texture;
+	texture.ID = textureID;
+	texture.Type = "cubeMap";
+	texture.Path = directory;
+
+	return texture;
 }
 
-Texture AssetLoader::loadCubeMap(const std::string& directory)
-{
-	if (AssetLoader::textures.count(directory) == 0)
-	{
-		std::vector<std::string> faces = { directory + "/right.png", directory + "/left.png", directory + "/top.png",
-			directory + "/bottom.png", directory + "/back.png", directory + "/front.png" };
-
-		GLuint textureID;
-		glCall(glGenTextures, 1, &textureID);
-		glCall(glBindTexture, GL_TEXTURE_CUBE_MAP, textureID);
-
-		stbi_set_flip_vertically_on_load(false);
-		for (unsigned int i = 0; i < faces.size(); i++)
-		{
-			int width, height, nrChannels;
-			unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
-			if (data)
-			{
-				glCall(glTexImage2D, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-				stbi_image_free(data);
-
-				LOG_fileLoad(faces[i], "cubeMap", true);
-			}
-			else
-			{
-				stbi_image_free(data);
-				LOG_fileLoad(faces[i], "cubeMap", false);
-			}
-		}
-
-		glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-		Texture texture;
-		texture.id = textureID;
-		texture.type = "cubeMap";
-		texture.path = directory;
-		texture.gamma = 0.0f;
-		AssetLoader::textures.insert(std::pair<std::string, Texture>(directory, texture));
-
-		return texture;
-	}
-	else
-		return AssetLoader::textures[directory];
-}
-
-void AssetLoader::cleanUp()
-{
-
-	for (GLuint vao : AssetLoader::vaos)
-		glCall(glDeleteVertexArrays, 1, &vao);
-	for (GLuint vbo : AssetLoader::vbos)
-		glCall(glDeleteBuffers, 1, &vbo);
-	for (GLuint ebo : AssetLoader::ebos)
-		glCall(glDeleteBuffers, 1, &ebo);
-	for (auto const& pair : AssetLoader::textures)
-		glCall(glDeleteTextures, 1, &pair.second.id);
-}
-
-GLuint AssetLoader::bindIndicesArray(std::vector<GLuint> indices) {
-	GLuint EBO;
-	glCall(glGenBuffers, 1, &EBO);
-	glCall(glBindBuffer, GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glCall(glBufferData, GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(float), &indices[0], GL_STATIC_DRAW);
-	return EBO;
-}
-
-GLuint AssetLoader::createVAO() {
-	GLuint vaoID;
-	glCall(glGenVertexArrays, 1, &vaoID);
-	glCall(glBindVertexArray, vaoID);
-	return vaoID;
-}
-
-void AssetLoader::unbindVAO() { glCall(glBindVertexArray, 0); }
+void AssetLoader::cleanUp() {}
