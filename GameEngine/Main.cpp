@@ -37,7 +37,6 @@
 #include "NormalShader.h"
 #include "SkyboxShader.h"
 #include "SkyboxModel.h"
-#include "AssetLoader.h"
 #include "FPSShader.h"
 #include "FpsModel.h"
 #include "Listener.h"
@@ -54,6 +53,8 @@
 #include "Mesh.h"
 
 int main() {
+	Loader::loadSceneJSON("res/TestScene/testScene.json");
+
 	Listener listener = Listener();
 
 	Source source1 = Source("res/audio/ambientMono.wav", glm::vec3(-4.25f, 0.125f, -4.25f), glm::vec3(0.0f), 1.0f, 1.0f, 0.0f, 10.0f, 1.0f, AL_FALSE);
@@ -62,16 +63,16 @@ int main() {
 	DisplayManager::createDisplay(Config::Display::WIDTH, Config::Display::HEIGHT);
 
 	Shader shader = Shader(
-		"shaders/shader/shader.vert",
-		"shaders/shader/shader.frag");
+		"shaders/Shader/shader.vert",
+		"shaders/Shader/shader.frag");
 
 	StaticShader staticShader = StaticShader(
-		"shaders/staticShader/staticShader.vert", 
-		"shaders/staticShader/staticShader.frag");
+		"shaders/LightShader/shader.vert", 
+		"shaders/LightShader/shader.frag");
 
 	NormalShader normalShader = NormalShader(
-		"shaders/normalShader/normalShader.vert",
-		"shaders/normalShader/normalShader.frag");
+		"shaders/NormalShader/shader.vert",
+		"shaders/NormalShader/shader.frag");
 
 	TessellationShader tessShader = TessellationShader(
 		"shaders/tessellationShader/vertex.vert",
@@ -105,6 +106,7 @@ int main() {
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	FrameBufferObject fbo = FrameBufferObject();
+	FrameBufferObject fbo2 = FrameBufferObject();
 
 	source1.play();
 
@@ -129,13 +131,29 @@ int main() {
 		skyboxShader.stop();
 		fbo.unbind();
 
+		// Buffered Shader Cycle 2
+		GLuint tempTexture = model.meshes[1].textures[0].ID;
+		model.meshes[1].textures[0].ID = fbo.textureColorID;
+
+		fbo2.bind();
+		shader.start();
+		model.draw(shader, glm::mat4(1.0f));
+		shader.stop();
+
+		skyboxShader.start();
+		skyboxModel.draw(skyboxShader);
+		skyboxShader.stop();
+		fbo2.unbind();
+
+		model.meshes[1].textures[0].ID = tempTexture;
+
 		// Clear Screen Buffers
 		glCall(glClearColor, 0.0f, 1.0f, 1.0f, 1.0f);
 		glCall(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Shader Cycle
-		unsigned int tempTexture = model.meshes[1].textures[0].ID;
-		model.meshes[1].textures[0].ID = fbo.textureColorID;
+		tempTexture = model.meshes[1].textures[0].ID;
+		model.meshes[1].textures[0].ID = fbo2.textureColorID;
 
 		shader.start();
 		model.draw(shader, glm::mat4(1.0f));
@@ -162,6 +180,6 @@ int main() {
 	normalShader.cleanUp();
 	tessShader.cleanUp();
 	fpsShader.cleanUp();
-	AssetLoader::cleanUp();
+	Loader::destroy();
 	DisplayManager::closeDisplay();
 }

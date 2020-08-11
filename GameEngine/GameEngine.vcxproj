@@ -135,7 +135,6 @@
   <ItemGroup>
     <ClInclude Include="..\Include\openAL\al.h" />
     <ClInclude Include="..\Include\openAL\alc.h" />
-    <ClInclude Include="AssetLoader.h" />
     <ClInclude Include="BasicShader.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Config.h" />
@@ -168,7 +167,6 @@
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AssetLoader.cpp" />
     <ClCompile Include="BasicShader.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Config.cpp" />

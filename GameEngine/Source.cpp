@@ -1,7 +1,7 @@
 #include "Source.h"
 
 #include "OpenALFunctions.h"
-#include "AssetLoader.h"
+#include "Loader.h"
 #include "Debug.h"
 
 Source::Source() {}
@@ -11,7 +11,7 @@ Source::Source(const std::string filename, glm::vec3 position, glm::vec3 velocit
 	position(position), velocity(velocity), pitch(pitch), gain(gain), referenceDistance(referenceDistance),
 	maxDistance(maxDistance), rolloffFactor(rolloffFactor), looping(looping)
 {
-	this->sound = AssetLoader::loadWav(filename);
+	this->sound = Loader::loadWav(filename);
 	if (this->sound.rawSoundData == nullptr || this->sound.dataSize == 0)
 		LOG_fileLoad(filename, "Audio", false);
 	alCall(alGenBuffers, 1, &this->buffer);

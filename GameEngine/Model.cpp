@@ -143,10 +143,7 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType 
 
 		if (!skip)
 		{
-			Texture texture;
-			texture.ID = Loader::loadTextureFromPath(str.C_Str(), this->directory);
-			texture.Type = typeName;
-			texture.Path = str.C_Str();
+			Texture texture = Loader::loadTextureFromPath(str.C_Str(), this->directory, typeName);
 			textures.push_back(texture);
 			texturesLoaded.push_back(texture);
 		}

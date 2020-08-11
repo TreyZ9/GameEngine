@@ -3,6 +3,7 @@
 #include <string>
 
 #define LOG_fileLoad(loadedFile, type, success) Debug::fileLoad(__FILE__, __LINE__, loadedFile, type, success)
+#define LOG_fileLoadInfo(loadedFile, type, success, info) Debug::fileLoad(__FILE__, __LINE__, loadedFile, type, success, info)
 #define LOG_alcOpenDevice(success) Debug::alcOpenDevice(__FILE__, __LINE__, success)
 #define LOG_alcCreateContext(success) Debug::alcCreateContext(__FILE__, __LINE__, success)
 #define LOG_alcMakeContextCurrent(success) Debug::alcMakeContextCurrent(__FILE__, __LINE__, success)

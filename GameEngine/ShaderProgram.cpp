@@ -101,7 +101,7 @@ int ShaderProgram::loadShader(std::string filename, int type) {
 		dataFile.close();
 		data = dataStream.str();
 	}
-	catch (std::ifstream::failure e) { std::cout << "failed to open : " << filename << std::endl; }
+	catch (std::ifstream::failure e) { LOG_fileLoadInfo(filename, "shader", false, "File does not exist"); }
 
 	const char* shaderCode = data.c_str();
 	unsigned int shader;
@@ -113,22 +113,22 @@ int ShaderProgram::loadShader(std::string filename, int type) {
 	glCall(glGetShaderiv, shader, GL_COMPILE_STATUS, &success);
 	if (!success) {
 		if (type == GL_VERTEX_SHADER)
-			Debug::fileLoad(__FILE__, __LINE__, filename, "vertexShader", false);
+			LOG_fileLoad(filename, "vertexShader", false);
 		else if (type == GL_FRAGMENT_SHADER)
-			Debug::fileLoad(__FILE__, __LINE__, filename, "fragmentShader", false);
+			LOG_fileLoad(filename, "fragmentShader", false);
 		else if (type == GL_TESS_CONTROL_SHADER)
-			Debug::fileLoad(__FILE__, __LINE__, filename, "controlShader", false);
+			LOG_fileLoad(filename, "controlShader", false);
 		else if (type == GL_TESS_EVALUATION_SHADER)
-			Debug::fileLoad(__FILE__, __LINE__, filename, "evaluationShader", false);
+			LOG_fileLoad(filename, "evaluationShader", false);
 		else if (type == GL_GEOMETRY_SHADER)
-			Debug::fileLoad(__FILE__, __LINE__, filename, "geometryShader", false);
+			LOG_fileLoad(filename, "geometryShader", false);
 		else
-			Debug::fileLoad(__FILE__, __LINE__, filename, "unknownShader", false);
+			LOG_fileLoad(filename, "unknownShader", false);
 
 		glGetShaderInfoLog(shader, 1024, NULL, infoLog); // glCall Currently Incompatible, Needs Fixed
 		std::cout << infoLog << std::endl;
 	}
-	Debug::fileLoad(__FILE__, __LINE__, filename, "shader", true);
+	LOG_fileLoad(filename, "shader", true);
 
 	return shader;
 }

@@ -18,7 +18,7 @@ FpsModel::FpsModel()
 
 	Loader::storeDataInAttributeList(0, 3, vertices);
 	Loader::storeDataInAttributeList(1, 2, textureCoords);
-	Loader::bindIndicesArray(indices);
+	Loader::createEBO(indices);
 	this->vertexCount = (int) indices.size();
 
 	this->fpsTextures['0'] = Loader::loadTexture("res/fpsTextures/0.png", "diffuse").ID;

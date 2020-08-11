@@ -1,9 +1,0 @@
-
-Texture Types [REFERENCE]
-	Diffuse
-	Albedo
-	Ambient Occlusion
-	Normal (Bump)
-	Displacement
-	Specular (Reflection)
-	Glass (Roughness)
