@@ -1,8 +1,9 @@
 #include "Loader.h"
 
 #include "stb_image.h"
-#include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
+#include <rapidjson/rapidjson.h>
+#include <rapidjson/document.h>
 
 #include <fstream>
 
@@ -23,7 +24,13 @@ void Loader::loadSceneJSON(const std::string& filename)
 	rapidjson::Document jsonDocument;
 	jsonDocument.ParseStream(jsonFileWrapped);
 
-	std::cout << jsonDocument["Shaders"]["BasicShader"]["VertexPath"].GetString() << std::endl;
+	const rapidjson::Value& shaders = jsonDocument["Shaders"];
+	for (rapidjson::Value::ConstMemberIterator shader = shaders.MemberBegin(); shader != shaders.MemberEnd(); shader++)
+	{
+		std::cout << shader->name.GetString() << std::endl;
+		std::cout << "   " << shader->value["VertexPath"].GetString() << std::endl;
+		std::cout << "   " << shader->value["FragmentPath"].GetString() << std::endl;
+	}
 }
 
 std::int32_t Loader::convertToInt(char* buffer, std::size_t len)
