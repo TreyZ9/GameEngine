@@ -4,6 +4,8 @@
 
 struct Config
 {
+	static void loadConfigs(const std::string& filename);
+
 	struct Display
 	{
 		static std::string TITLE;
@@ -22,8 +24,8 @@ struct Config
 
 	struct Camera
 	{
-		static const float MOVEMENT_SPEED;
-		static const float LOOK_SPEED;
+		static float MOVEMENT_SPEED;
+		static float LOOK_SPEED;
 
 		static float PITCH_MIN;
 		static float PITCH_MAX;

@@ -143,6 +143,7 @@
     <ClInclude Include="FpsModel.h" />
     <ClInclude Include="FPSShader.h" />
     <ClInclude Include="FrameBufferObject.h" />
+    <ClInclude Include="INIReader.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Listener.h" />
     <ClInclude Include="Loader.h" />
@@ -195,9 +196,6 @@
     <ClCompile Include="StaticShader.cpp" />
     <ClCompile Include="stb.cpp" />
     <ClCompile Include="TessellationShader.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Notes.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\basicShader\basicShader.frag" />

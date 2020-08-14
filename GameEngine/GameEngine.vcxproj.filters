@@ -198,6 +198,9 @@
     <ClInclude Include="Loader.h">
       <Filter>Header Files\Loaders</Filter>
     </ClInclude>
+    <ClInclude Include="INIReader.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stb.cpp">
@@ -284,11 +287,6 @@
     <ClCompile Include="Loader.cpp">
       <Filter>Source Files\Loaders</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Notes.txt">
-      <Filter>Source Files\Toolbox</Filter>
-    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\fpsShader\fragmentShaderFPS.frag">

@@ -21,16 +21,16 @@ FpsModel::FpsModel()
 	Loader::createEBO(indices);
 	this->vertexCount = (int) indices.size();
 
-	this->fpsTextures['0'] = Loader::loadTexture("res/fpsTextures/0.png", "diffuse").ID;
-	this->fpsTextures['1'] = Loader::loadTexture("res/fpsTextures/1.png", "diffuse").ID;
-	this->fpsTextures['2'] = Loader::loadTexture("res/fpsTextures/2.png", "diffuse").ID;
-	this->fpsTextures['3'] = Loader::loadTexture("res/fpsTextures/3.png", "diffuse").ID;
-	this->fpsTextures['4'] = Loader::loadTexture("res/fpsTextures/4.png", "diffuse").ID;
-	this->fpsTextures['5'] = Loader::loadTexture("res/fpsTextures/5.png", "diffuse").ID;
-	this->fpsTextures['6'] = Loader::loadTexture("res/fpsTextures/6.png", "diffuse").ID;
-	this->fpsTextures['7'] = Loader::loadTexture("res/fpsTextures/7.png", "diffuse").ID;
-	this->fpsTextures['8'] = Loader::loadTexture("res/fpsTextures/8.png", "diffuse").ID;
-	this->fpsTextures['9'] = Loader::loadTexture("res/fpsTextures/9.png", "diffuse").ID;
+	this->fpsTextures['0'] = Loader::loadTexture("Resources/fpsTextures/0.png", "diffuse").ID;
+	this->fpsTextures['1'] = Loader::loadTexture("Resources/fpsTextures/1.png", "diffuse").ID;
+	this->fpsTextures['2'] = Loader::loadTexture("Resources/fpsTextures/2.png", "diffuse").ID;
+	this->fpsTextures['3'] = Loader::loadTexture("Resources/fpsTextures/3.png", "diffuse").ID;
+	this->fpsTextures['4'] = Loader::loadTexture("Resources/fpsTextures/4.png", "diffuse").ID;
+	this->fpsTextures['5'] = Loader::loadTexture("Resources/fpsTextures/5.png", "diffuse").ID;
+	this->fpsTextures['6'] = Loader::loadTexture("Resources/fpsTextures/6.png", "diffuse").ID;
+	this->fpsTextures['7'] = Loader::loadTexture("Resources/fpsTextures/7.png", "diffuse").ID;
+	this->fpsTextures['8'] = Loader::loadTexture("Resources/fpsTextures/8.png", "diffuse").ID;
+	this->fpsTextures['9'] = Loader::loadTexture("Resources/fpsTextures/9.png", "diffuse").ID;
 }
 
 FpsModel::~FpsModel() {}

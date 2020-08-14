@@ -53,52 +53,53 @@
 #include "Mesh.h"
 
 int main() {
-	Loader::loadSceneJSON("res/TestScene/testScene.json");
+	Loader::loadSceneJSON("Resources/TestScene/testScene.json");
+	Config::loadConfigs("Settings/settings.ini");
 
 	Listener listener = Listener();
 
-	Source source1 = Source("res/audio/ambientMono.wav", glm::vec3(-4.25f, 0.125f, -4.25f), glm::vec3(0.0f), 1.0f, 1.0f, 0.0f, 10.0f, 1.0f, AL_FALSE);
-	Source source2 = Source("res/audio/heavy.wav");
+	Source source1 = Source("Resources/audio/ambientMono.wav", glm::vec3(-4.25f, 0.125f, -4.25f), glm::vec3(0.0f), 1.0f, 1.0f, 0.0f, 10.0f, 1.0f, AL_FALSE);
+	Source source2 = Source("Resources/audio/heavy.wav");
 
 	DisplayManager::createDisplay(Config::Display::WIDTH, Config::Display::HEIGHT);
 
 	Shader shader = Shader(
-		"shaders/Shader/shader.vert",
-		"shaders/Shader/shader.frag");
+		"Shaders/Shader/shader.vert",
+		"Shaders/Shader/shader.frag");
 
 	StaticShader staticShader = StaticShader(
-		"shaders/LightShader/shader.vert", 
-		"shaders/LightShader/shader.frag");
+		"Shaders/LightShader/shader.vert", 
+		"Shaders/LightShader/shader.frag");
 
 	NormalShader normalShader = NormalShader(
-		"shaders/NormalShader/shader.vert",
-		"shaders/NormalShader/shader.frag");
+		"Shaders/NormalShader/shader.vert",
+		"Shaders/NormalShader/shader.frag");
 
 	TessellationShader tessShader = TessellationShader(
-		"shaders/tessellationShader/vertex.vert",
-		"shaders/tessellationShader/fragment.frag",
-		"shaders/tessellationShader/control.tesc",
-		"shaders/tessellationShader/evaluation.tese");
+		"Shaders/tessellationShader/vertex.vert",
+		"Shaders/tessellationShader/fragment.frag",
+		"Shaders/tessellationShader/control.tesc",
+		"Shaders/tessellationShader/evaluation.tese");
 		// "shaders/tessellationShader/geometry.geom");
 
 	ReflectionShader reflectionShader = ReflectionShader(
-		"shaders/reflectionShader/shader.vert",
-		"shaders/reflectionShader/shader.frag");
+		"Shaders/reflectionShader/shader.vert",
+		"Shaders/reflectionShader/shader.frag");
 
 	SkyboxShader skyboxShader = SkyboxShader(
-		"shaders/skyboxShader/shader.vert",
-		"shaders/skyboxShader/shader.frag");
+		"Shaders/skyboxShader/shader.vert",
+		"Shaders/skyboxShader/shader.frag");
 
 	FPSShader fpsShader = FPSShader(
-		"shaders/fpsShader/vertexShaderFPS.vert",
-		"shaders/fpsShader/fragmentShaderFPS.frag");
+		"Shaders/fpsShader/vertexShaderFPS.vert",
+		"Shaders/fpsShader/fragmentShaderFPS.frag");
 
 	Light light(glm::vec3(60.0f, 100.0f, 100.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 
 	FpsModel fpsModel = FpsModel();
-	SkyboxModel skyboxModel = SkyboxModel("res/skyboxDay");
+	SkyboxModel skyboxModel = SkyboxModel("Resources/skyboxDay");
 
-	Model model = Model("res/TestScene/testScene.obj");
+	Model model = Model("Resources/TestScene/testScene.obj");
 
 	DisplayManager::hideCursor();
 	//DisplayManager::showCursor();
