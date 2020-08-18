@@ -135,7 +135,7 @@
   <ItemGroup>
     <ClInclude Include="..\Include\openAL\al.h" />
     <ClInclude Include="..\Include\openAL\alc.h" />
-    <ClInclude Include="BasicShader.h" />
+    <ClInclude Include="BSDFShader.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="DisplayManager.h" />
@@ -168,7 +168,7 @@
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BasicShader.cpp" />
+    <ClCompile Include="BSDFShader.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="Debug.cpp" />
@@ -198,8 +198,9 @@
     <ClCompile Include="TessellationShader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\basicShader\basicShader.frag" />
-    <None Include="shaders\basicShader\basicShader.vert" />
+    <None Include="Settings\settings.ini" />
+    <None Include="Shaders\BSDFShader\shader.frag" />
+    <None Include="Shaders\BSDFShader\shader.vert" />
     <None Include="shaders\fpsShader\fragmentShaderFPS.frag" />
     <None Include="shaders\fpsShader\vertexShaderFPS.vert" />
     <None Include="shaders\normalShader\normalShader.frag" />
@@ -216,6 +217,9 @@
     <None Include="shaders\tessellationShader\evaluation.tese" />
     <None Include="shaders\tessellationShader\fragment.frag" />
     <None Include="shaders\tessellationShader\vertex.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="StyleRules.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

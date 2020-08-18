@@ -1,15 +1,14 @@
 #pragma once
 
-#include <glm/common.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/common.hpp>
 
-struct Camera {
+struct Camera 
+{
 public:
-	static void move();
-
 	static glm::mat4 viewMatrix;
 	static glm::vec3 position;
-	static float pitch;
-	static float roll;
-	static float yaw;
+	static glm::vec3 rotation;
+
+	static void move();
 };

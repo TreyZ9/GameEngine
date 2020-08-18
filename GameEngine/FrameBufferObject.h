@@ -12,10 +12,12 @@ public:
 	GLuint textureColorID;
 
 	FrameBufferObject();
+
 	~FrameBufferObject();
 
 	void bind();
+
 	void unbind();
+
 	void destroy();
 };
-

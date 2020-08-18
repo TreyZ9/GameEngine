@@ -3,6 +3,9 @@
 #include <glad\glad.h>
 #include <glfw\glfw3.h>
 
+#include <openAL/al.h>
+#include <openAL/alc.h>
+
 // Standard
 #include <algorithm>
 #include <iostream>
@@ -21,9 +24,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/common.hpp>
 
-#include <openAL/al.h>
-#include <openAL/alc.h>
-
 #include "stb_image.h"
 
 // Headers
@@ -37,6 +37,7 @@
 #include "NormalShader.h"
 #include "SkyboxShader.h"
 #include "SkyboxModel.h"
+#include "BSDFShader.h"
 #include "FPSShader.h"
 #include "FpsModel.h"
 #include "Listener.h"
@@ -66,6 +67,10 @@ int main() {
 	Shader shader = Shader(
 		"Shaders/Shader/shader.vert",
 		"Shaders/Shader/shader.frag");
+
+	BSDFShader bsdfShader = BSDFShader(
+		"Shaders/BSDFShader/shader.vert",
+		"Shaders/BSDFShader/shader.frag");
 
 	StaticShader staticShader = StaticShader(
 		"Shaders/LightShader/shader.vert", 
@@ -99,7 +104,7 @@ int main() {
 	FpsModel fpsModel = FpsModel();
 	SkyboxModel skyboxModel = SkyboxModel("Resources/skyboxDay");
 
-	Model model = Model("Resources/TestScene/testScene.obj");
+	Model model = Model("Resources/BSDFTest/test0001.obj");
 
 	DisplayManager::hideCursor();
 	//DisplayManager::showCursor();
@@ -133,8 +138,8 @@ int main() {
 		fbo.unbind();
 
 		// Buffered Shader Cycle 2
-		GLuint tempTexture = model.meshes[1].textures[0].ID;
-		model.meshes[1].textures[0].ID = fbo.textureColorID;
+		//GLuint tempTexture = model.meshes[1].textures[0].ID;
+		//model.meshes[1].textures[0].ID = fbo.textureColorID;
 
 		fbo2.bind();
 		shader.start();
@@ -146,21 +151,21 @@ int main() {
 		skyboxShader.stop();
 		fbo2.unbind();
 
-		model.meshes[1].textures[0].ID = tempTexture;
+		//model.meshes[1].textures[0].ID = tempTexture;
 
 		// Clear Screen Buffers
 		glCall(glClearColor, 0.0f, 1.0f, 1.0f, 1.0f);
 		glCall(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Shader Cycle
-		tempTexture = model.meshes[1].textures[0].ID;
-		model.meshes[1].textures[0].ID = fbo2.textureColorID;
+		//tempTexture = model.meshes[1].textures[0].ID;
+		//model.meshes[1].textures[0].ID = fbo2.textureColorID;
 
-		shader.start();
-		model.draw(shader, glm::mat4(1.0f));
-		shader.stop();
+		bsdfShader.start();
+		model.draw(bsdfShader, glm::mat4(1.0f));
+		bsdfShader.stop();
 
-		model.meshes[1].textures[0].ID = tempTexture;
+		//model.meshes[1].textures[0].ID = tempTexture;
 
 		// Skybox Shader Cycle
 		skyboxShader.start();

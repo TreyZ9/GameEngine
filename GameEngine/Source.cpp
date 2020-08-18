@@ -12,18 +12,18 @@ Source::Source(const std::string filename, glm::vec3 position, glm::vec3 velocit
 	maxDistance(maxDistance), rolloffFactor(rolloffFactor), looping(looping)
 {
 	this->sound = Loader::loadWav(filename);
-	if (this->sound.rawSoundData == nullptr || this->sound.dataSize == 0)
+	if (this->sound.RawSoundData == nullptr || this->sound.DataSize == 0)
 		LOG_fileLoad(filename, "Audio", false);
 	alCall(alGenBuffers, 1, &this->buffer);
 
 	ALenum format;
-	if (sound.channels == 1 && sound.bitsPerSample == 8)
+	if (sound.Channels == 1 && sound.BitsPerSample == 8)
 		format = AL_FORMAT_MONO8;
-	else if (sound.channels == 1 && sound.bitsPerSample == 16)
+	else if (sound.Channels == 1 && sound.BitsPerSample == 16)
 		format = AL_FORMAT_MONO16;
-	else if (sound.channels == 2 && sound.bitsPerSample == 8)
+	else if (sound.Channels == 2 && sound.BitsPerSample == 8)
 		format = AL_FORMAT_STEREO8;
-	else if (sound.channels == 2 && sound.bitsPerSample == 16)
+	else if (sound.Channels == 2 && sound.BitsPerSample == 16)
 		format = AL_FORMAT_STEREO16;
 	else
 	{
@@ -31,8 +31,8 @@ Source::Source(const std::string filename, glm::vec3 position, glm::vec3 velocit
 		format = NULL;
 	}
 
-	std::vector<char> soundData(this->sound.rawSoundData, this->sound.rawSoundData + this->sound.dataSize);
-	alCall(alBufferData, buffer, format, soundData.data(), soundData.size(), sound.sampleRate);
+	std::vector<char> soundData(this->sound.RawSoundData, this->sound.RawSoundData + this->sound.DataSize);
+	alCall(alBufferData, buffer, format, soundData.data(), soundData.size(), sound.SampleRate);
 	soundData.clear();
 
 	alCall(alGenSources, 1, &this->id);

@@ -47,8 +47,8 @@ void TessellationShader::loadViewMatrix() {
 void TessellationShader::loadCameraPosition(glm::vec3 pos) { this->loadVec3(this->location_eyePos, pos); }
 
 void TessellationShader::loadLight(Light light) {
-	this->loadVec3(this->location_lightPosition, light.getPosition());
-	this->loadVec3(this->location_lightColor, light.getColor());
+	this->loadVec3(this->location_lightPosition, light.position);
+	this->loadVec3(this->location_lightColor, light.color);
 }
 
 void TessellationShader::loadGamma(float gamma) { this->loadFloat(this->location_gamma, gamma); }

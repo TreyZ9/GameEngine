@@ -49,8 +49,8 @@ void StaticShader::loadViewMatrix()
 
 void StaticShader::loadLight(Light light)
 {
-	this->loadVec3(this->location_lightPosition, light.getPosition());
-	this->loadVec3(this->location_lightColor, light.getColor());
+	this->loadVec3(this->location_lightPosition, light.position);
+	this->loadVec3(this->location_lightColor, light.color);
 }
 
 void StaticShader::loadGamma(float gamma)

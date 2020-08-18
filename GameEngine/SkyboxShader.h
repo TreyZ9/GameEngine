@@ -12,11 +12,17 @@ public:
 	int location_viewMatrix;
 
 	SkyboxShader();
+
 	SkyboxShader(std::string vertexShaderFilename, std::string fragmentShaderFilename);
+
 	~SkyboxShader();
+
 	void bindAttributes();
+
 	void getAllUniformLocations();
+
 	void loadProjectionMatrix(glm::mat4);
+
 	void loadViewMatrix(glm::mat4 viewMatrix);
 };
 

@@ -1,10 +1,12 @@
 #pragma once
 
+#include <glad/glad.h>
+
 #include <string>
 
 struct Texture
 {
-	unsigned int ID;
+	GLuint ID;
 	std::string Type;
 	std::string Path;
 };

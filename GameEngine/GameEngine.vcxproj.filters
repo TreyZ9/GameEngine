@@ -97,14 +97,20 @@
     <Filter Include="Source Files\Graphics">
       <UniqueIdentifier>{052e349d-3495-4cbc-8908-46c9e06e6762}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Shaders\Children\BasicShader">
-      <UniqueIdentifier>{06ceff3f-3801-48f8-b591-c3feb19db548}</UniqueIdentifier>
+    <Filter Include="Resource Files\Include">
+      <UniqueIdentifier>{6613a359-5e8d-4ffc-902f-331f483bef8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Settings">
+      <UniqueIdentifier>{21b13dd1-9cb5-4085-9b8a-a8e8b96fe30c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\Children\BSDFShader">
+      <UniqueIdentifier>{6714004b-6c90-4fc4-9d9f-142ed55395ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Notes">
+      <UniqueIdentifier>{af374fd0-75c5-482d-b567-d9fcebc8ceb5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stb_image.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
@@ -156,12 +162,6 @@
     <ClInclude Include="Config.h">
       <Filter>Header Files\Toolbox</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\openAL\al.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Include\openAL\alc.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source.h">
       <Filter>Header Files\Audio</Filter>
     </ClInclude>
@@ -183,9 +183,6 @@
     <ClInclude Include="Model.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
-    <ClInclude Include="BasicShader.h">
-      <Filter>Header Files\Shaders\Children</Filter>
-    </ClInclude>
     <ClInclude Include="Material.h">
       <Filter>Header Files\Models\Primitives</Filter>
     </ClInclude>
@@ -198,17 +195,23 @@
     <ClInclude Include="Loader.h">
       <Filter>Header Files\Loaders</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\openAL\al.h">
+      <Filter>Resource Files\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\openAL\alc.h">
+      <Filter>Resource Files\Include</Filter>
+    </ClInclude>
     <ClInclude Include="INIReader.h">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Resource Files\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="BSDFShader.h">
+      <Filter>Header Files\Shaders\Children</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stb.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="glad.c">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
@@ -281,11 +284,17 @@
     <ClCompile Include="Model.cpp">
       <Filter>Source Files\Models</Filter>
     </ClCompile>
-    <ClCompile Include="BasicShader.cpp">
-      <Filter>Source Files\Shaders\Children\BasicShader</Filter>
-    </ClCompile>
     <ClCompile Include="Loader.cpp">
       <Filter>Source Files\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>Resource Files\Include</Filter>
+    </ClCompile>
+    <ClCompile Include="stb.cpp">
+      <Filter>Resource Files\Include</Filter>
+    </ClCompile>
+    <ClCompile Include="BSDFShader.cpp">
+      <Filter>Source Files\Shaders\Children\BSDFShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -337,11 +346,19 @@
     <None Include="shaders\tessellationShader\vertex.vert">
       <Filter>Source Files\Shaders\Children\TessellationShader</Filter>
     </None>
-    <None Include="shaders\basicShader\basicShader.frag">
-      <Filter>Source Files\Shaders\Children\BasicShader</Filter>
+    <None Include="Settings\settings.ini">
+      <Filter>Resource Files\Settings</Filter>
     </None>
-    <None Include="shaders\basicShader\basicShader.vert">
-      <Filter>Source Files\Shaders\Children\BasicShader</Filter>
+    <None Include="Shaders\BSDFShader\shader.frag">
+      <Filter>Source Files\Shaders\Children\BSDFShader</Filter>
     </None>
+    <None Include="Shaders\BSDFShader\shader.vert">
+      <Filter>Source Files\Shaders\Children\BSDFShader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="StyleRules.txt">
+      <Filter>Resource Files\Notes</Filter>
+    </Text>
   </ItemGroup>
 </Project>

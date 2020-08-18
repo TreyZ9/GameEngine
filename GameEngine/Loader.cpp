@@ -108,7 +108,7 @@ bool Loader::loadWavFileHeader(std::ifstream& file, Sound& sound)
 		std::cerr << "ERROR: could not read number of channels" << std::endl;
 		return false;
 	}
-	sound.channels = Loader::convertToInt(buffer, 2);
+	sound.Channels = Loader::convertToInt(buffer, 2);
 
 	// sample rate
 	if (!file.read(buffer, 4))
@@ -116,7 +116,7 @@ bool Loader::loadWavFileHeader(std::ifstream& file, Sound& sound)
 		std::cerr << "ERROR: could not read sample rate" << std::endl;
 		return false;
 	}
-	sound.sampleRate = Loader::convertToInt(buffer, 4);
+	sound.SampleRate = Loader::convertToInt(buffer, 4);
 
 	// (sampleRate * bitsPerSample * channels) / 8
 	if (!file.read(buffer, 4))
@@ -138,7 +138,7 @@ bool Loader::loadWavFileHeader(std::ifstream& file, Sound& sound)
 		std::cerr << "ERROR: could not read bits per sample" << std::endl;
 		return false;
 	}
-	sound.bitsPerSample = Loader::convertToInt(buffer, 2);
+	sound.BitsPerSample = Loader::convertToInt(buffer, 2);
 
 	// data chunk header "data"
 	if (!file.read(buffer, 4))
@@ -158,7 +158,7 @@ bool Loader::loadWavFileHeader(std::ifstream& file, Sound& sound)
 		std::cerr << "ERROR: could not read data size" << std::endl;
 		return false;
 	}
-	sound.dataSize = Loader::convertToInt(buffer, 4);
+	sound.DataSize = Loader::convertToInt(buffer, 4);
 
 	/* cannot be at the end of file */
 	if (file.eof())
@@ -193,9 +193,9 @@ Sound Loader::loadWav(const std::string& filename)
 			exit(-1);
 		}
 
-		sound.rawSoundData = new char[sound.dataSize];
+		sound.RawSoundData = new char[sound.DataSize];
 
-		in.read(sound.rawSoundData, sound.dataSize);
+		in.read(sound.RawSoundData, sound.DataSize);
 
 		Loader::sounds.insert(std::pair<std::string, Sound>(filename, sound));
 

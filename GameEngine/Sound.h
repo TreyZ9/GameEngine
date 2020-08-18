@@ -6,10 +6,10 @@
 
 struct Sound
 {
-	std::uint8_t channels;
-	std::int32_t sampleRate;
-	std::uint8_t bitsPerSample;
-	ALsizei dataSize;
-	ALenum format;
-	char* rawSoundData;
+	std::uint8_t Channels;
+	std::int32_t SampleRate;
+	std::uint8_t BitsPerSample;
+	ALsizei DataSize;
+	ALenum Format;
+	char* RawSoundData;
 };

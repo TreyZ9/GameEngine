@@ -10,9 +10,7 @@
 
 glm::mat4 Camera::viewMatrix = glm::mat4(1.0f);
 glm::vec3 Camera::position = glm::vec3(0.0f, 1.6f, 0.0f);
-float Camera::pitch = 0.0f;
-float Camera::roll = 0.0f;
-float Camera::yaw = 0.0f;
+glm::vec3 Camera::rotation = glm::vec3(0.0f);
 
 void Camera::move() 
 {
@@ -20,11 +18,11 @@ void Camera::move()
 	glfwGetCursorPos(DisplayManager::window, &xPos, &yPos);
 	glfwSetCursorPos(DisplayManager::window, Config::Display::WIDTH / 2, Config::Display::HEIGHT / 2);
 
-	Camera::pitch += Config::Camera::LOOK_SPEED * (float)DisplayManager::DELTA * ((float)yPos - (Config::Display::HEIGHT / 2));
-	Camera::yaw += Config::Camera::LOOK_SPEED * (float)DisplayManager::DELTA * ((float)xPos - (Config::Display::WIDTH / 2));
+	Camera::rotation.x += Config::Camera::LOOK_SPEED * (float)DisplayManager::DELTA * ((float)yPos - (Config::Display::HEIGHT / 2));
+	Camera::rotation.y += Config::Camera::LOOK_SPEED * (float)DisplayManager::DELTA * ((float)xPos - (Config::Display::WIDTH / 2));
 
-	if (Camera::pitch > Config::Camera::PITCH_MAX) { Camera::pitch = Config::Camera::PITCH_MAX; }
-	if (Camera::pitch < Config::Camera::PITCH_MIN) { Camera::pitch = Config::Camera::PITCH_MIN; }
+	if (Camera::rotation.x > Config::Camera::PITCH_MAX) { Camera::rotation.x = Config::Camera::PITCH_MAX; }
+	if (Camera::rotation.x < Config::Camera::PITCH_MIN) { Camera::rotation.x = Config::Camera::PITCH_MIN; }
 
 	float speedForward = 0.0f;
 	float speedRight = 0.0f;
@@ -38,14 +36,14 @@ void Camera::move()
 	if (glfwGetKey(DisplayManager::window, GLFW_KEY_A))
 		speedRight -= Config::Camera::MOVEMENT_SPEED * (float)DisplayManager::DELTA;
 
-	if (Camera::yaw < 0.0f) { Camera::yaw += 360; }    // Overflow
-	if (Camera::yaw > 360.0f) { Camera::yaw -= 360; }  // Protection
+	if (Camera::rotation.y < 0.0f) { Camera::rotation.y += 360; }    // Overflow
+	if (Camera::rotation.y > 360.0f) { Camera::rotation.y -= 360; }  // Protection
 
-	position.x += (float)sin(Camera::yaw * 3.141592654f / 180.0f) * speedForward;
-	position.z -= (float)cos(Camera::yaw * 3.141592654f / 180.0f) * speedForward;
+	position.x += (float)sin(Camera::rotation.y * 3.141592654f / 180.0f) * speedForward;
+	position.z -= (float)cos(Camera::rotation.y * 3.141592654f / 180.0f) * speedForward;
 
-	position.x += (float)sin((Camera::yaw + 90.0) * 3.141592654f / 180.0f) * speedRight;
-	position.z -= (float)cos((Camera::yaw + 90.0) * 3.141592654f / 180.0f) * speedRight;
+	position.x += (float)sin((Camera::rotation.y + 90.0) * 3.141592654f / 180.0f) * speedRight;
+	position.z -= (float)cos((Camera::rotation.y + 90.0) * 3.141592654f / 180.0f) * speedRight;
 
 	if (glfwGetKey(DisplayManager::window, GLFW_KEY_SPACE))
 		Camera::position.y += Config::Camera::MOVEMENT_SPEED * (float)DisplayManager::DELTA;

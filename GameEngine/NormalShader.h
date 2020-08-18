@@ -18,17 +18,25 @@ public:
 	int location_gamma;
 	int location_cameraPosition;
 
-	// Default Constructor
 	NormalShader();
-	// Constructor
+
 	NormalShader(std::string vertexShaderFilename, std::string fragmentShaderFilename);
+
 	~NormalShader();
+
 	void bindAttributes();
+
 	void getAllUniformLocations();
+
 	void loadTransformationMatrix(glm::mat4 matrix);
+
 	void loadProjectionMatrix(glm::mat4);
+
 	void loadViewMatrix();
+
 	void loadLight(Light light);
+
 	void loadGamma(float gamma);
+
 	void loadCameraPosition(glm::vec3 cameraPositon);
 };

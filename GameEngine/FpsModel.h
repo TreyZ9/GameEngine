@@ -1,7 +1,6 @@
 #pragma once
 
 #include "FPSShader.h"
-#include "Config.h"
 
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
@@ -9,6 +8,8 @@
 #include <string>
 #include <vector>
 #include <map>
+
+#include "Config.h"
 
 class FpsModel
 {
@@ -40,6 +41,7 @@ private:
 
 public:
 	FpsModel();
+
 	~FpsModel();
 
 	GLuint getTexture(char number);

@@ -16,14 +16,23 @@ public:
 	int location_gamma;
 
 	StaticShader();
+
 	StaticShader(std::string vertexShaderFilename, std::string fragmentShaderFilename);
+
 	~StaticShader();
+
 	void bindAttributes();
+
 	void getAllUniformLocations();
+
 	void loadTransformationMatrix(glm::mat4 matrix);
+
 	void loadProjectionMatrix(glm::mat4);
+
 	void loadViewMatrix();
+
 	void loadLight(Light light);
+
 	void loadGamma(float gamma);
 };
 

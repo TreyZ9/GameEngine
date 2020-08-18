@@ -36,7 +36,8 @@ void SkyboxModel::draw(SkyboxShader shader)
 	shader.loadProjectionMatrix(projectionMatrix);
 
 	glm::mat4 viewMatrix;
-	Maths::createTransformationMatrix(viewMatrix, glm::vec3(0.0f), Camera::pitch, Camera::yaw, Camera::roll, 1.0f);
+	Maths::createTransformationMatrix(viewMatrix, glm::vec3(0.0f), 
+		Camera::rotation.x, Camera::rotation.y, Camera::rotation.z, 1.0f);
 	shader.loadViewMatrix(viewMatrix);
 
 	glCall(glBindVertexArray, this->vao);

@@ -16,6 +16,7 @@ private:
 
 public:
 	Listener(glm::vec3 position = glm::vec3(0.0f), ALenum distanceModel = AL_LINEAR_DISTANCE_CLAMPED);
+
 	~Listener();
 
 	void updatePosition();

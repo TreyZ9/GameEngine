@@ -14,20 +14,30 @@ public:
 	int location_gamma;
 	int location_blackPoint;
 
-	// Default Constructor
+
 	TessellationShader();
-	// Constructor
+
 	TessellationShader(std::string vertexShaderFilename, std::string fragmentShaderFilename, 
 		std::string tessellationControlFilename, std::string tessellationEvaluationFilename,
 		std::string geometryFilename = "null");
+
 	~TessellationShader();
+
 	void bindAttributes();
+
 	void getAllUniformLocations();
+
 	void loadTransformationMatrix(glm::mat4 matrix);
+
 	void loadProjectionMatrix(glm::mat4);
+
 	void loadViewMatrix();
+
 	void loadCameraPosition(glm::vec3 pos);
+
 	void loadLight(Light light);
+
 	void loadGamma(float gamma);
+
 	void loadBlackPoint(float blackPoint);
 };

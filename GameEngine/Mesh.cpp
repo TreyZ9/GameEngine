@@ -36,7 +36,7 @@ void Mesh::setupMesh()
 	Loader::createAttibutePointer(4, 3, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
 }
 
-void Mesh::bindTextures(Shader& shader)
+void Mesh::bindTextures(GLuint programID)
 {
 	unsigned int diffuseNr = 0;
 	unsigned int specularNr = 0;
@@ -64,7 +64,7 @@ void Mesh::bindTextures(Shader& shader)
 		else if (name == "texture_cubeMap")
 			number = std::to_string(cubeMapNr++);
 
-		glCall(glUniform1i, glGetUniformLocation(shader.getProgramID(), (name + number).c_str()), i);
+		glCall(glUniform1i, glGetUniformLocation(programID, (name + number).c_str()), i);
 		if (name == "texture_cubeMap")
 			glCall(glBindTexture, GL_TEXTURE_CUBE_MAP, textures[i].ID);
 		else
@@ -74,10 +74,28 @@ void Mesh::bindTextures(Shader& shader)
 
 void Mesh::draw(Shader shader, glm::mat4 transformationMatrix)
 {
-	this->bindTextures(shader);
+	this->bindTextures(shader.getProgramID());
 
 	shader.loadTransformationMatrix(transformationMatrix);
 	glm::mat4 projectionMatrix = glm::perspective(Config::Display::FOV, (float)Config::Display::WIDTH / 
+		(float)Config::Display::HEIGHT, Config::Display::NEAR_PLANE, Config::Display::FAR_PLANE);
+	shader.loadProjectionMatrix(projectionMatrix);
+	shader.loadViewMatrix();
+
+	glCall(glBindVertexArray, this->vao);
+	glCall(glBindBufferRange, GL_UNIFORM_BUFFER, 0, this->uniformBlockIndex, 0, sizeof(Material));
+	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
+	glCall(glBindVertexArray, 0);
+	glCall(glActiveTexture, GL_TEXTURE0);
+}
+
+void Mesh::draw(BSDFShader shader, glm::mat4 transformationMatrix)
+{
+	this->bindTextures(shader.getProgramID());
+	
+	shader.loadMaterialInfo(this->mat);
+	shader.loadTransformationMatrix(transformationMatrix);
+	glm::mat4 projectionMatrix = glm::perspective(Config::Display::FOV, (float)Config::Display::WIDTH /
 		(float)Config::Display::HEIGHT, Config::Display::NEAR_PLANE, Config::Display::FAR_PLANE);
 	shader.loadProjectionMatrix(projectionMatrix);
 	shader.loadViewMatrix();

@@ -18,15 +18,26 @@ public:
 	int location_useSpecularMap;
 
 	ReflectionShader();
+
 	ReflectionShader(std::string vertexShaderFilename, std::string fragmentShaderFilename);
+
 	~ReflectionShader();
+
 	void bindAttributes();
+
 	void getAllUniformLocations();
+
 	void loadTransformationMatrix(glm::mat4 matrix);
+
 	void loadProjectionMatrix(glm::mat4);
+
 	void loadViewMatrix();
+
 	void loadLight(Light light);
+
 	void loadGamma(float gamma);
+
 	void setUseSpecularMap(bool useSpecularMap);
+
 	void loadCameraPosition(glm::vec3 cameraPositon);
 };

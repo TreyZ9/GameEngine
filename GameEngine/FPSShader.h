@@ -11,12 +11,15 @@ private:
 public:
 	int location_transformationMatrix;
 
-	// Default Constructor
 	FPSShader();
-	// Constructor
+
 	FPSShader(std::string vertexShaderFilename, std::string fragmentShaderFilename);
+
 	~FPSShader();
+
 	void bindAttributes();
+
 	void getAllUniformLocations();
+
 	void loadTransformationMatrix(glm::mat4 matrix);
 };

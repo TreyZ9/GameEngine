@@ -1,0 +1,54 @@
+
+Imports
+Definitions
+Structs & Classes
+Definitions
+
+----------------------------------
+
+Import Order:
+	[1.1] glad/glad.h
+	[1.2] glfw/glfw3.h
+	[2.1] openAL/al.h
+	[2.2] openAL/alc.h
+	[3.#] Standard Libraries
+	[4.1] assimp/...
+	[4.2] glm/...
+	[4.3] stb_image.h
+	[5.#] Headers
+
+----------------------------------
+
+Container Ex:
+	struct Sound
+	{
+		std::uint8_t Channels;
+		std::int32_t SampleRate;
+		std::uint8_t BitsPerSample;
+		ALsizei DataSize;
+		ALenum Format;
+		char* RawSoundData;
+	};
+
+Static Ex:
+	struct Camera 
+	{
+	public:
+		static glm::mat4 viewMatrix;
+		static glm::vec3 position;
+		static glm::vec3 rotation;
+
+		static void move();
+	};
+
+Non-Static Ex:
+	class Light 
+	{
+	public:
+		glm::vec3 position;
+		glm::vec3 color;
+
+		Light(glm::vec3 position, glm::vec3 color);
+
+		~Light();
+	};

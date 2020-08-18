@@ -22,19 +22,25 @@ struct Loader
 	static void loadSceneJSON(const std::string& filename);
 
 	static std::int32_t convertToInt(char* buffer, std::size_t len);
+
 	static bool loadWavFileHeader(std::ifstream& file, Sound& sound);
+
 	static Sound loadWav(const std::string& filename);
 
 	static GLuint createVAO();
+
 	static GLuint createEBO(std::vector<GLuint> indices);
+
 	static void unbindVAO();
 
 	static Texture loadTexture(const std::string& filename, const std::string& typeName);
+
 	static Texture loadCubeMap(const std::string& path);
 
 	static Texture loadTextureFromPath(const std::string& path, const std::string& directory, const std::string& type, bool gamma = false);
 
 	template <typename dataType> static void storeDataInAttributeList(GLuint attributeNumber, GLuint coordinateSize, std::vector<dataType> data);
+
 	template <typename dataSize_t, typename offset_t> static void createAttibutePointer(GLuint attributeNumber, GLuint coordinateSize, dataSize_t dataType, offset_t offset);
 
 	static void destroy();

@@ -4,10 +4,10 @@
 
 #include <openAL/al.h>
 
-#include <glm/common.hpp>
-
 #include <vector>
 #include <string>
+
+#include <glm/common.hpp>
 
 class Source
 {
