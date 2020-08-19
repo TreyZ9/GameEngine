@@ -22,8 +22,6 @@ void main(void) {
 	vec4 textureColor = texture(texture_diffuse0, textureCoords_fs);
 	if (textureColor.a < 0.1)
 		discard;
-	// FragColor = textureColor;
-	
-	vec4 result = vec4((materialKa * materialKd), materialD);
-	FragColor = result;
+
+	FragColor = textureColor;
 }

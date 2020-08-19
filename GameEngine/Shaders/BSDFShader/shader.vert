@@ -17,6 +17,7 @@ uniform mat4 viewMatrix;
 void main(void) {
 	vec4 worldPosition = transformationMatrix * vec4(position_vs.xyz, 1.0f);
 	gl_Position = projectionMatrix * viewMatrix * worldPosition;
+	
 	textureCoords_fs = textureCoords_vs;
 
 	surfaceNormal_fs = mat3(transpose(inverse(transformationMatrix))) * normal_vs;

@@ -104,7 +104,8 @@ int main() {
 	FpsModel fpsModel = FpsModel();
 	SkyboxModel skyboxModel = SkyboxModel("Resources/skyboxDay");
 
-	Model model = Model("Resources/BSDFTest/test0001.obj");
+	// Model model = Model("Resources/BSDFTest/test0001.obj");
+	Model model = Model("Resources/TestScene/testScene.obj");
 
 	DisplayManager::hideCursor();
 	//DisplayManager::showCursor();
