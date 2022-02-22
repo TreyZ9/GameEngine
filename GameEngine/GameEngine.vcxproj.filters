@@ -109,6 +109,18 @@
     <Filter Include="Resource Files\Notes">
       <UniqueIdentifier>{af374fd0-75c5-482d-b567-d9fcebc8ceb5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Physics">
+      <UniqueIdentifier>{572738fa-42e4-435b-979f-f4be56395117}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{81388bd0-c715-44c8-921f-ed5e8c95ee42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics\CollisionObjects">
+      <UniqueIdentifier>{afb32ff6-9412-4491-bd68-2736280b113e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Physics\CollisionObjects">
+      <UniqueIdentifier>{daa339da-875e-4176-8ee3-61a2cca2a4e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -210,6 +222,12 @@
     <ClInclude Include="BSDFShader.h">
       <Filter>Header Files\Shaders\Children</Filter>
     </ClInclude>
+    <ClInclude Include="PhysicsManager.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsBox.h">
+      <Filter>Header Files\Physics\CollisionObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -295,6 +313,12 @@
     </ClCompile>
     <ClCompile Include="BSDFShader.cpp">
       <Filter>Source Files\Shaders\Children\BSDFShader</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsManager.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsBox.cpp">
+      <Filter>Source Files\Physics\CollisionObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

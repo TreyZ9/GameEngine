@@ -53,6 +53,13 @@
 #include "Light.h"
 #include "Mesh.h"
 
+// Physics
+#include "PhysicsManager.h"
+#include "PhysicsBox.h"
+
+#include <bullet3/btBulletDynamicsCommon.h>
+
+
 int main() {
 	Loader::loadSceneJSON("Resources/TestScene/testScene.json");
 	Config::loadConfigs("Settings/settings.ini");
@@ -106,6 +113,8 @@ int main() {
 
 	// Model model = Model("Resources/BSDFTest/test0001.obj");
 	Model model = Model("Resources/TestScene/testScene.obj");
+	Model physicsCubeGround = Model("Resources/CollisionTest/100x10x100_box.obj");
+	Model physicsCubeDynamic = Model("Resources/CollisionTest/10x10x10_box.obj");
 
 	DisplayManager::hideCursor();
 	//DisplayManager::showCursor();
@@ -117,6 +126,14 @@ int main() {
 
 	source1.play();
 
+	// Physics
+	PhysicsManager physicsManager = PhysicsManager();
+
+	PhysicsBox groundBox = PhysicsBox(btVector3(100, 10, 100), btVector3(0, -10, 0), btScalar(0.0f));
+	physicsManager.addCollisionShape(groundBox.getShape(), groundBox.getBody());
+	PhysicsBox dynamicBox = PhysicsBox(btVector3(10, 10, 10), btVector3(0, 100, 0), btScalar(1.0f));
+	physicsManager.addCollisionShape(dynamicBox.getShape(), dynamicBox.getBody());
+
 	while (!glfwWindowShouldClose(DisplayManager::window) && !glfwGetKey(DisplayManager::window, GLFW_KEY_ESCAPE)) {
 
 		if (glfwGetKey(DisplayManager::window, GLFW_KEY_0))
@@ -126,6 +143,8 @@ int main() {
 		Camera::move();
 
 		listener.updatePosition();
+
+		physicsManager.stepSimulation(1.0f / 60.0f);
 
 		// Buffered Shader Cycle
 		fbo.bind();
@@ -139,8 +158,8 @@ int main() {
 		fbo.unbind();
 
 		// Buffered Shader Cycle 2
-		//GLuint tempTexture = model.meshes[1].textures[0].ID;
-		//model.meshes[1].textures[0].ID = fbo.textureColorID;
+		GLuint tempTexture = model.meshes[1].textures[0].ID;
+		model.meshes[1].textures[0].ID = fbo.textureColorID;
 
 		fbo2.bind();
 		shader.start();
@@ -152,21 +171,28 @@ int main() {
 		skyboxShader.stop();
 		fbo2.unbind();
 
-		//model.meshes[1].textures[0].ID = tempTexture;
+		model.meshes[1].textures[0].ID = tempTexture;
 
 		// Clear Screen Buffers
 		glCall(glClearColor, 0.0f, 1.0f, 1.0f, 1.0f);
 		glCall(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Shader Cycle
-		//tempTexture = model.meshes[1].textures[0].ID;
-		//model.meshes[1].textures[0].ID = fbo2.textureColorID;
+		tempTexture = model.meshes[1].textures[0].ID;
+		model.meshes[1].textures[0].ID = fbo2.textureColorID;
 
 		bsdfShader.start();
 		model.draw(bsdfShader, glm::mat4(1.0f));
+		physicsCubeGround.draw(bsdfShader, glm::mat4(1.0f));
+
+		glm::vec3 position((float)dynamicBox.getPosition().getX(), (float)dynamicBox.getPosition().getY(), (float)dynamicBox.getPosition().getZ());
+		glm::mat4 transform;
+		Maths::createTransformationMatrix(transform, position, 0, 0, 0, 1);
+
+		physicsCubeDynamic.draw(bsdfShader, transform);
 		bsdfShader.stop();
 
-		//model.meshes[1].textures[0].ID = tempTexture;
+		model.meshes[1].textures[0].ID = tempTexture;
 
 		// Skybox Shader Cycle
 		skyboxShader.start();

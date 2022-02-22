@@ -98,9 +98,10 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>assimp-vc141-mtd.lib;common.lib;ex-common.lib;glfw3.lib;glfw3dll.lib;LinearMath_vs2010_debug.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc141-mtd.lib;common.lib;ex-common.lib;glfw3_mt.lib;glfw3dll.lib;LinearMath_vs2010_debug.lib;OpenAL32.lib;LinearMath_Debug.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -154,6 +155,8 @@
     <ClInclude Include="NormalShader.h" />
     <ClInclude Include="OpenALFunctions.h" />
     <ClInclude Include="OpenGLFunctions.h" />
+    <ClInclude Include="PhysicsBox.h" />
+    <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="ReflectionShader.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
@@ -187,6 +190,8 @@
     <ClCompile Include="NormalShader.cpp" />
     <ClCompile Include="OpenALFunctions.cpp" />
     <ClCompile Include="OpenGLFunctions.cpp" />
+    <ClCompile Include="PhysicsBox.cpp" />
+    <ClCompile Include="PhysicsManager.cpp" />
     <ClCompile Include="ReflectionShader.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />

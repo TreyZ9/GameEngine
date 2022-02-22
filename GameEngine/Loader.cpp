@@ -16,6 +16,11 @@ std::vector<GLuint> Loader::vaos;
 std::vector<GLuint> Loader::vbos;
 std::vector<GLuint> Loader::ebos;
 
+/*
+* JSON Scene Format:
+* 
+* todo
+*/
 void Loader::loadSceneJSON(const std::string& filename)
 {
 	std::ifstream jsonFile(filename);
