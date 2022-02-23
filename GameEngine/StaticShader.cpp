@@ -19,9 +19,10 @@ StaticShader::StaticShader(std::string vertexShaderFilename, std::string fragmen
 	this->getAllUniformLocations();
 }
 
-StaticShader::~StaticShader() {}
+StaticShader::~StaticShader() { }
 
-void StaticShader::bindAttributes() {
+void StaticShader::bindAttributes() 
+{
 	this->bindAttribute(0, "position");
 	this->bindAttribute(1, "textureCoords");
 	this->bindAttribute(2, "normal");
@@ -29,7 +30,8 @@ void StaticShader::bindAttributes() {
 	this->bindAttribute(4, "bitangent");
 }
 
-void StaticShader::getAllUniformLocations() {
+void StaticShader::getAllUniformLocations() 
+{
 	this->location_transformationMatrix = this->getUniformLocation("transformationMatrix");
 	this->location_projectionMatrix = this->getUniformLocation("projectionMatrix");
 	this->location_viewMatrix = this->getUniformLocation("viewMatrix");
@@ -38,9 +40,15 @@ void StaticShader::getAllUniformLocations() {
 	this->location_gamma = this->getUniformLocation("gamma");
 }
 
-void StaticShader::loadTransformationMatrix(glm::mat4 matrix) { this->loadMat4(this->location_transformationMatrix, matrix); }
+void StaticShader::loadTransformationMatrix(glm::mat4 matrix) 
+{ 
+	this->loadMat4(this->location_transformationMatrix, matrix); 
+}
 
-void StaticShader::loadProjectionMatrix(glm::mat4 matrix) { this->loadMat4(this->location_projectionMatrix, matrix); }
+void StaticShader::loadProjectionMatrix(glm::mat4 matrix) 
+{ 
+	this->loadMat4(this->location_projectionMatrix, matrix); 
+}
 
 void StaticShader::loadViewMatrix()
 {

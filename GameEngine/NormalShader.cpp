@@ -40,9 +40,15 @@ void NormalShader::getAllUniformLocations() {
 	this->location_cameraPosition = this->getUniformLocation("cameraPosition");
 }
 
-void NormalShader::loadTransformationMatrix(glm::mat4 matrix) { this->loadMat4(this->location_transformationMatrix, matrix); }
+void NormalShader::loadTransformationMatrix(glm::mat4 matrix) 
+{ 
+	this->loadMat4(this->location_transformationMatrix, matrix); 
+}
 
-void NormalShader::loadProjectionMatrix(glm::mat4 matrix) { this->loadMat4(this->location_projectionMatrix, matrix); }
+void NormalShader::loadProjectionMatrix(glm::mat4 matrix) 
+{ 
+	this->loadMat4(this->location_projectionMatrix, matrix); 
+}
 
 void NormalShader::loadViewMatrix()
 {
@@ -60,5 +66,8 @@ void NormalShader::loadGamma(float gamma)
 	this->loadFloat(this->location_gamma, gamma);
 }
 
-void NormalShader::loadCameraPosition(glm::vec3 cameraPosition) { this->loadVec3(this->location_cameraPosition, cameraPosition); }
+void NormalShader::loadCameraPosition(glm::vec3 cameraPosition) 
+{ 
+	this->loadVec3(this->location_cameraPosition, cameraPosition); 
+}
 

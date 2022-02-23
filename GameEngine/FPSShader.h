@@ -4,7 +4,8 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-class FPSShader : public ShaderProgram {
+class FPSShader : public ShaderProgram 
+{
 private:
 	std::string VERTEX_SHADER_FILENAME = "vertexShaderFPS.vert";
 	std::string FRAGMENT_SHADER_FILENAME = "fragmentShaderFPS.frag";

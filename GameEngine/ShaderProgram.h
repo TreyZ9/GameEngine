@@ -5,7 +5,8 @@
 
 #include <string>
 
-class ShaderProgram {
+class ShaderProgram 
+{
 protected:
 	int programID;
 	int vertexShaderID;
@@ -26,7 +27,7 @@ protected:
 
 	void loadVec3(int location, glm::vec3 vector);
 
-	void loadMat4(int location, const glm::mat4 &value) const;
+	void loadMat4(int location, const glm::mat4 &value);
 
 
 public:

@@ -3,7 +3,8 @@
 #include "ShaderProgram.h"
 #include "Light.h"
 
-class ReflectionShader : public ShaderProgram {
+class ReflectionShader : public ShaderProgram 
+{
 private:
 	std::string VERTEX_SHADER_FILENAME = "vertexShader.vert";
 	std::string FRAGMENT_SHADER_FILENAME = "fragmentShader.frag";

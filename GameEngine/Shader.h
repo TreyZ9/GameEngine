@@ -2,7 +2,8 @@
 
 #include "ShaderProgram.h"
 
-class Shader : public ShaderProgram {
+class Shader : public ShaderProgram 
+{
 public:
 	int location_transformationMatrix;
 	int location_projectionMatrix;

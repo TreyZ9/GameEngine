@@ -60,7 +60,8 @@
 #include <bullet3/btBulletDynamicsCommon.h>
 
 
-int main() {
+int main() 
+{
 	Loader::loadSceneJSON("Resources/TestScene/testScene.json");
 	Config::loadConfigs("Settings/settings.ini");
 
@@ -134,7 +135,8 @@ int main() {
 	PhysicsBox dynamicBox = PhysicsBox(btVector3(10, 10, 10), btVector3(0, 100, 0), btScalar(1.0f));
 	physicsManager.addCollisionShape(dynamicBox.getShape(), dynamicBox.getBody());
 
-	while (!glfwWindowShouldClose(DisplayManager::window) && !glfwGetKey(DisplayManager::window, GLFW_KEY_ESCAPE)) {
+	while (!glfwWindowShouldClose(DisplayManager::window) && !glfwGetKey(DisplayManager::window, GLFW_KEY_ESCAPE)) 
+	{
 
 		if (glfwGetKey(DisplayManager::window, GLFW_KEY_0))
 			source2.play();
@@ -174,8 +176,7 @@ int main() {
 		model.meshes[1].textures[0].ID = tempTexture;
 
 		// Clear Screen Buffers
-		glCall(glClearColor, 0.0f, 1.0f, 1.0f, 1.0f);
-		glCall(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		DisplayManager::clearScreenBuffer();
 
 		// Shader Cycle
 		tempTexture = model.meshes[1].textures[0].ID;

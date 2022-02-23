@@ -5,7 +5,8 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-class NormalShader : public ShaderProgram {
+class NormalShader : public ShaderProgram 
+{
 private:
 	std::string VERTEX_SHADER_FILENAME = "vertexShader.vert";
 	std::string FRAGMENT_SHADER_FILENAME = "fragmentShader.frag";

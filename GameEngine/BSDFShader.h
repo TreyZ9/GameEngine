@@ -4,7 +4,8 @@
 
 #include "Material.h"
 
-class BSDFShader : public ShaderProgram {
+class BSDFShader : public ShaderProgram 
+{
 public:
 	int location_transformationMatrix;
 	int location_projectionMatrix;

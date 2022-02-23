@@ -17,6 +17,8 @@ public:
 
 	static void updateDisplay();
 
+	static void clearScreenBuffer();
+
 	static void closeDisplay();
 
 	static void hideCursor();

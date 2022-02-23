@@ -59,6 +59,12 @@ void DisplayManager::updateDisplay() {
 	DisplayManager::LAST_TIME = thisTime;
 }
 
+void DisplayManager::clearScreenBuffer()
+{
+	glCall(glClearColor, 0.0f, 1.0f, 1.0f, 1.0f);
+	glCall(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
 void DisplayManager::closeDisplay() { glfwTerminate(); }
 
 void DisplayManager::framebuffer_size_callback(GLFWwindow* window, int width, int height) {

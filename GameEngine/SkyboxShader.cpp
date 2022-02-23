@@ -15,19 +15,25 @@ SkyboxShader::SkyboxShader(std::string vertexShaderFilename, std::string fragmen
 	this->getAllUniformLocations();
 }
 
-SkyboxShader::~SkyboxShader() {}
+SkyboxShader::~SkyboxShader() { }
 
-void SkyboxShader::bindAttributes() {
+void SkyboxShader::bindAttributes() 
+{
 	this->bindAttribute(0, "position");
 }
 
-void SkyboxShader::getAllUniformLocations() {
+void SkyboxShader::getAllUniformLocations() 
+{
 	this->location_projectionMatrix = this->getUniformLocation("projectionMatrix");
 	this->location_viewMatrix = this->getUniformLocation("viewMatrix");
 }
 
-void SkyboxShader::loadProjectionMatrix(glm::mat4 matrix) { this->loadMat4(this->location_projectionMatrix, matrix); }
+void SkyboxShader::loadProjectionMatrix(glm::mat4 matrix) 
+{ 
+	this->loadMat4(this->location_projectionMatrix, matrix); 
+}
 
-void SkyboxShader::loadViewMatrix(glm::mat4 viewMatrix) {
+void SkyboxShader::loadViewMatrix(glm::mat4 viewMatrix) 
+{
 	this->loadMat4(this->location_viewMatrix, viewMatrix);
 }

@@ -11,7 +11,7 @@
 #include <fstream>
 #include <sstream>
 
-ShaderProgram::ShaderProgram() {}
+ShaderProgram::ShaderProgram() { }
 
 ShaderProgram::ShaderProgram(std::string vertexFilename, std::string fragmentFilename, std::string tessellationControlFilename, std::string tessellationEvaluationFilename, std::string geometryFilename)
 {
@@ -56,26 +56,43 @@ ShaderProgram::ShaderProgram(std::string vertexFilename, std::string fragmentFil
 	this->getAllUniformLocations();
 }
 
-ShaderProgram::~ShaderProgram() {}
+ShaderProgram::~ShaderProgram() { }
 
-int ShaderProgram::getUniformLocation(std::string uniformName) { return glCall(glGetUniformLocation, this->programID, uniformName.c_str()); }
+int ShaderProgram::getUniformLocation(std::string uniformName) 
+{ 
+	return glCall(glGetUniformLocation, this->programID, uniformName.c_str()); 
+}
 
-void ShaderProgram::loadFloat(int location, float value) { glCall(glUniform1f, location, value); }
+void ShaderProgram::loadFloat(int location, float value) 
+{ 
+	glCall(glUniform1f, location, value); 
+}
 
-void ShaderProgram::loadInt(int location, int value) { glCall(glUniform1i, location, value); }
+void ShaderProgram::loadInt(int location, int value) 
+{ 
+	glCall(glUniform1i, location, value); 
+}
 
-void ShaderProgram::loadVec3(int location, glm::vec3 vector) { glCall(glUniform3f, location, vector.x, vector.y, vector.z); }
+void ShaderProgram::loadVec3(int location, glm::vec3 vector) 
+{ 
+	glCall(glUniform3f, location, vector.x, vector.y, vector.z); 
+}
 
-void ShaderProgram::loadBoolean(int location, bool value) {
+void ShaderProgram::loadBoolean(int location, bool value) 
+{
 	if (value)
 		glCall(glUniform1f, location, 1);
 	else
 		glCall(glUniform1f, location, 0);
 }
 
-void ShaderProgram::loadMat4(int location, const glm::mat4& matrix) const { glCall(glUniformMatrix4fv, location, 1, GL_FALSE, &matrix[0][0]); }
+void ShaderProgram::loadMat4(int location, const glm::mat4& matrix)
+{ 
+	glCall(glUniformMatrix4fv, location, 1, GL_FALSE, &matrix[0][0]); 
+}
 
-void ShaderProgram::cleanUp() {
+void ShaderProgram::cleanUp() 
+{
 	glCall(glDetachShader, this->programID, this->vertexShaderID);
 	glCall(glDetachShader, this->programID, this->fragmentShaderID);
 	glCall(glDeleteShader, this->vertexShaderID);
@@ -83,25 +100,39 @@ void ShaderProgram::cleanUp() {
 	glCall(glDeleteProgram, this->programID);
 }
 
-void ShaderProgram::start() { glCall(glUseProgram, this->programID); }
+void ShaderProgram::start() 
+{ 
+	glCall(glUseProgram, this->programID); 
+}
 
-void ShaderProgram::stop() { glCall(glUseProgram, 0); }
+void ShaderProgram::stop() 
+{ 
+	glCall(glUseProgram, 0); 
+}
 
-void ShaderProgram::bindAttribute(int attribute, std::string variableName) { glCall(glBindAttribLocation, this->programID, attribute, variableName.c_str()); }
+void ShaderProgram::bindAttribute(int attribute, std::string variableName) 
+{ 
+	glCall(glBindAttribLocation, this->programID, attribute, variableName.c_str()); 
+}
 
-int ShaderProgram::loadShader(std::string filename, int type) {
+int ShaderProgram::loadShader(std::string filename, int type) 
+{
 	std::string data;
 	std::ifstream dataFile;
 	dataFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 
-	try {
+	try 
+	{
 		dataFile.open(filename);
 		std::stringstream dataStream;
 		dataStream << dataFile.rdbuf();
 		dataFile.close();
 		data = dataStream.str();
 	}
-	catch (std::ifstream::failure e) { LOG_fileLoadInfo(filename, "shader", false, "File does not exist"); }
+	catch (std::ifstream::failure e) 
+	{ 
+		LOG_fileLoadInfo(filename, "shader", false, "File does not exist"); 
+	}
 
 	const char* shaderCode = data.c_str();
 	unsigned int shader;
@@ -111,7 +142,8 @@ int ShaderProgram::loadShader(std::string filename, int type) {
 	glShaderSource(shader, 1, &shaderCode, NULL); // glCall Currently Incompatible, Needs Fixed
 	glCall(glCompileShader, shader);
 	glCall(glGetShaderiv, shader, GL_COMPILE_STATUS, &success);
-	if (!success) {
+	if (!success) 
+	{
 		if (type == GL_VERTEX_SHADER)
 			LOG_fileLoad(filename, "vertexShader", false);
 		else if (type == GL_FRAGMENT_SHADER)
@@ -133,4 +165,7 @@ int ShaderProgram::loadShader(std::string filename, int type) {
 	return shader;
 }
 
-int ShaderProgram::getProgramID() { return this->programID; }
+int ShaderProgram::getProgramID() 
+{ 
+	return this->programID; 
+}

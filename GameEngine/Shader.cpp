@@ -18,7 +18,8 @@ Shader::Shader(std::string vertexShaderFilename, std::string fragmentShaderFilen
 
 Shader::~Shader() {}
 
-void Shader::bindAttributes() {
+void Shader::bindAttributes() 
+{
 	this->bindAttribute(0, "position");
 	this->bindAttribute(1, "textureCoords");
 	this->bindAttribute(2, "normal");
@@ -26,16 +27,24 @@ void Shader::bindAttributes() {
 	this->bindAttribute(4, "bitangent");
 }
 
-void Shader::getAllUniformLocations() {
+void Shader::getAllUniformLocations() 
+{
 	this->location_transformationMatrix = this->getUniformLocation("transformationMatrix");
 	this->location_projectionMatrix = this->getUniformLocation("projectionMatrix");
 	this->location_viewMatrix = this->getUniformLocation("viewMatrix");
 }
 
-void Shader::loadTransformationMatrix(glm::mat4 matrix) { this->loadMat4(this->location_transformationMatrix, matrix); }
+void Shader::loadTransformationMatrix(glm::mat4 matrix) 
+{ 
+	this->loadMat4(this->location_transformationMatrix, matrix); 
+}
 
-void Shader::loadProjectionMatrix(glm::mat4 matrix) { this->loadMat4(this->location_projectionMatrix, matrix); }
+void Shader::loadProjectionMatrix(glm::mat4 matrix) 
+{ 
+	this->loadMat4(this->location_projectionMatrix, matrix); 
+}
 
-void Shader::loadViewMatrix() {
+void Shader::loadViewMatrix() 
+{
 	this->loadMat4(this->location_viewMatrix, Camera::viewMatrix);
 }

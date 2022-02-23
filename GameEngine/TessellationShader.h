@@ -3,7 +3,8 @@
 #include "ShaderProgram.h"
 #include "Light.h"
 
-class TessellationShader : public ShaderProgram {
+class TessellationShader : public ShaderProgram 
+{
 public:
 	int location_transformationMatrix;
 	int location_projectionMatrix;

@@ -21,9 +21,10 @@ ReflectionShader::ReflectionShader(std::string vertexShaderFilename, std::string
 	this->getAllUniformLocations();
 }
 
-ReflectionShader::~ReflectionShader() {}
+ReflectionShader::~ReflectionShader() { }
 
-void ReflectionShader::bindAttributes() {
+void ReflectionShader::bindAttributes() 
+{
 	this->bindAttribute(0, "position");
 	this->bindAttribute(1, "textureCoords");
 	this->bindAttribute(2, "normal");
@@ -31,7 +32,8 @@ void ReflectionShader::bindAttributes() {
 	this->bindAttribute(4, "bitangent");
 }
 
-void ReflectionShader::getAllUniformLocations() {
+void ReflectionShader::getAllUniformLocations() 
+{
 	this->location_transformationMatrix = this->getUniformLocation("transformationMatrix");
 	this->location_projectionMatrix = this->getUniformLocation("projectionMatrix");
 	this->location_viewMatrix = this->getUniformLocation("viewMatrix");
@@ -42,9 +44,15 @@ void ReflectionShader::getAllUniformLocations() {
 	this->location_useSpecularMap = this->getUniformLocation("useSpecularMap");
 }
 
-void ReflectionShader::loadTransformationMatrix(glm::mat4 matrix) { this->loadMat4(this->location_transformationMatrix, matrix); }
+void ReflectionShader::loadTransformationMatrix(glm::mat4 matrix) 
+{ 
+	this->loadMat4(this->location_transformationMatrix, matrix); 
+}
 
-void ReflectionShader::loadProjectionMatrix(glm::mat4 matrix) { this->loadMat4(this->location_projectionMatrix, matrix); }
+void ReflectionShader::loadProjectionMatrix(glm::mat4 matrix) 
+{ 
+	this->loadMat4(this->location_projectionMatrix, matrix); 
+}
 
 void ReflectionShader::loadViewMatrix()
 {
@@ -67,5 +75,8 @@ void ReflectionShader::setUseSpecularMap(bool useSpecularMap)
 	this->loadBoolean(this->location_useSpecularMap, useSpecularMap);
 }
 
-void ReflectionShader::loadCameraPosition(glm::vec3 cameraPosition) { this->loadVec3(this->location_cameraPosition, cameraPosition); }
+void ReflectionShader::loadCameraPosition(glm::vec3 cameraPosition) 
+{ 
+	this->loadVec3(this->location_cameraPosition, cameraPosition); 
+}
 

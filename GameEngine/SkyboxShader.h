@@ -6,7 +6,8 @@
 
 #include <string>
 
-class SkyboxShader : public ShaderProgram {
+class SkyboxShader : public ShaderProgram 
+{
 public:
 	int location_projectionMatrix;
 	int location_viewMatrix;
