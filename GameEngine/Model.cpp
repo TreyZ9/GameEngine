@@ -20,7 +20,9 @@ void Model::draw(Shader shader, glm::mat4 transformationMatrix)
 void Model::draw(BSDFShader shader, glm::mat4 transformationMatrix)
 {
 	for (unsigned int i = 0; i < this->meshes.size(); i++)
+	{
 		this->meshes[i].draw(shader, transformationMatrix);
+	}
 }
 
 void Model::loadModel(const std::string& path)
@@ -115,7 +117,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	material->Get(AI_MATKEY_COLOR_EMISSIVE, color);
 	mat.Ke = glm::vec3(color.r, color.g, color.b);
 	material->Get(AI_MATKEY_REFRACTI, mat.Ni);
-	material->Get(AI_MATKEY_TRANSPARENCYFACTOR, mat.d);
+	material->Get(AI_MATKEY_OPACITY, mat.d);
 	material->Get(AI_MATKEY_SHADING_MODEL, mat.illum);
 
 	std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");

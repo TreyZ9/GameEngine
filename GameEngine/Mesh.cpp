@@ -38,37 +38,33 @@ void Mesh::setupMesh()
 
 void Mesh::bindTextures(GLuint programID)
 {
-	unsigned int diffuseNr = 0;
-	unsigned int specularNr = 0;
-	unsigned int normalNr = 0;
-	unsigned int heightNr = 0;
-	unsigned int displacementNr = 0;
-	unsigned int cubeMapNr = 0;
+	std::unordered_map<std::string, unsigned int> textureCount({
+		{"texture_diffuse", 0},
+		{"texture_specular", 0},
+		{"texture_normal", 0},
+		{"texture_displacement", 0},
+		{"texture_cubeMap", 0}
+	});
 
 	for (unsigned int i = 0; i < this->textures.size(); i++)
 	{
 		glCall(glActiveTexture, GL_TEXTURE0 + i);
 
-		std::string number;
 		std::string name = this->textures[i].Type;
-		if (name == "texture_diffuse")
-			number = std::to_string(diffuseNr++);
-		else if (name == "texture_specular")
-			number = std::to_string(specularNr++);
-		else if (name == "texture_normal")
-			number = std::to_string(normalNr++);
-		else if (name == "texture_height")
-			number = std::to_string(heightNr++);
-		else if (name == "texture_displacement")
-			number = std::to_string(displacementNr++);
-		else if (name == "texture_cubeMap")
-			number = std::to_string(cubeMapNr++);
+		std::string number = std::to_string(textureCount[name]++);
 
 		glCall(glUniform1i, glGetUniformLocation(programID, (name + number).c_str()), i);
 		if (name == "texture_cubeMap")
 			glCall(glBindTexture, GL_TEXTURE_CUBE_MAP, textures[i].ID);
 		else
 			glCall(glBindTexture, GL_TEXTURE_2D, textures[i].ID);
+	}
+
+	for (const auto& [name, amount] : textureCount)
+	{
+		bool isBound = (amount > 0);
+		std::string boundName = name.substr(8) + "Bound";
+		glCall(glUniform1i, glGetUniformLocation(programID, boundName.c_str()), isBound);
 	}
 }
 
