@@ -112,7 +112,7 @@ int main()
 	FpsModel fpsModel = FpsModel();
 	SkyboxModel skyboxModel = SkyboxModel("Resources/skyboxDay");
 
-	Model model2 = Model("Resources/BSDFTest/test0002.obj");
+	Model model2 = Model("Resources/BSDFTest/test0003.obj");
 	Model model = Model("Resources/TestScene/testScene.obj");
 	Model physicsCubeGround = Model("Resources/CollisionTest/100x10x100_box.obj");
 	Model physicsCubeDynamic = Model("Resources/CollisionTest/10x10x10_box.obj");
