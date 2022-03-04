@@ -157,6 +157,7 @@
     <ClInclude Include="OpenGLFunctions.h" />
     <ClInclude Include="PhysicsBox.h" />
     <ClInclude Include="PhysicsManager.h" />
+    <ClInclude Include="PhysicsMesh.h" />
     <ClInclude Include="ReflectionShader.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
@@ -192,6 +193,7 @@
     <ClCompile Include="OpenGLFunctions.cpp" />
     <ClCompile Include="PhysicsBox.cpp" />
     <ClCompile Include="PhysicsManager.cpp" />
+    <ClCompile Include="PhysicsMesh.cpp" />
     <ClCompile Include="ReflectionShader.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />

@@ -5,8 +5,8 @@
 #include "Config.h"
 #include "Loader.h"
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material mat) :
-	vertices(vertices), indices(indices), textures(textures), mat(mat)
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material mat, unsigned int numFaces) :
+	vertices(vertices), indices(indices), textures(textures), mat(mat), numFaces(numFaces)
 {
 	this->setupMesh();
 }

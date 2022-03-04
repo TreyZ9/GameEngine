@@ -32,8 +32,9 @@ public:
 	Material mat;
 	unsigned int vao = NULL;
 	unsigned int uniformBlockIndex;
+	unsigned int numFaces;
 
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material mat);
+	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material mat, unsigned int numFaces);
 
 	void draw(Shader shader, glm::mat4 transformationMatrix);
 

@@ -228,6 +228,9 @@
     <ClInclude Include="PhysicsBox.h">
       <Filter>Header Files\Physics\CollisionObjects</Filter>
     </ClInclude>
+    <ClInclude Include="PhysicsMesh.h">
+      <Filter>Header Files\Physics\CollisionObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -318,6 +321,9 @@
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
     <ClCompile Include="PhysicsBox.cpp">
+      <Filter>Source Files\Physics\CollisionObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsMesh.cpp">
       <Filter>Source Files\Physics\CollisionObjects</Filter>
     </ClCompile>
   </ItemGroup>

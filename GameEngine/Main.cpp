@@ -37,6 +37,7 @@
 #include "NormalShader.h"
 #include "SkyboxShader.h"
 #include "SkyboxModel.h"
+#include "PhysicsMesh.h"
 #include "BSDFShader.h"
 #include "FPSShader.h"
 #include "FpsModel.h"
@@ -132,7 +133,10 @@ int main()
 
 	PhysicsBox groundBox = PhysicsBox(btVector3(100, 10, 100), btVector3(0, -10, 0), btScalar(0.0f));
 	physicsManager.addCollisionShape(groundBox.getShape(), groundBox.getBody());
-	PhysicsBox dynamicBox = PhysicsBox(btVector3(10, 10, 10), btVector3(0, 100, 0), btScalar(1.0f));
+	// PhysicsBox dynamicBox = PhysicsBox(btVector3(10, 10, 10), btVector3(0, 100, 0), btScalar(1.0f));
+	// physicsManager.addCollisionShape(dynamicBox.getShape(), dynamicBox.getBody());
+
+	PhysicsMesh dynamicBox = PhysicsMesh("Resources/Cube/cube.obj", btVector3(0, 50, 0));
 	physicsManager.addCollisionShape(dynamicBox.getShape(), dynamicBox.getBody());
 
 	while (!glfwWindowShouldClose(DisplayManager::window) && !glfwGetKey(DisplayManager::window, GLFW_KEY_ESCAPE)) 
@@ -187,9 +191,9 @@ int main()
 		model2.draw(bsdfShader, glm::mat4(1.0f));
 		// physicsCubeGround.draw(bsdfShader, glm::mat4(1.0f));
 
-		glm::vec3 position((float)dynamicBox.getPosition().getX(), (float)dynamicBox.getPosition().getY(), (float)dynamicBox.getPosition().getZ());
-		glm::mat4 transform;
-		Maths::createTransformationMatrix(transform, position, 0, 0, 0, 1);
+		// glm::vec3 position((float)dynamicBox.getPosition().getX(), (float)dynamicBox.getPosition().getY(), (float)dynamicBox.getPosition().getZ());
+		// glm::mat4 transform;
+		// Maths::createTransformationMatrix(transform, position, 0, 0, 0, 1);
 
 		// physicsCubeDynamic.draw(bsdfShader, transform);
 		bsdfShader.stop();
