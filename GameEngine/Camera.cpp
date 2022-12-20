@@ -50,5 +50,10 @@ void Camera::move()
 	if (glfwGetKey(DisplayManager::window, GLFW_KEY_LEFT_SHIFT))
 		Camera::position.y -= Config::Camera::MOVEMENT_SPEED * (float)DisplayManager::DELTA;
 
+	Camera::update();
+}
+
+void Camera::update()
+{
 	Maths::createViewMatrix(Camera::viewMatrix);
 }

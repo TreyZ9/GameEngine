@@ -11,4 +11,5 @@ public:
 	static glm::vec3 rotation;
 
 	static void move();
+	static void update();
 };

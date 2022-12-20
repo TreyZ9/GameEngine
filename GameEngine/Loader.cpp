@@ -9,6 +9,7 @@
 
 #include "OpenGLFunctions.h"
 #include "OpenALFunctions.h"
+#include "Debug.h"
 
 std::map<std::string, Sound> Loader::sounds;
 std::map<std::string, Texture> Loader::textures;
@@ -18,19 +19,21 @@ std::vector<GLuint> Loader::ebos;
 
 void Loader::loadSceneJSON(const std::string& filename)
 {
+	LOG_fileLoad(filename, "JSON", true);
 	std::ifstream jsonFile(filename);
 	rapidjson::IStreamWrapper jsonFileWrapped(jsonFile);
 
 	rapidjson::Document jsonDocument;
 	jsonDocument.ParseStream(jsonFileWrapped);
 
+	/*
 	const rapidjson::Value& shaders = jsonDocument["Shaders"];
 	for (rapidjson::Value::ConstMemberIterator shader = shaders.MemberBegin(); shader != shaders.MemberEnd(); shader++)
 	{
 		std::cout << shader->name.GetString() << std::endl;
 		std::cout << "   " << shader->value["VertexPath"].GetString() << std::endl;
 		std::cout << "   " << shader->value["FragmentPath"].GetString() << std::endl;
-	}
+	}*/
 }
 
 std::int32_t Loader::convertToInt(char* buffer, std::size_t len)

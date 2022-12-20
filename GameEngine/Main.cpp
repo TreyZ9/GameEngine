@@ -63,7 +63,7 @@
 
 int main() 
 {
-	Loader::loadSceneJSON("Resources/TestScene/testScene.json");
+	// Loader::loadSceneJSON("Resources/TestScene/test.json");
 	Config::loadConfigs("Settings/settings.ini");
 
 	Listener listener = Listener();
@@ -113,8 +113,7 @@ int main()
 	FpsModel fpsModel = FpsModel();
 	SkyboxModel skyboxModel = SkyboxModel("Resources/skyboxDay");
 
-	Model model2 = Model("Resources/BSDFTest/test0003.obj");
-	Model model = Model("Resources/TestScene/testScene.obj");
+	Model model = Model("Resources/TestScene/TestScene.obj");
 	Model physicsCubeGround = Model("Resources/CollisionTest/100x10x100_box.obj");
 	Model physicsCubeDynamic = Model("Resources/CollisionTest/10x10x10_box.obj");
 
@@ -152,10 +151,10 @@ int main()
 
 		physicsManager.stepSimulation(1.0f / 60.0f);
 
-		// Buffered Shader Cycle
+		// Buffered Shader Cycle (Mirror)
 		fbo.bind();
 		bsdfShader.start();
-		// model.draw(bsdfShader, glm::mat4(1.0f));
+		model.draw(bsdfShader, glm::mat4(1.0f));
 		bsdfShader.stop();
 
 		skyboxShader.start();
@@ -183,12 +182,11 @@ int main()
 		DisplayManager::clearScreenBuffer();
 
 		// Shader Cycle
-		// tempTexture = model.meshes[1].textures[0].ID;
-		// model.meshes[1].textures[0].ID = fbo2.textureColorID;
+		GLuint tempTexture = model.meshes[1].textures[0].ID;
+		model.meshes[1].textures[0].ID = fbo.textureColorID;
 
 		bsdfShader.start();
 		model.draw(bsdfShader, glm::mat4(1.0f));
-		model2.draw(bsdfShader, glm::mat4(1.0f));
 		// physicsCubeGround.draw(bsdfShader, glm::mat4(1.0f));
 
 		// glm::vec3 position((float)dynamicBox.getPosition().getX(), (float)dynamicBox.getPosition().getY(), (float)dynamicBox.getPosition().getZ());
@@ -198,7 +196,7 @@ int main()
 		// physicsCubeDynamic.draw(bsdfShader, transform);
 		bsdfShader.stop();
 
-		// model.meshes[1].textures[0].ID = tempTexture;
+		model.meshes[1].textures[0].ID = tempTexture;
 
 		// Skybox Shader Cycle
 		skyboxShader.start();
