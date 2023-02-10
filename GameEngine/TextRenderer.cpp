@@ -42,7 +42,6 @@ TextRenderer::TextRenderer()
 		glCall(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glCall(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-
 		Character character = {
 			texture,
 			glm::ivec2(glyphBitmap->bitmap.width, glyphBitmap->bitmap.rows),

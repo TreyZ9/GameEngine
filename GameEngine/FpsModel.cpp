@@ -42,19 +42,20 @@ void FpsModel::update()
 	fps /= Config::Display::FPS_BUFFER_SIZE;
 	std::stringstream ss;
 	ss << fps;
-	this->fps = ss.str();
+	this->fps = "FPS: " + ss.str();
 }
 
 void FpsModel::render(FPSShader shader, TextRenderer textRenderer)
 {
-	float x = 0.5f;
-	float y = 0.5f;
-	float scale = 1.0f;
+	float x = 700.0f;
+	float y = 570.0f;
+	float scale = 0.7f;
 
 	shader.start();
 
 	glm::mat4 projectionMatrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
 	shader.loadTransformationMatrix(projectionMatrix);
+	shader.loadTextColor(glm::vec3(0.0f, 1.0f, 0.0f));
 
 	glCall(glActiveTexture, GL_TEXTURE0);
 	glCall(glBindVertexArray, this->vao);
@@ -78,12 +79,6 @@ void FpsModel::render(FPSShader shader, TextRenderer textRenderer)
 			{ xpos + w, ypos,       1.0f, 1.0f },
 			{ xpos + w, ypos + h,   1.0f, 0.0f }
 		};
-
-		for (int i = 0; i < 6; i++)
-		{
-			glm::vec4 position = glm::vec4(vertices[i][0], vertices[i][1], 0, 1) * projectionMatrix;
-			std::cout << position.x << " " << position.y << " " << position.z << " " << position.w << std::endl;
-		}
 
 		glCall(glBindTexture, GL_TEXTURE_2D, character.textureID);
 		glCall(glBindBuffer, GL_ARRAY_BUFFER, this->vbo);

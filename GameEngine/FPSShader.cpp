@@ -18,9 +18,15 @@ void FPSShader::bindAttributes()
 void FPSShader::getAllUniformLocations() 
 {
 	this->location_transformationMatrix = this->getUniformLocation("projectionMatrix");
+	this->location_textColor = this->getUniformLocation("textColor");
 }
 
 void FPSShader::loadTransformationMatrix(glm::mat4 matrix) 
 { 
 	this->loadMat4(this->location_transformationMatrix, matrix); 
+}
+
+void FPSShader::loadTextColor(glm::vec3 color)
+{
+	this->loadVec3(this->location_textColor, color);
 }

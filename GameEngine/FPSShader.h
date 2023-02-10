@@ -11,6 +11,7 @@ private:
 	std::string FRAGMENT_SHADER_FILENAME = "fragmentShaderFPS.frag";
 public:
 	int location_transformationMatrix;
+	int location_textColor;
 
 	FPSShader();
 
@@ -23,4 +24,6 @@ public:
 	void getAllUniformLocations();
 
 	void loadTransformationMatrix(glm::mat4 matrix);
+
+	void loadTextColor(glm::vec3 color);
 };
