@@ -13,31 +13,22 @@
 
 FpsModel::FpsModel()
 {
-	glCall(glGenVertexArrays, 1, &this->vaoID);
-	glCall(glBindVertexArray, this->vaoID);
-
-	Loader::storeDataInAttributeList(0, 3, vertices);
-	Loader::storeDataInAttributeList(1, 2, textureCoords);
-	Loader::createEBO(indices);
-	this->vertexCount = (int) indices.size();
-
-	this->fpsTextures['0'] = Loader::loadTexture("Resources/fpsTextures/0.png", "diffuse").ID;
-	this->fpsTextures['1'] = Loader::loadTexture("Resources/fpsTextures/1.png", "diffuse").ID;
-	this->fpsTextures['2'] = Loader::loadTexture("Resources/fpsTextures/2.png", "diffuse").ID;
-	this->fpsTextures['3'] = Loader::loadTexture("Resources/fpsTextures/3.png", "diffuse").ID;
-	this->fpsTextures['4'] = Loader::loadTexture("Resources/fpsTextures/4.png", "diffuse").ID;
-	this->fpsTextures['5'] = Loader::loadTexture("Resources/fpsTextures/5.png", "diffuse").ID;
-	this->fpsTextures['6'] = Loader::loadTexture("Resources/fpsTextures/6.png", "diffuse").ID;
-	this->fpsTextures['7'] = Loader::loadTexture("Resources/fpsTextures/7.png", "diffuse").ID;
-	this->fpsTextures['8'] = Loader::loadTexture("Resources/fpsTextures/8.png", "diffuse").ID;
-	this->fpsTextures['9'] = Loader::loadTexture("Resources/fpsTextures/9.png", "diffuse").ID;
+	glCall(glGenVertexArrays, 1, &this->vao);
+	glCall(glGenBuffers, 1, &this->vbo);
+	glCall(glBindVertexArray, this->vao);
+	glCall(glBindBuffer, GL_ARRAY_BUFFER, this->vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+	glCall(glEnableVertexAttribArray, 0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+	glCall(glBindBuffer, GL_ARRAY_BUFFER, 0);
+	glCall(glBindVertexArray, 0);
 }
 
 FpsModel::~FpsModel() {}
 
-GLuint FpsModel::getTexture(char number)
+GLuint FpsModel::getTexture(char number, TextRenderer textRenderer)
 {
-	return this->fpsTextures[number];
+	return textRenderer.getCharacter(number).textureID;
 }
 
 void FpsModel::update()
@@ -54,26 +45,58 @@ void FpsModel::update()
 	this->fps = ss.str();
 }
 
-void FpsModel::render(FPSShader shader)
+void FpsModel::render(FPSShader shader, TextRenderer textRenderer)
 {
-	shader.start();
 	float x = 0.5f;
-	for (int i = 0; i < this->fps.size(); ++i) {
-		x += 0.1f;
+	float y = 0.5f;
+	float scale = 1.0f;
 
-		glm::mat4 translationMatrix;
-		Maths::createTransformationMatrix(translationMatrix, glm::vec3(x, 0.8f, 0.0f), 0.0f, 0.0f, 0.0f, 0.1f);
-		shader.loadTransformationMatrix(translationMatrix);
+	shader.start();
 
-		glCall(glBindVertexArray, this->vaoID);
-		glCall(glEnableVertexAttribArray, 0);
-		glCall(glEnableVertexAttribArray, 1);
-		glCall(glActiveTexture, GL_TEXTURE0);
-		glCall(glBindTexture, GL_TEXTURE_2D, this->getTexture(this->fps[i]));
-		glDrawElements(GL_TRIANGLES, this->vertexCount, GL_UNSIGNED_INT, 0); // Currently Incompatible With glCall, Needs Fixed
-		glCall(glDisableVertexAttribArray, 1);
-		glCall(glDisableVertexAttribArray, 0);
-		glCall(glBindVertexArray, 0);
+	glm::mat4 projectionMatrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+	shader.loadTransformationMatrix(projectionMatrix);
+
+	glCall(glActiveTexture, GL_TEXTURE0);
+	glCall(glBindVertexArray, this->vao);
+
+	for (char c : fps)
+	{
+		Character character = textRenderer.getCharacter(c);
+
+		float xpos = x + character.bearing.x * scale;
+		float ypos = y - (character.size.y - character.bearing.y) * scale;
+
+		float w = character.size.x * scale;
+		float h = character.size.y * scale;
+
+		float vertices[6][4] = {
+			{ xpos,     ypos + h,   0.0f, 0.0f },
+			{ xpos,     ypos,       0.0f, 1.0f },
+			{ xpos + w, ypos,       1.0f, 1.0f },
+
+			{ xpos,     ypos + h,   0.0f, 0.0f },
+			{ xpos + w, ypos,       1.0f, 1.0f },
+			{ xpos + w, ypos + h,   1.0f, 0.0f }
+		};
+
+		for (int i = 0; i < 6; i++)
+		{
+			glm::vec4 position = glm::vec4(vertices[i][0], vertices[i][1], 0, 1) * projectionMatrix;
+			std::cout << position.x << " " << position.y << " " << position.z << " " << position.w << std::endl;
+		}
+
+		glCall(glBindTexture, GL_TEXTURE_2D, character.textureID);
+		glCall(glBindBuffer, GL_ARRAY_BUFFER, this->vbo);
+		glCall(glBufferSubData, GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+		glCall(glBindBuffer, GL_ARRAY_BUFFER, 0);
+
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		x += (character.advance >> 6) * scale;
 	}
+
+	glCall(glBindVertexArray, 0);
+	glCall(glBindTexture, GL_TEXTURE_2D, 0);
+
 	shader.stop();
 }

@@ -9,44 +9,26 @@
 #include <vector>
 #include <map>
 
+#include "TextRenderer.h"
 #include "Config.h"
 
 class FpsModel
 {
 private:
-	std::vector<float> vertices = {
-		-0.5f,  1.0f, 0.0f,
-		-0.5f, -1.0f, 0.0f,
-		0.5f, -1.0f, 0.0f,
-		0.5f,  1.0f, 0.0f
-	};
-	std::vector<GLuint> indices = {
-		0, 1, 3,
-		3, 1, 2
-	};
-	std::vector<float> textureCoords = {
-		0.0f, 1.0f,
-		0.0f, 0.0f,
-		1.0f, 0.0f,
-		1.0f, 1.0f
-	};
-
 	std::vector<int> fpsBuffer = std::vector<int>(Config::Display::FPS_BUFFER_SIZE, 60);
 	std::string fps = "60";
 
-	unsigned int vaoID;
-	unsigned int vertexCount;
-
-	std::map<char, GLuint> fpsTextures;
+	unsigned int vao;
+	unsigned int vbo;
 
 public:
 	FpsModel();
 
 	~FpsModel();
 
-	GLuint getTexture(char number);
+	GLuint getTexture(char number, TextRenderer textRenderer);
 
 	void update();
 
-	void render(FPSShader shader);
+	void render(FPSShader shader, TextRenderer textRenderer);
 };

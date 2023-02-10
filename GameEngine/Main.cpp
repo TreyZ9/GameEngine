@@ -207,8 +207,10 @@ int main()
 		skyboxShader.stop();
 
 		// FPS Shader Cycle
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		fpsModel.update();
-		fpsModel.render(fpsShader);
+		fpsModel.render(fpsShader, textRenderer);
 
 		// Show Display Buffer
 		DisplayManager::updateDisplay();

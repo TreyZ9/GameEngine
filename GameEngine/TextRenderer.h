@@ -22,4 +22,6 @@ private:
 public:
 	TextRenderer();
 	~TextRenderer();
+
+	Character getCharacter(char character);
 };

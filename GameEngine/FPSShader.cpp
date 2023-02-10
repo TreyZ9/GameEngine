@@ -12,13 +12,12 @@ FPSShader::~FPSShader() {}
 
 void FPSShader::bindAttributes() 
 {
-	this->bindAttribute(0, "position");
-	this->bindAttribute(1, "textureCoords");
+	this->bindAttribute(0, "vertex");
 }
 
 void FPSShader::getAllUniformLocations() 
 {
-	this->location_transformationMatrix = this->getUniformLocation("transformationMatrix");
+	this->location_transformationMatrix = this->getUniformLocation("projectionMatrix");
 }
 
 void FPSShader::loadTransformationMatrix(glm::mat4 matrix) 
