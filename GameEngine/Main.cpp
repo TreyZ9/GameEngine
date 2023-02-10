@@ -119,6 +119,7 @@ int main()
 	Model model = Model("Resources/TestScene/TestScene.obj");
 	Model physicsCubeGround = Model("Resources/CollisionTest/100x10x100_box.obj");
 	Model physicsCubeDynamic = Model("Resources/CollisionTest/10x10x10_box.obj");
+	Model torus = Model("Resources/Torus/torus.obj");
 
 	DisplayManager::hideCursor();
 	//DisplayManager::showCursor();
@@ -165,22 +166,6 @@ int main()
 		skyboxShader.stop();
 		fbo.unbind();
 
-		// Buffered Shader Cycle 2
-		// GLuint tempTexture = model.meshes[1].textures[0].ID;
-		// model.meshes[1].textures[0].ID = fbo.textureColorID;
-
-		fbo2.bind();
-		bsdfShader.start();
-		// model.draw(bsdfShader, glm::mat4(1.0f));
-		bsdfShader.stop();
-
-		skyboxShader.start();
-		skyboxModel.draw(skyboxShader);
-		skyboxShader.stop();
-		fbo2.unbind();
-
-		// model.meshes[1].textures[0].ID = tempTexture;
-
 		// Clear Screen Buffers
 		DisplayManager::clearScreenBuffer();
 
@@ -190,13 +175,13 @@ int main()
 
 		bsdfShader.start();
 		model.draw(bsdfShader, glm::mat4(1.0f));
+		
 		// physicsCubeGround.draw(bsdfShader, glm::mat4(1.0f));
-
 		// glm::vec3 position((float)dynamicBox.getPosition().getX(), (float)dynamicBox.getPosition().getY(), (float)dynamicBox.getPosition().getZ());
 		// glm::mat4 transform;
 		// Maths::createTransformationMatrix(transform, position, 0, 0, 0, 1);
-
 		// physicsCubeDynamic.draw(bsdfShader, transform);
+
 		bsdfShader.stop();
 
 		model.meshes[1].textures[0].ID = tempTexture;
@@ -205,6 +190,13 @@ int main()
 		skyboxShader.start();
 		skyboxModel.draw(skyboxShader);
 		skyboxShader.stop();
+
+		// Transparent pass
+		bsdfShader.start();
+		glm::mat4 torusTransformationMatrix;
+		Maths::createTransformationMatrix(torusTransformationMatrix, glm::vec3(0.0f, 0.5f, 0.0f), 0.0f, 0.0f, 0.0f, 1.0f);
+		torus.draw(bsdfShader, torusTransformationMatrix);
+		bsdfShader.stop();
 
 		// FPS Shader Cycle
 		glEnable(GL_BLEND);
