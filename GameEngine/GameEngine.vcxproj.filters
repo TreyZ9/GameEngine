@@ -231,6 +231,9 @@
     <ClInclude Include="PhysicsMesh.h">
       <Filter>Header Files\Physics\CollisionObjects</Filter>
     </ClInclude>
+    <ClInclude Include="TextRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -325,6 +328,9 @@
     </ClCompile>
     <ClCompile Include="PhysicsMesh.cpp">
       <Filter>Source Files\Physics\CollisionObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="TextRenderer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

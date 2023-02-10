@@ -101,7 +101,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>assimp-vc141-mtd.lib;common.lib;ex-common.lib;glfw3_mt.lib;glfw3dll.lib;LinearMath_vs2010_debug.lib;OpenAL32.lib;LinearMath_Debug.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc141-mtd.lib;common.lib;ex-common.lib;glfw3_mt.lib;glfw3dll.lib;LinearMath_vs2010_debug.lib;OpenAL32.lib;LinearMath_Debug.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;freetyped.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -168,6 +168,7 @@
     <ClInclude Include="StaticShader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="TessellationShader.h" />
+    <ClInclude Include="TextRenderer.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
@@ -203,6 +204,7 @@
     <ClCompile Include="StaticShader.cpp" />
     <ClCompile Include="stb.cpp" />
     <ClCompile Include="TessellationShader.cpp" />
+    <ClCompile Include="TextRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Settings\settings.ini" />

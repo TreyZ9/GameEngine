@@ -36,6 +36,7 @@
 #include "StaticShader.h"
 #include "NormalShader.h"
 #include "SkyboxShader.h"
+#include "TextRenderer.h"
 #include "SkyboxModel.h"
 #include "PhysicsMesh.h"
 #include "BSDFShader.h"
@@ -107,6 +108,8 @@ int main()
 	FPSShader fpsShader = FPSShader(
 		"Shaders/fpsShader/vertexShaderFPS.vert",
 		"Shaders/fpsShader/fragmentShaderFPS.frag");
+
+	TextRenderer textRenderer = TextRenderer();
 
 	Light light(glm::vec3(60.0f, 100.0f, 100.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 

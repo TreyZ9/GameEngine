@@ -67,4 +67,48 @@ void Debug::alcMakeContextCurrent(const char* filename, const std::uint_fast32_t
 	}
 }
 
+void Debug::freetypeLibraryLoad(const char* filename, const std::uint_fast32_t line,
+	bool success)
+{
+	if (Debug::debug)
+	{
+		if (!success)
+			std::cout << "[ERROR] Could not init freetype library" << std::endl;
+		else
+			std::cout << "[DEBUG] Loaded freetype library" << std::endl;
+
+		std::cout << "        " << filename << " : " << line << std::endl;
+	}
+}
+
+void Debug::freetypeFontLoad(const char* filename, const std::uint_fast32_t line,
+	bool success, std::string info)
+{
+	if (Debug::debug)
+	{
+		if (!success)
+			std::cout << "[ERROR] Could load font with freetype" << std::endl;
+		else
+			std::cout << "[DEBUG] Loaded font with freetype" << std::endl;
+
+		if (info != "")
+			std::cout << "        " << info << std::endl;
+		std::cout << "        " << filename << " : " << line << std::endl;
+	}
+}
+
+void Debug::freetypeCharacterLoad(const char* filename, const std::uint_fast32_t line,
+	bool success, std::string info)
+{
+	if (Debug::debug)
+	{
+		if (!success)
+			std::cout << "[ERROR] Could not load character with freetype" << std::endl;
+
+			if (info != "")
+				std::cout << "        " << info << std::endl;
+			std::cout << "        " << filename << " : " << line << std::endl;
+	}
+}
+
 const bool Debug::debug = true;

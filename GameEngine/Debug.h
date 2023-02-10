@@ -7,6 +7,9 @@
 #define LOG_alcOpenDevice(success) Debug::alcOpenDevice(__FILE__, __LINE__, success)
 #define LOG_alcCreateContext(success) Debug::alcCreateContext(__FILE__, __LINE__, success)
 #define LOG_alcMakeContextCurrent(success) Debug::alcMakeContextCurrent(__FILE__, __LINE__, success)
+#define LOG_freetypeLibraryLoad(success) Debug::freetypeLibraryLoad(__FILE__, __LINE__, success);
+#define LOG_freetypeFontLoad(success, info) Debug::freetypeFontLoad(__FILE__, __LINE__, success, info);
+#define LOG_freetypeCharacterLoad(success, info) Debug::freetypeCharacterLoad(__FILE__, __LINE__, success, info);
 
 struct Debug
 {
@@ -24,5 +27,14 @@ public:
 		bool success, std::string info = "");
 
 	static void alcMakeContextCurrent(const char* filename, const std::uint_fast32_t line,
+		bool success, std::string info = "");
+
+	static void freetypeLibraryLoad(const char* filename, const std::uint_fast32_t line,
+		bool success);
+
+	static void freetypeFontLoad(const char* filename, const std::uint_fast32_t line,
+		bool success, std::string info = "");
+
+	static void freetypeCharacterLoad(const char* filename, const std::uint_fast32_t line,
 		bool success, std::string info = "");
 };
