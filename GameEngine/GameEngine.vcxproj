@@ -142,7 +142,7 @@
     <ClInclude Include="DisplayManager.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="FpsModel.h" />
-    <ClInclude Include="FPSShader.h" />
+    <ClInclude Include="TextShader.h" />
     <ClInclude Include="FrameBufferObject.h" />
     <ClInclude Include="INIReader.h" />
     <ClInclude Include="Light.h" />
@@ -179,7 +179,7 @@
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="DisplayManager.cpp" />
     <ClCompile Include="FpsModel.cpp" />
-    <ClCompile Include="FPSShader.cpp" />
+    <ClCompile Include="TextShader.cpp" />
     <ClCompile Include="FrameBufferObject.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Light.cpp" />

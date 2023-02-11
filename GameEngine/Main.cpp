@@ -40,7 +40,7 @@
 #include "SkyboxModel.h"
 #include "PhysicsMesh.h"
 #include "BSDFShader.h"
-#include "FPSShader.h"
+#include "TextShader.h"
 #include "FpsModel.h"
 #include "Listener.h"
 #include "Texture.h"
@@ -105,9 +105,9 @@ int main()
 		"Shaders/skyboxShader/shader.vert",
 		"Shaders/skyboxShader/shader.frag");
 
-	FPSShader fpsShader = FPSShader(
-		"Shaders/fpsShader/vertexShaderFPS.vert",
-		"Shaders/fpsShader/fragmentShaderFPS.frag");
+	TextShader textShader = TextShader(
+		"Shaders/textShader/shader.vert",
+		"Shaders/textShader/shader.frag");
 
 	TextRenderer textRenderer = TextRenderer();
 
@@ -202,7 +202,9 @@ int main()
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		fpsModel.update();
-		fpsModel.render(fpsShader, textRenderer);
+		fpsModel.render(textShader, textRenderer);
+
+		textRenderer.drawText(textShader, "Press ESC to Close", 10, 570, 0.7);
 
 		// Show Display Buffer
 		DisplayManager::updateDisplay();
@@ -213,7 +215,7 @@ int main()
 	staticShader.cleanUp();
 	normalShader.cleanUp();
 	tessShader.cleanUp();
-	fpsShader.cleanUp();
+	textShader.cleanUp();
 	Loader::destroy();
 	DisplayManager::closeDisplay();
 }

@@ -61,9 +61,6 @@
     <Filter Include="Source Files\EngineTester">
       <UniqueIdentifier>{6190fcb0-95ae-464e-9d38-4b9e9bff8018}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Shaders\Children\FPSShader">
-      <UniqueIdentifier>{52de3084-f53d-43bc-bad4-6245248b52bc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Shaders\Children\NormalShader">
       <UniqueIdentifier>{c92093d0-ed93-4b9d-a396-387d7e157375}</UniqueIdentifier>
     </Filter>
@@ -121,6 +118,9 @@
     <Filter Include="Header Files\Physics\CollisionObjects">
       <UniqueIdentifier>{daa339da-875e-4176-8ee3-61a2cca2a4e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shaders\Children\TextShader">
+      <UniqueIdentifier>{52de3084-f53d-43bc-bad4-6245248b52bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -159,7 +159,7 @@
     <ClInclude Include="NormalShader.h">
       <Filter>Header Files\Shaders\Children</Filter>
     </ClInclude>
-    <ClInclude Include="FPSShader.h">
+    <ClInclude Include="TextShader.h">
       <Filter>Header Files\Shaders\Children</Filter>
     </ClInclude>
     <ClInclude Include="Maths.h">
@@ -269,8 +269,8 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files\EngineTester</Filter>
     </ClCompile>
-    <ClCompile Include="FPSShader.cpp">
-      <Filter>Source Files\Shaders\Children\FPSShader</Filter>
+    <ClCompile Include="TextShader.cpp">
+      <Filter>Source Files\Shaders\Children\TextShader</Filter>
     </ClCompile>
     <ClCompile Include="NormalShader.cpp">
       <Filter>Source Files\Shaders\Children\NormalShader</Filter>
@@ -335,10 +335,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\fpsShader\fragmentShaderFPS.frag">
-      <Filter>Source Files\Shaders\Children\FPSShader</Filter>
+      <Filter>Source Files\Shaders\Children\TextShader</Filter>
     </None>
     <None Include="shaders\fpsShader\vertexShaderFPS.vert">
-      <Filter>Source Files\Shaders\Children\FPSShader</Filter>
+      <Filter>Source Files\Shaders\Children\TextShader</Filter>
     </None>
     <None Include="shaders\normalShader\normalShader.frag">
       <Filter>Source Files\Shaders\Children\NormalShader</Filter>

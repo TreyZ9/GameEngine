@@ -4,7 +4,10 @@
 
 #include <glm/common.hpp>
 
+#include <string>
 #include <map>
+
+#include "TextShader.h"
 
 struct Character
 {
@@ -18,10 +21,12 @@ class TextRenderer
 {
 private:
 	std::map<char, Character> characters;
+	GLuint vao;
+	GLuint vbo;
 
 public:
 	TextRenderer();
 	~TextRenderer();
 
-	Character getCharacter(char character);
+	void drawText(TextShader shader, const std::string& text, float x, float y, float scale, glm::vec3 color = glm::vec3(1.0f));
 };
