@@ -9,7 +9,10 @@
 
 #include "OpenGLFunctions.h"
 #include "TextShader.h"
+#include "Config.h"
+#include "Camera.h"
 #include "Debug.h"
+#include "Maths.h"
 
 TextRenderer::TextRenderer()
 {
@@ -60,10 +63,11 @@ void TextRenderer::loadFont(const std::string& font)
 
 		bitmaps.push_back(glyphBitmap);
 		advance.push_back(glm::ivec2(face->glyph->advance.x, face->glyph->advance.y));
-		width += glyphBitmap->bitmap.width;
+		width += glyphBitmap->bitmap.width + 2; // add 2px buffer to help with aa bleed
 		height = std::max(height, glyphBitmap->bitmap.rows);
 	}
 
+	// create empty texture atlas
 	GLuint textureID;
 	glCall(glGenTextures, 1, &textureID);
 	glCall(glBindTexture, GL_TEXTURE_2D, textureID);
@@ -93,17 +97,23 @@ void TextRenderer::loadFont(const std::string& font)
 			advance[i]
 		};
 		this->characters.insert(std::pair<char, Character>((char)i, character));
-		x += bitmaps[i]->bitmap.width;
+		x += bitmaps[i]->bitmap.width + 2; // 2px buffer
 	}
 }
 
-void TextRenderer::drawText(TextShader shader, const std::string& text, 
-	float x, float y, float scale, glm::vec3 color)
+void TextRenderer::drawText(TextShader shader, const std::string& text, glm::vec3 pos, glm::vec3 rot, glm::vec2 scale, glm::vec3 color)
 {
 	shader.start();
 
-	glm::mat4 projectionMatrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
-	shader.loadTransformationMatrix(projectionMatrix);
+	glm::mat4 projectionMatrix = glm::perspective(Config::Display::FOV, (float)Config::Display::WIDTH /
+		(float)Config::Display::HEIGHT, Config::Display::NEAR_PLANE, Config::Display::FAR_PLANE);
+
+	glm::mat4 transformationMatrix;
+	Maths::createTransformationMatrix(transformationMatrix, pos, rot.x, rot.y, rot.z, 1.0f);
+
+	shader.loadTransformationMatrix(transformationMatrix);
+	shader.loadProjectionMatrix(projectionMatrix);
+	shader.loadViewMatrix(Camera::viewMatrix);
 	shader.loadTextColor(color);
 
 	glCall(glActiveTexture, GL_TEXTURE0);
@@ -114,26 +124,25 @@ void TextRenderer::drawText(TextShader shader, const std::string& text,
 	{
 		Character character = this->characters[c];
 
-		float xpos = x + character.bearing.x * scale;
-		float ypos = y - (character.size.y - character.bearing.y) * scale;
+		float xpos = pos.x + character.bearing.x * scale.x;
+		float ypos = pos.y - (character.size.y - character.bearing.y) * scale.y;
 
-		float w = character.size.x * scale;
-		float h = character.size.y * scale;
+		float w = character.size.x * scale.x;
+		float h = character.size.y * scale.y;
 
 		float x0 = character.textureAtlasOffset / this->textureAtlas.width;
 		float x1 = (character.textureAtlasOffset + character.size.x) / this->textureAtlas.width;
-
-		float y0 = 0.0f;
+		
 		float y1 = (float)character.size.y / (float)this->textureAtlas.height;
 
 		float vertices[6][4] = {
-			{ xpos,     ypos + h,   x0, y0 },
+			{ xpos,     ypos + h,   x0, 0.0f },
 			{ xpos,     ypos,       x0, y1 },
 			{ xpos + w, ypos,       x1, y1 },
 
-			{ xpos,     ypos + h,   x0, y0 },
+			{ xpos,     ypos + h,   x0, 0.0f },
 			{ xpos + w, ypos,       x1, y1 },
-			{ xpos + w, ypos + h,   x1, y0 }
+			{ xpos + w, ypos + h,   x1, 0.0f }
 		};
 
 		glCall(glBindBuffer, GL_ARRAY_BUFFER, this->vbo);
@@ -142,7 +151,61 @@ void TextRenderer::drawText(TextShader shader, const std::string& text,
 
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
-		x += (character.advance.x >> 6) * scale;
+		pos.x += (character.advance.x >> 6) * scale.x;
+	}
+
+	glCall(glBindVertexArray, 0);
+	glCall(glBindTexture, GL_TEXTURE_2D, 0);
+
+	shader.stop();
+}
+
+void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, glm::vec2 pos, glm::vec2 scale, glm::vec3 color)
+{
+	shader.start();
+
+	glm::mat4 projectionMatrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+	shader.loadTransformationMatrix(glm::mat4(1.0f));
+	shader.loadProjectionMatrix(projectionMatrix);
+	shader.loadViewMatrix(glm::mat4(1.0f));
+	shader.loadTextColor(color);
+
+	glCall(glActiveTexture, GL_TEXTURE0);
+	glCall(glBindVertexArray, this->vao);
+	glCall(glBindTexture, GL_TEXTURE_2D, this->textureAtlas.textureID);
+
+	for (char c : text)
+	{
+		Character character = this->characters[c];
+
+		float xpos = pos.x + character.bearing.x * scale.x;
+		float ypos = pos.y - (character.size.y - character.bearing.y) * scale.y;
+
+		float w = character.size.x * scale.x;
+		float h = character.size.y * scale.y;
+
+		float x0 = character.textureAtlasOffset / this->textureAtlas.width;
+		float x1 = (character.textureAtlasOffset + character.size.x) / this->textureAtlas.width;
+
+		float y1 = (float)character.size.y / (float)this->textureAtlas.height;
+
+		float vertices[6][4] = {
+			{ xpos,     ypos + h,   x0, 0.0f },
+			{ xpos,     ypos,       x0, y1 },
+			{ xpos + w, ypos,       x1, y1 },
+
+			{ xpos,     ypos + h,   x0, 0.0f },
+			{ xpos + w, ypos,       x1, y1 },
+			{ xpos + w, ypos + h,   x1, 0.0f }
+		};
+
+		glCall(glBindBuffer, GL_ARRAY_BUFFER, this->vbo);
+		glCall(glBufferSubData, GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+		glCall(glBindBuffer, GL_ARRAY_BUFFER, 0);
+
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		pos.x += (character.advance.x >> 6) * scale.x;
 	}
 
 	glCall(glBindVertexArray, 0);

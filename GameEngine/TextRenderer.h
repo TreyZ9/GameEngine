@@ -38,5 +38,6 @@ public:
 	TextRenderer();
 	~TextRenderer();
 
-	void drawText(TextShader shader, const std::string& text, float x, float y, float scale, glm::vec3 color = glm::vec3(1.0f));
+	void drawText(TextShader shader, const std::string& text, glm::vec3 pos, glm::vec3 rot, glm::vec2 scale, glm::vec3 color = glm::vec3(1.0f));
+	void drawTextOnHUD(TextShader shader, const std::string& text, glm::vec2 pos, glm::vec2 scale = glm::vec2(1.0f), glm::vec3 color = glm::vec3(1.0f));
 };

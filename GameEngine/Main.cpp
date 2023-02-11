@@ -142,6 +142,8 @@ int main()
 	PhysicsMesh dynamicBox = PhysicsMesh("Resources/Cube/cube.obj", btVector3(0, 50, 0));
 	physicsManager.addCollisionShape(dynamicBox.getShape(), dynamicBox.getBody());
 
+	float yRot = 0.0f;
+
 	while (!glfwWindowShouldClose(DisplayManager::window) && !glfwGetKey(DisplayManager::window, GLFW_KEY_ESCAPE)) 
 	{
 
@@ -198,16 +200,22 @@ int main()
 		torus.draw(bsdfShader, torusTransformationMatrix);
 		bsdfShader.stop();
 
+		textRenderer.drawText(textShader, "ERROR", glm::vec3(-5.0f, 2.5f, -5.0f), glm::vec3(0.0f, yRot, 0.0f), glm::vec2(0.03f), glm::vec3(1.0f, 0.0f, 0.0f));
+
 		// FPS Shader Cycle
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		fpsModel.update();
 		fpsModel.render(textShader, textRenderer);
 
-		textRenderer.drawText(textShader, "Press ESC to Close", 10, 570, 0.7);
+		textRenderer.drawTextOnHUD(textShader, "Press ESC to Close", glm::vec2(10, 570), glm::vec2(0.7));
 
 		// Show Display Buffer
 		DisplayManager::updateDisplay();
+
+		yRot += DisplayManager::DELTA * 80.0f;
+		if (yRot > 360.0f)
+			yRot -= 360.0f;
 	}
 
 	fbo.destroy();

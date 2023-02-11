@@ -210,8 +210,6 @@
     <None Include="Settings\settings.ini" />
     <None Include="Shaders\BSDFShader\shader.frag" />
     <None Include="Shaders\BSDFShader\shader.vert" />
-    <None Include="shaders\fpsShader\fragmentShaderFPS.frag" />
-    <None Include="shaders\fpsShader\vertexShaderFPS.vert" />
     <None Include="shaders\normalShader\normalShader.frag" />
     <None Include="shaders\normalShader\normalShader.vert" />
     <None Include="shaders\reflectionShader\shader.frag" />
@@ -226,6 +224,8 @@
     <None Include="shaders\tessellationShader\evaluation.tese" />
     <None Include="shaders\tessellationShader\fragment.frag" />
     <None Include="shaders\tessellationShader\vertex.vert" />
+    <None Include="Shaders\textShader\shader.frag" />
+    <None Include="Shaders\textShader\shader.vert" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="StyleRules.txt" />
