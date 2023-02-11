@@ -232,7 +232,7 @@
       <Filter>Header Files\Physics\CollisionObjects</Filter>
     </ClInclude>
     <ClInclude Include="TextRenderer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Toolbox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -330,7 +330,7 @@
       <Filter>Source Files\Physics\CollisionObjects</Filter>
     </ClCompile>
     <ClCompile Include="TextRenderer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Toolbox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

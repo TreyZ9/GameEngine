@@ -11,10 +11,17 @@
 
 struct Character
 {
-	GLuint textureID;
+	float textureAtlasOffset;
 	glm::ivec2 size;
 	glm::ivec2 bearing;
-	unsigned int advance;
+	glm::ivec2 advance;
+};
+
+struct TextureAtlas
+{
+	GLuint textureID;
+	unsigned int width;
+	unsigned int height;
 };
 
 class TextRenderer
@@ -23,6 +30,9 @@ private:
 	std::map<char, Character> characters;
 	GLuint vao;
 	GLuint vbo;
+	TextureAtlas textureAtlas;
+
+	void loadFont(const std::string& font);
 
 public:
 	TextRenderer();
