@@ -101,7 +101,22 @@ void TextRenderer::loadFont(const std::string& font)
 	}
 }
 
-void TextRenderer::drawText(TextShader shader, const std::string& text, glm::vec3 pos, glm::vec3 rot, glm::vec2 scale, glm::vec3 color)
+std::vector<std::string> TextRenderer::splitString(const std::string& text, const std::string& delimiter)
+{
+	std::vector<std::string> elements;
+	size_t last = 0;
+	size_t next = 0;
+	while ((next = text.find(delimiter, last)) != std::string::npos)
+	{
+		elements.push_back(text.substr(last, next - last));
+		last = next + 1;
+	}
+	elements.push_back(text.substr(last));
+	return elements;
+}
+
+void TextRenderer::drawText(TextShader shader, const std::string& text, 
+	glm::vec3 pos, glm::vec3 rot, glm::vec2 scale, glm::vec3 color)
 {
 	shader.start();
 
@@ -160,7 +175,8 @@ void TextRenderer::drawText(TextShader shader, const std::string& text, glm::vec
 	shader.stop();
 }
 
-void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, glm::vec2 pos, glm::vec2 scale, glm::vec3 color)
+void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, glm::vec2 pos, 
+	glm::vec2 scale, glm::vec3 color, std::string alignment, std::string origin)
 {
 	shader.start();
 
@@ -174,38 +190,114 @@ void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, glm
 	glCall(glBindVertexArray, this->vao);
 	glCall(glBindTexture, GL_TEXTURE_2D, this->textureAtlas.textureID);
 
-	for (char c : text)
+	// -----------------
+
+	// ensure alignment is valid default:left
+	if (alignment != "left" && alignment != "center" && alignment != "right")
 	{
-		Character character = this->characters[c];
+		alignment = "left";
+	}
 
-		float xpos = pos.x + character.bearing.x * scale.x;
-		float ypos = pos.y - (character.size.y - character.bearing.y) * scale.y;
+	// ensure origin is valid default:center
+	if (origin != "topleft" && origin != "top" && origin != "topright" &&
+		origin != "left" && origin != "center" && origin != "right" &&
+		origin != "bottomleft" && origin != "bottom" && origin != "bottomright")
+	{
+		origin = "center";
+	}
 
-		float w = character.size.x * scale.x;
-		float h = character.size.y * scale.y;
+	// calculate bounding box
+	glm::ivec2 size = glm::vec2(0.0f);
 
-		float x0 = character.textureAtlasOffset / this->textureAtlas.width;
-		float x1 = (character.textureAtlasOffset + character.size.x) / this->textureAtlas.width;
+	std::vector<std::string> lines = this->splitString(text, "\n");
+	std::vector<float> lineOffsets;
+	for (std::string line : lines)
+	{
+		int lineWidth = 0;
+		int lineHeight = 0;
 
-		float y1 = (float)character.size.y / (float)this->textureAtlas.height;
+		for (char character : line)
+		{
+			lineWidth += (this->characters.at(character).advance.x >> 6) * scale.x;
+			lineHeight = std::max(lineHeight, this->characters.at(character).size.y);
+		}
 
-		float vertices[6][4] = {
-			{ xpos,     ypos + h,   x0, 0.0f },
-			{ xpos,     ypos,       x0, y1 },
-			{ xpos + w, ypos,       x1, y1 },
+		lineOffsets.push_back(lineWidth);
+		size.x = std::max(size.x, lineWidth);
+		size.y += lineHeight;
+	}
 
-			{ xpos,     ypos + h,   x0, 0.0f },
-			{ xpos + w, ypos,       x1, y1 },
-			{ xpos + w, ypos + h,   x1, 0.0f }
-		};
+	// alignment
+	for (int i = 0; i < lineOffsets.size(); i++)
+	{
+		if (alignment == "left")
+			lineOffsets[i] = 0.0f;
+		else if (alignment == "center")
+			lineOffsets[i] = (size.x - lineOffsets[i]) / 2.0f;
+		else if (alignment == "right")
+			lineOffsets[i] = size.x - lineOffsets[i];
+	}
 
-		glCall(glBindBuffer, GL_ARRAY_BUFFER, this->vbo);
-		glCall(glBufferSubData, GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-		glCall(glBindBuffer, GL_ARRAY_BUFFER, 0);
+	// origin horizontal
+	for (int i = 0; i < lineOffsets.size(); i++)
+	{
+		if (origin == "top" || origin == "center" || origin == "bottom")
+			lineOffsets[i] -= size.x / 2.0f;
+		if (origin == "topright" || origin == "right" || origin == "bottomright")
+			lineOffsets[i] -= size.x;
+	}
 
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+	// origin vertical
+	float yOffset = 0.0f;
+	if (origin == "left" || origin == "center" || origin == "right")
+		yOffset = size.y / 2.0f;
+	if (origin == "topleft" || origin == "top" || origin == "topright")
+		yOffset = size.y;
 
-		pos.x += (character.advance.x >> 6) * scale.x;
+	// -----------------
+
+	for (int i = 0; i < lines.size(); i++)
+	{
+		int lineHeight = 0;
+		glm::ivec2 pos2 = pos;
+
+		for (char c : lines[i])
+		{
+			Character character = this->characters[c];
+
+			float xpos = pos2.x + character.bearing.x * scale.x;
+			float ypos = pos2.y - (character.size.y - character.bearing.y) * scale.y;
+
+			float w = character.size.x * scale.x;
+			float h = character.size.y * scale.y;
+
+			float x0 = character.textureAtlasOffset / this->textureAtlas.width;
+			float x1 = (character.textureAtlasOffset + character.size.x) / this->textureAtlas.width;
+			float xOffset = lineOffsets[i];
+
+			float y1 = (float)character.size.y / (float)this->textureAtlas.height;
+
+			float vertices[6][4] = {
+				{ xpos + xOffset,     ypos + h - yOffset,   x0, 0.0f },
+				{ xpos + xOffset,     ypos - yOffset,       x0, y1 },
+				{ xpos + w + xOffset, ypos - yOffset,       x1, y1 },
+
+				{ xpos + xOffset,     ypos + h - yOffset,   x0, 0.0f },
+				{ xpos + w + xOffset, ypos - yOffset,       x1, y1 },
+				{ xpos + w + xOffset, ypos + h - yOffset,   x1, 0.0f }
+			};
+
+			glCall(glBindBuffer, GL_ARRAY_BUFFER, this->vbo);
+			glCall(glBufferSubData, GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+			glCall(glBindBuffer, GL_ARRAY_BUFFER, 0);
+
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+
+			pos2.x += (character.advance.x >> 6) * scale.x;
+			lineHeight = std::max(lineHeight, character.size.y);
+		}
+
+		yOffset += lineHeight;
 	}
 
 	glCall(glBindVertexArray, 0);

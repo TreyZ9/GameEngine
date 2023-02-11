@@ -142,10 +142,34 @@ int main()
 	PhysicsMesh dynamicBox = PhysicsMesh("Resources/Cube/cube.obj", btVector3(0, 50, 0));
 	physicsManager.addCollisionShape(dynamicBox.getShape(), dynamicBox.getBody());
 
+
+	// temp vars
 	float yRot = 0.0f;
+	std::string align = "left";
+	std::string origin = "center";
 
 	while (!glfwWindowShouldClose(DisplayManager::window) && !glfwGetKey(DisplayManager::window, GLFW_KEY_ESCAPE)) 
 	{
+		if (glfwGetKey(DisplayManager::window, GLFW_KEY_1))
+			align = "left";
+		if (glfwGetKey(DisplayManager::window, GLFW_KEY_2))
+			align = "center";
+		if (glfwGetKey(DisplayManager::window, GLFW_KEY_3))
+			align = "right";
+		if (glfwGetKey(DisplayManager::window, GLFW_KEY_4))
+			origin = "bottomleft";
+		if (glfwGetKey(DisplayManager::window, GLFW_KEY_5))
+			origin = "left";
+		if (glfwGetKey(DisplayManager::window, GLFW_KEY_6))
+			origin = "topleft";
+		if (glfwGetKey(DisplayManager::window, GLFW_KEY_7))
+			origin = "bottom";
+		if (glfwGetKey(DisplayManager::window, GLFW_KEY_8))
+			origin = "center";
+		if (glfwGetKey(DisplayManager::window, GLFW_KEY_9))
+			origin = "top";
+		if (glfwGetKey(DisplayManager::window, GLFW_KEY_0))
+			origin = "bottomright";
 
 		if (glfwGetKey(DisplayManager::window, GLFW_KEY_0))
 			source2.play();
@@ -208,7 +232,7 @@ int main()
 		fpsModel.update();
 		fpsModel.render(textShader, textRenderer);
 
-		textRenderer.drawTextOnHUD(textShader, "Press ESC to Close", glm::vec2(10, 570), glm::vec2(0.7));
+		textRenderer.drawTextOnHUD(textShader, "Press ESC to Close\na\nHello World", glm::vec2(10, 570), glm::vec2(0.7), glm::vec3(1.0f), align, origin);
 
 		// Show Display Buffer
 		DisplayManager::updateDisplay();
