@@ -40,6 +40,9 @@ void TextRenderer::loadFont(const std::string& font)
 	FT_Face face;
 	LOG_freetypeFontLoad(!FT_New_Face(ft, ("C:\\Windows\\fonts\\" + font + ".ttf").c_str(), 0, &face), "font:" + font);
 
+	// save line height
+	this->lineHeight = (face->height >> 6) / 1.5;
+
 	// cache bitmaps and advance to populate texture atlas
 	std::vector<FT_BitmapGlyph> bitmaps;
 	std::vector<glm::ivec2> advance;
@@ -219,13 +222,12 @@ void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, glm
 		for (char character : line)
 		{
 			lineWidth += (this->characters.at(character).advance.x >> 6) * scale.x;
-			lineHeight = std::max(lineHeight, this->characters.at(character).size.y);
 		}
 
 		lineOffsets.push_back(lineWidth);
 		size.x = std::max(size.x, lineWidth);
-		size.y += lineHeight;
 	}
+	size.y = this->lineHeight * lines.size() * scale.y;
 
 	// alignment
 	for (int i = 0; i < lineOffsets.size(); i++)
@@ -258,7 +260,6 @@ void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, glm
 
 	for (int i = 0; i < lines.size(); i++)
 	{
-		int lineHeight = 0;
 		glm::ivec2 pos2 = pos;
 
 		for (char c : lines[i])
@@ -294,10 +295,9 @@ void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, glm
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 
 			pos2.x += (character.advance.x >> 6) * scale.x;
-			lineHeight = std::max(lineHeight, character.size.y);
 		}
 
-		yOffset += lineHeight;
+		yOffset += this->lineHeight;
 	}
 
 	glCall(glBindVertexArray, 0);

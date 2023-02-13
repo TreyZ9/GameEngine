@@ -232,7 +232,7 @@ int main()
 		fpsModel.update();
 		fpsModel.render(textShader, textRenderer);
 
-		textRenderer.drawTextOnHUD(textShader, "Press ESC to Close\na\nHello World", glm::vec2(10, 570), glm::vec2(0.7), glm::vec3(1.0f), align, origin);
+		textRenderer.drawTextOnHUD(textShader, "y Press ESC to Close\nA\nHello World", glm::vec2(10, 570), glm::vec2(0.7), glm::vec3(1.0f), align, origin);
 
 		// Show Display Buffer
 		DisplayManager::updateDisplay();

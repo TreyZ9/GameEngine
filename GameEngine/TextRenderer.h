@@ -32,6 +32,7 @@ private:
 	GLuint vao;
 	GLuint vbo;
 	TextureAtlas textureAtlas;
+	unsigned int lineHeight;
 
 	void loadFont(const std::string& font);
 	std::vector<std::string> splitString(const std::string& text, const std::string& delimiter);
