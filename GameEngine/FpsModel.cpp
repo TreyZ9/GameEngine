@@ -3,6 +3,7 @@
 
 #include "OpenGLFunctions.h"
 #include "DisplayManager.h"
+#include "Config.h"
 #include "Vertex.h"
 #include "Loader.h"
 #include "Maths.h"
@@ -31,5 +32,5 @@ void FpsModel::update()
 
 void FpsModel::render(TextShader shader, TextRenderer textRenderer)
 {
-	textRenderer.drawTextOnHUD(shader, fps, glm::vec2(700.0f, 570.0f), glm::vec2(0.7f), glm::vec3(0.0f, 1.0f, 0.0f));
+	textRenderer.drawTextOnHUD(shader, fps, glm::vec2(Config::Display::WIDTH, Config::Display::HEIGHT), glm::vec2(0.7f), glm::vec3(0.0f, 1.0f, 0.0f), "left", "topright");
 }

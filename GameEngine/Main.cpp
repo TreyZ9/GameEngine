@@ -145,32 +145,9 @@ int main()
 
 	// temp vars
 	float yRot = 0.0f;
-	std::string align = "left";
-	std::string origin = "center";
 
 	while (!glfwWindowShouldClose(DisplayManager::window) && !glfwGetKey(DisplayManager::window, GLFW_KEY_ESCAPE)) 
 	{
-		if (glfwGetKey(DisplayManager::window, GLFW_KEY_1))
-			align = "left";
-		if (glfwGetKey(DisplayManager::window, GLFW_KEY_2))
-			align = "center";
-		if (glfwGetKey(DisplayManager::window, GLFW_KEY_3))
-			align = "right";
-		if (glfwGetKey(DisplayManager::window, GLFW_KEY_4))
-			origin = "bottomleft";
-		if (glfwGetKey(DisplayManager::window, GLFW_KEY_5))
-			origin = "left";
-		if (glfwGetKey(DisplayManager::window, GLFW_KEY_6))
-			origin = "topleft";
-		if (glfwGetKey(DisplayManager::window, GLFW_KEY_7))
-			origin = "bottom";
-		if (glfwGetKey(DisplayManager::window, GLFW_KEY_8))
-			origin = "center";
-		if (glfwGetKey(DisplayManager::window, GLFW_KEY_9))
-			origin = "top";
-		if (glfwGetKey(DisplayManager::window, GLFW_KEY_0))
-			origin = "bottomright";
-
 		if (glfwGetKey(DisplayManager::window, GLFW_KEY_0))
 			source2.play();
 		source2.setPosition(Camera::position);
@@ -232,7 +209,8 @@ int main()
 		fpsModel.update();
 		fpsModel.render(textShader, textRenderer);
 
-		textRenderer.drawTextOnHUD(textShader, "y Press ESC to Close\nA\nHello World", glm::vec2(10, 570), glm::vec2(0.7), glm::vec3(1.0f), align, origin);
+		textRenderer.drawTextOnHUD(textShader, "y Press ESC to Close\nA\nHello World\na\na\na\na\na\na", glm::vec2(10, 0), glm::vec2(0.7), glm::vec3(0.0f, 1.0f, 0.0f), "center", "bottomleft");
+		textRenderer.drawTextOnHUD(textShader, "y Press ESC to Close\nA\nHello World\na\na\na\na\na\na", glm::vec2(10, Config::Display::HEIGHT), glm::vec2(0.7), glm::vec3(0.0f, 1.0f, 0.0f), "center", "topleft");
 
 		// Show Display Buffer
 		DisplayManager::updateDisplay();

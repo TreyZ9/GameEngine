@@ -33,8 +33,8 @@ public:
 	std::map<char, Character> characters;
 	unsigned int textureWidth;
 	unsigned int textureHeight;
-	GLuint textureID;
 	unsigned int lineHeight;
+	GLuint textureID;
 
 	Font();
 	Font(const std::string& fontName);
@@ -49,11 +49,12 @@ private:
 	Font font;
 
 	std::vector<std::string> splitString(const std::string& text, const std::string& delimiter);
+	void drawText(const std::string& text, glm::vec2 pos, glm::vec2 scale, std::string alignment, std::string origin);
 
 public:
 	TextRenderer();
 	~TextRenderer();
 
-	void drawText(TextShader shader, const std::string& text, glm::vec3 pos, glm::vec3 rot, glm::vec2 scale, glm::vec3 color = glm::vec3(1.0f));
+	void drawText(TextShader shader, const std::string& text, glm::vec3 pos, glm::vec3 rot, glm::vec2 scale, glm::vec3 color = glm::vec3(1.0f), std::string alignment = "left", std::string origin = "center");
 	void drawTextOnHUD(TextShader shader, const std::string& text, glm::vec2 pos, glm::vec2 scale = glm::vec2(1.0f), glm::vec3 color = glm::vec3(1.0f), std::string alignment = "left", std::string origin = "center");
 };

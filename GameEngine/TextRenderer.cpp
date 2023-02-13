@@ -15,7 +15,13 @@
 #include "Debug.h"
 #include "Maths.h"
 
-Font::Font() = default;
+Font::Font()
+{
+	this->textureWidth = 0;
+	this->textureHeight = 0;
+	this->lineHeight = 0;
+	this->textureID = 0;
+}
 
 Font::Font(const std::string& fontName)
 {
@@ -117,82 +123,12 @@ std::vector<std::string> TextRenderer::splitString(const std::string& text, cons
 	return elements;
 }
 
-void TextRenderer::drawText(TextShader shader, const std::string& text, 
-	glm::vec3 pos, glm::vec3 rot, glm::vec2 scale, glm::vec3 color)
+void TextRenderer::drawText(const std::string& text, glm::vec2 pos, glm::vec2 scale, std::string alignment, std::string origin)
 {
-	shader.start();
-
-	glm::mat4 projectionMatrix = glm::perspective(Config::Display::FOV, (float)Config::Display::WIDTH /
-		(float)Config::Display::HEIGHT, Config::Display::NEAR_PLANE, Config::Display::FAR_PLANE);
-
-	glm::mat4 transformationMatrix;
-	Maths::createTransformationMatrix(transformationMatrix, pos, rot.x, rot.y, rot.z, 1.0f);
-
-	shader.loadTransformationMatrix(transformationMatrix);
-	shader.loadProjectionMatrix(projectionMatrix);
-	shader.loadViewMatrix(Camera::viewMatrix);
-	shader.loadTextColor(color);
-
+	// bind vao and texture atlas
 	glCall(glActiveTexture, GL_TEXTURE0);
 	glCall(glBindVertexArray, this->vao);
 	glCall(glBindTexture, GL_TEXTURE_2D, this->font.textureID);
-
-	for (char c : text)
-	{
-		Character character = this->font.characters[c];
-
-		float xpos = pos.x + character.bearing.x * scale.x;
-		float ypos = pos.y - (character.size.y - character.bearing.y) * scale.y;
-
-		float w = character.size.x * scale.x;
-		float h = character.size.y * scale.y;
-
-		float x0 = character.textureAtlasOffset / this->font.textureWidth;
-		float x1 = (character.textureAtlasOffset + character.size.x) / this->font.textureWidth;
-		
-		float y1 = (float)character.size.y / (float)this->font.textureHeight;
-
-		float vertices[6][4] = {
-			{ xpos,     ypos + h,   x0, 0.0f },
-			{ xpos,     ypos,       x0, y1 },
-			{ xpos + w, ypos,       x1, y1 },
-
-			{ xpos,     ypos + h,   x0, 0.0f },
-			{ xpos + w, ypos,       x1, y1 },
-			{ xpos + w, ypos + h,   x1, 0.0f }
-		};
-
-		glCall(glBindBuffer, GL_ARRAY_BUFFER, this->vbo);
-		glCall(glBufferSubData, GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-		glCall(glBindBuffer, GL_ARRAY_BUFFER, 0);
-
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-
-		pos.x += (character.advance.x >> 6) * scale.x;
-	}
-
-	glCall(glBindVertexArray, 0);
-	glCall(glBindTexture, GL_TEXTURE_2D, 0);
-
-	shader.stop();
-}
-
-void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, glm::vec2 pos, 
-	glm::vec2 scale, glm::vec3 color, std::string alignment, std::string origin)
-{
-	shader.start();
-
-	glm::mat4 projectionMatrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
-	shader.loadTransformationMatrix(glm::mat4(1.0f));
-	shader.loadProjectionMatrix(projectionMatrix);
-	shader.loadViewMatrix(glm::mat4(1.0f));
-	shader.loadTextColor(color);
-
-	glCall(glActiveTexture, GL_TEXTURE0);
-	glCall(glBindVertexArray, this->vao);
-	glCall(glBindTexture, GL_TEXTURE_2D, this->font.textureID);
-
-	// -----------------
 
 	// ensure alignment is valid default:left
 	if (alignment != "left" && alignment != "center" && alignment != "right")
@@ -209,14 +145,13 @@ void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, glm
 	}
 
 	// calculate bounding box
-	glm::ivec2 size = glm::vec2(0.0f);
+	glm::vec2 size = glm::vec2(0.0f);
 
 	std::vector<std::string> lines = this->splitString(text, "\n");
 	std::vector<float> lineOffsets;
 	for (std::string line : lines)
 	{
-		int lineWidth = 0;
-		int lineHeight = 0;
+		float lineWidth = 0.0f;
 
 		for (char character : line)
 		{
@@ -226,7 +161,7 @@ void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, glm
 		lineOffsets.push_back(lineWidth);
 		size.x = std::max(size.x, lineWidth);
 	}
-	size.y = this->font.lineHeight * lines.size() * scale.y;
+	size.y = this->font.lineHeight * lines.size();
 
 	// alignment
 	for (int i = 0; i < lineOffsets.size(); i++)
@@ -249,42 +184,40 @@ void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, glm
 	}
 
 	// origin vertical
-	float yOffset = 0.0f;
+	float yOffset = size.y - this->font.lineHeight;
 	if (origin == "left" || origin == "center" || origin == "right")
-		yOffset = size.y / 2.0f;
-	if (origin == "topleft" || origin == "top" || origin == "topright")
-		yOffset = size.y;
+		yOffset = (size.y / 2.0f) - this->font.lineHeight;
+	if (origin == "topleft" || origin == "bottom" || origin == "topright")
+		yOffset =  -(int)this->font.lineHeight;
 
-	// -----------------
-
+	// draw each character
 	for (int i = 0; i < lines.size(); i++)
 	{
-		glm::ivec2 pos2 = pos;
-
+		float xOffset = 0.0f;
 		for (char c : lines[i])
 		{
 			Character character = this->font.characters[c];
 
-			float xpos = pos2.x + character.bearing.x * scale.x;
-			float ypos = pos2.y - (character.size.y - character.bearing.y) * scale.y;
+			float xpos = pos.x + xOffset + character.bearing.x * scale.x;
+			float ypos = pos.y + yOffset - (character.size.y - character.bearing.y) * scale.y;
 
 			float w = character.size.x * scale.x;
 			float h = character.size.y * scale.y;
 
-			float x0 = character.textureAtlasOffset / this->font.textureWidth;
-			float x1 = (character.textureAtlasOffset + character.size.x) / this->font.textureWidth;
-			float xOffset = lineOffsets[i];
+			float s0 = character.textureAtlasOffset / this->font.textureWidth;
+			float s1 = (character.textureAtlasOffset + character.size.x) / this->font.textureWidth;
+			float lineOffset = lineOffsets[i];
 
-			float y1 = (float)character.size.y / (float)this->font.textureHeight;
+			float t1 = (float)character.size.y / (float)this->font.textureHeight;
 
 			float vertices[6][4] = {
-				{ xpos + xOffset,     ypos + h - yOffset,   x0, 0.0f },
-				{ xpos + xOffset,     ypos - yOffset,       x0, y1 },
-				{ xpos + w + xOffset, ypos - yOffset,       x1, y1 },
+				{ xpos + lineOffset,     ypos + h,   s0, 0.0f },
+				{ xpos + lineOffset,     ypos,       s0, t1 },
+				{ xpos + w + lineOffset, ypos,       s1, t1 },
 
-				{ xpos + xOffset,     ypos + h - yOffset,   x0, 0.0f },
-				{ xpos + w + xOffset, ypos - yOffset,       x1, y1 },
-				{ xpos + w + xOffset, ypos + h - yOffset,   x1, 0.0f }
+				{ xpos + lineOffset,     ypos + h,   s0, 0.0f },
+				{ xpos + w + lineOffset, ypos,       s1, t1 },
+				{ xpos + w + lineOffset, ypos + h,   s1, 0.0f }
 			};
 
 			glCall(glBindBuffer, GL_ARRAY_BUFFER, this->vbo);
@@ -293,14 +226,49 @@ void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, glm
 
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 
-			pos2.x += (character.advance.x >> 6) * scale.x;
+			xOffset += (character.advance.x >> 6) * scale.x;
 		}
 
-		yOffset += this->font.lineHeight;
+		yOffset -= this->font.lineHeight;
 	}
 
 	glCall(glBindVertexArray, 0);
 	glCall(glBindTexture, GL_TEXTURE_2D, 0);
+}
+
+void TextRenderer::drawText(TextShader shader, const std::string& text, glm::vec3 pos, glm::vec3 rot, 
+	glm::vec2 scale, glm::vec3 color, std::string alignment, std::string origin)
+{
+	shader.start();
+
+	glm::mat4 projectionMatrix = glm::perspective(Config::Display::FOV, (float)Config::Display::WIDTH /
+		(float)Config::Display::HEIGHT, Config::Display::NEAR_PLANE, Config::Display::FAR_PLANE);
+
+	glm::mat4 transformationMatrix;
+	Maths::createTransformationMatrix(transformationMatrix, pos, rot.x, rot.y, rot.z, 1.0f);
+
+	shader.loadTransformationMatrix(transformationMatrix);
+	shader.loadProjectionMatrix(projectionMatrix);
+	shader.loadViewMatrix(Camera::viewMatrix);
+	shader.loadTextColor(color);
+
+	this->drawText(text, glm::vec2(0.0f), scale, alignment, origin);
+
+	shader.stop();
+}
+
+void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, glm::vec2 pos, 
+	glm::vec2 scale, glm::vec3 color, std::string alignment, std::string origin)
+{
+	shader.start();
+
+	glm::mat4 projectionMatrix = glm::ortho(0.0f, (float)Config::Display::WIDTH, 0.0f, (float)Config::Display::HEIGHT);
+	shader.loadTransformationMatrix(glm::mat4(1.0f));
+	shader.loadProjectionMatrix(projectionMatrix);
+	shader.loadViewMatrix(glm::mat4(1.0f));
+	shader.loadTextColor(color);
+
+	this->drawText(text, pos, scale, alignment, origin);
 
 	shader.stop();
 }
