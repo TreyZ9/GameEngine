@@ -5,6 +5,7 @@
 #include <freetype/ftglyph.h>
 
 #include <algorithm>
+#include <format>
 #include <vector>
 
 #include "OpenGLFunctions.h"
@@ -14,40 +15,24 @@
 #include "Debug.h"
 #include "Maths.h"
 
-TextRenderer::TextRenderer()
-{
-	this->loadFont("arial");
+Font::Font() = default;
 
-	// create render object
-	glCall(glGenVertexArrays, 1, &this->vao);
-	glCall(glGenBuffers, 1, &this->vbo);
-	glCall(glBindVertexArray, this->vao);
-	glCall(glBindBuffer, GL_ARRAY_BUFFER, this->vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-	glCall(glEnableVertexAttribArray, 0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
-	glCall(glBindBuffer, GL_ARRAY_BUFFER, 0);
-	glCall(glBindVertexArray, 0);
-}
-
-TextRenderer::~TextRenderer() {}
-
-void TextRenderer::loadFont(const std::string& font)
+Font::Font(const std::string& fontName)
 {
 	// init freetype
 	FT_Library ft;
 	LOG_freetypeLibraryLoad(!FT_Init_FreeType(&ft));
 	FT_Face face;
-	LOG_freetypeFontLoad(!FT_New_Face(ft, ("C:\\Windows\\fonts\\" + font + ".ttf").c_str(), 0, &face), "font:" + font);
+	LOG_freetypeFontLoad(!FT_New_Face(ft, std::format("C:\\Windows\\fonts\\{}.ttf", fontName).c_str(), 0, &face), std::format("font:{}", fontName));
 
 	// save line height
-	this->lineHeight = (face->height >> 6) / 1.5;
+	this->lineHeight = (face->height >> 6) / 1.5f;
 
 	// cache bitmaps and advance to populate texture atlas
 	std::vector<FT_BitmapGlyph> bitmaps;
 	std::vector<glm::ivec2> advance;
-	unsigned int width = 0;
-	unsigned int height = 0;
+	this->textureWidth = 0;
+	this->textureHeight = 0;
 	for (unsigned char c = 0; c < 128; c++)
 	{
 		// load char
@@ -66,26 +51,20 @@ void TextRenderer::loadFont(const std::string& font)
 
 		bitmaps.push_back(glyphBitmap);
 		advance.push_back(glm::ivec2(face->glyph->advance.x, face->glyph->advance.y));
-		width += glyphBitmap->bitmap.width + 2; // add 2px buffer to help with aa bleed
-		height = std::max(height, glyphBitmap->bitmap.rows);
+		this->textureWidth += glyphBitmap->bitmap.width + 2; // add 2px buffer to help with aa bleed
+		this->textureHeight = std::max(this->textureHeight, glyphBitmap->bitmap.rows);
 	}
 
 	// create empty texture atlas
-	GLuint textureID;
-	glCall(glGenTextures, 1, &textureID);
-	glCall(glBindTexture, GL_TEXTURE_2D, textureID);
+	this->textureID;
+	glCall(glGenTextures, 1, &this->textureID);
+	glCall(glBindTexture, GL_TEXTURE_2D, this->textureID);
 	glCall(glPixelStorei, GL_UNPACK_ALIGNMENT, 1);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, this->textureWidth, this->textureHeight, 0, GL_RED, GL_UNSIGNED_BYTE, 0);
 	glCall(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glCall(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glCall(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glCall(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	this->textureAtlas = {
-		textureID,
-		width,
-		height
-	};
 
 	// populate atlas with textures and create character map
 	int x = 0;
@@ -103,6 +82,26 @@ void TextRenderer::loadFont(const std::string& font)
 		x += bitmaps[i]->bitmap.width + 2; // 2px buffer
 	}
 }
+
+Font::~Font() = default;
+
+TextRenderer::TextRenderer()
+{
+	this->font = Font("arial");
+
+	// create render object
+	glCall(glGenVertexArrays, 1, &this->vao);
+	glCall(glGenBuffers, 1, &this->vbo);
+	glCall(glBindVertexArray, this->vao);
+	glCall(glBindBuffer, GL_ARRAY_BUFFER, this->vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+	glCall(glEnableVertexAttribArray, 0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+	glCall(glBindBuffer, GL_ARRAY_BUFFER, 0);
+	glCall(glBindVertexArray, 0);
+}
+
+TextRenderer::~TextRenderer() {}
 
 std::vector<std::string> TextRenderer::splitString(const std::string& text, const std::string& delimiter)
 {
@@ -136,11 +135,11 @@ void TextRenderer::drawText(TextShader shader, const std::string& text,
 
 	glCall(glActiveTexture, GL_TEXTURE0);
 	glCall(glBindVertexArray, this->vao);
-	glCall(glBindTexture, GL_TEXTURE_2D, this->textureAtlas.textureID);
+	glCall(glBindTexture, GL_TEXTURE_2D, this->font.textureID);
 
 	for (char c : text)
 	{
-		Character character = this->characters[c];
+		Character character = this->font.characters[c];
 
 		float xpos = pos.x + character.bearing.x * scale.x;
 		float ypos = pos.y - (character.size.y - character.bearing.y) * scale.y;
@@ -148,10 +147,10 @@ void TextRenderer::drawText(TextShader shader, const std::string& text,
 		float w = character.size.x * scale.x;
 		float h = character.size.y * scale.y;
 
-		float x0 = character.textureAtlasOffset / this->textureAtlas.width;
-		float x1 = (character.textureAtlasOffset + character.size.x) / this->textureAtlas.width;
+		float x0 = character.textureAtlasOffset / this->font.textureWidth;
+		float x1 = (character.textureAtlasOffset + character.size.x) / this->font.textureWidth;
 		
-		float y1 = (float)character.size.y / (float)this->textureAtlas.height;
+		float y1 = (float)character.size.y / (float)this->font.textureHeight;
 
 		float vertices[6][4] = {
 			{ xpos,     ypos + h,   x0, 0.0f },
@@ -191,7 +190,7 @@ void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, glm
 
 	glCall(glActiveTexture, GL_TEXTURE0);
 	glCall(glBindVertexArray, this->vao);
-	glCall(glBindTexture, GL_TEXTURE_2D, this->textureAtlas.textureID);
+	glCall(glBindTexture, GL_TEXTURE_2D, this->font.textureID);
 
 	// -----------------
 
@@ -221,13 +220,13 @@ void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, glm
 
 		for (char character : line)
 		{
-			lineWidth += (this->characters.at(character).advance.x >> 6) * scale.x;
+			lineWidth += (this->font.characters.at(character).advance.x >> 6) * scale.x;
 		}
 
 		lineOffsets.push_back(lineWidth);
 		size.x = std::max(size.x, lineWidth);
 	}
-	size.y = this->lineHeight * lines.size() * scale.y;
+	size.y = this->font.lineHeight * lines.size() * scale.y;
 
 	// alignment
 	for (int i = 0; i < lineOffsets.size(); i++)
@@ -264,7 +263,7 @@ void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, glm
 
 		for (char c : lines[i])
 		{
-			Character character = this->characters[c];
+			Character character = this->font.characters[c];
 
 			float xpos = pos2.x + character.bearing.x * scale.x;
 			float ypos = pos2.y - (character.size.y - character.bearing.y) * scale.y;
@@ -272,11 +271,11 @@ void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, glm
 			float w = character.size.x * scale.x;
 			float h = character.size.y * scale.y;
 
-			float x0 = character.textureAtlasOffset / this->textureAtlas.width;
-			float x1 = (character.textureAtlasOffset + character.size.x) / this->textureAtlas.width;
+			float x0 = character.textureAtlasOffset / this->font.textureWidth;
+			float x1 = (character.textureAtlasOffset + character.size.x) / this->font.textureWidth;
 			float xOffset = lineOffsets[i];
 
-			float y1 = (float)character.size.y / (float)this->textureAtlas.height;
+			float y1 = (float)character.size.y / (float)this->font.textureHeight;
 
 			float vertices[6][4] = {
 				{ xpos + xOffset,     ypos + h - yOffset,   x0, 0.0f },
@@ -297,7 +296,7 @@ void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, glm
 			pos2.x += (character.advance.x >> 6) * scale.x;
 		}
 
-		yOffset += this->lineHeight;
+		yOffset += this->font.lineHeight;
 	}
 
 	glCall(glBindVertexArray, 0);

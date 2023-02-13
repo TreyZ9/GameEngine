@@ -25,16 +25,29 @@ struct TextureAtlas
 	unsigned int height;
 };
 
+class Font
+{
+private:
+
+public:
+	std::map<char, Character> characters;
+	unsigned int textureWidth;
+	unsigned int textureHeight;
+	GLuint textureID;
+	unsigned int lineHeight;
+
+	Font();
+	Font(const std::string& fontName);
+	~Font();
+};
+
 class TextRenderer
 {
 private:
-	std::map<char, Character> characters;
 	GLuint vao;
 	GLuint vbo;
-	TextureAtlas textureAtlas;
-	unsigned int lineHeight;
+	Font font;
 
-	void loadFont(const std::string& font);
 	std::vector<std::string> splitString(const std::string& text, const std::string& delimiter);
 
 public:
