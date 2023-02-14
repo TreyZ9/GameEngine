@@ -14,9 +14,10 @@
 struct Character
 {
 	float textureAtlasOffset;
-	glm::ivec2 size;
-	glm::ivec2 bearing;
-	glm::ivec2 advance;
+	glm::ivec2 textureSize;
+	glm::vec2 size;
+	glm::vec2 bearing;
+	glm::vec2 advance;
 };
 
 class Font
@@ -27,11 +28,11 @@ public:
 	std::map<char, Character> characters;
 	unsigned int textureWidth;
 	unsigned int textureHeight;
-	unsigned int lineHeight;
+	float lineHeight;
 	GLuint textureID;
 
 	Font();
-	Font(const std::string& fontName);
+	Font(const std::string& fontName, unsigned int fontQuality);
 	~Font();
 
 	std::array<std::array<float, 4>, 6> generateVertices(const char c, glm::vec2& cursorPos, const glm::vec2& scale);

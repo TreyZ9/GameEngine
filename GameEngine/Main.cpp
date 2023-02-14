@@ -209,8 +209,8 @@ int main()
 		fpsModel.update();
 		fpsModel.render(textShader, textRenderer);
 
-		textRenderer.drawTextOnHUD(textShader, "y Press ESC to Close\nA\nHello World\na\na\na\na\na\na", glm::vec2(10, 0), glm::vec2(0.7), glm::vec3(0.0f, 1.0f, 0.0f), "center", "bottomleft");
-		textRenderer.drawTextOnHUD(textShader, "y Press ESC to Close\nA\nHello World\na\na\na\na\na\na", glm::vec2(10, Config::Display::HEIGHT), glm::vec2(0.7), glm::vec3(0.0f, 1.0f, 0.0f), "center", "topleft");
+		textRenderer.drawTextOnHUD(textShader, "y Press ESC to Close\nA\nHello World\na\na\na\na\na\na", glm::vec2(10, 0), glm::vec2(48), glm::vec3(0.0f, 1.0f, 0.0f), "center", "bottomleft");
+		textRenderer.drawTextOnHUD(textShader, "y Press ESC to Close\nA\nHello World\na\na\na\na\na\na", glm::vec2(10, Config::Display::HEIGHT), glm::vec2(24), glm::vec3(0.0f, 1.0f, 0.0f), "center", "topleft");
 
 		// Show Display Buffer
 		DisplayManager::updateDisplay();

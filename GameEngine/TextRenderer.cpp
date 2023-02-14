@@ -22,23 +22,21 @@ Font::Font()
 	this->textureID = 0;
 }
 
-Font::Font(const std::string& fontName)
+Font::Font(const std::string& fontName, unsigned int fontQualtiy = 24)
 {
-	unsigned int fontSize = 48;
-
 	// init freetype
 	FT_Library ft;
 	LOG_freetypeLibraryLoad(!FT_Init_FreeType(&ft));
 	FT_Face face;
 	LOG_freetypeFontLoad(!FT_New_Face(ft, std::format("C:\\Windows\\fonts\\{}.ttf", fontName).c_str(), 0, &face), std::format("font:{}", fontName));
-	FT_Set_Char_Size(face, 0, fontSize << 6, 0, 0);
+	FT_Set_Char_Size(face, 0, fontQualtiy << 6, 0, 0);
 
 	// save line height
-	this->lineHeight = (fontSize) / 1.5f;
+	this->lineHeight = (fontQualtiy) / 1.5f / fontQualtiy;
 
 	// cache bitmaps and advance to populate texture atlas
 	std::vector<FT_BitmapGlyph> bitmaps;
-	std::vector<glm::ivec2> advance;
+	std::vector<glm::vec2> advance;
 	this->textureWidth = 0;
 	this->textureHeight = 0;
 	for (unsigned char c = 0; c < 128; c++)
@@ -58,7 +56,7 @@ Font::Font(const std::string& fontName)
 		FT_BitmapGlyph glyphBitmap = (FT_BitmapGlyph)glyph;
 
 		bitmaps.push_back(glyphBitmap);
-		advance.push_back(glm::ivec2(face->glyph->advance.x, face->glyph->advance.y));
+		advance.push_back(glm::vec2((float)(face->glyph->advance.x >> 6) / fontQualtiy, (float)(face->glyph->advance.y >> 6) / fontQualtiy));
 		this->textureWidth += glyphBitmap->bitmap.width + 2; // add 2px buffer to help with aa bleed
 		this->textureHeight = std::max(this->textureHeight, glyphBitmap->bitmap.rows);
 	}
@@ -83,7 +81,8 @@ Font::Font(const std::string& fontName)
 		Character character = {
 			x,
 			glm::ivec2(bitmaps[i]->bitmap.width, bitmaps[i]->bitmap.rows),
-			glm::ivec2(bitmaps[i]->left, bitmaps[i]->top),
+			glm::vec2((float)bitmaps[i]->bitmap.width / fontQualtiy, (float)bitmaps[i]->bitmap.rows / fontQualtiy),
+			glm::vec2((float)bitmaps[i]->left / fontQualtiy, (float)bitmaps[i]->top / fontQualtiy),
 			advance[i]
 		};
 		this->characters.insert(std::pair<char, Character>((char)i, character));
@@ -104,8 +103,8 @@ std::array<std::array<float, 4>, 6> Font::generateVertices(const char c, glm::ve
 	glm::vec2 size = (glm::vec2)character.size * scale;
 
 	float s0 = character.textureAtlasOffset / this->textureWidth;
-	float s1 = (character.textureAtlasOffset + character.size.x) / this->textureWidth;
-	float t1 = (float)character.size.y / this->textureHeight;
+	float s1 = (character.textureAtlasOffset + character.textureSize.x) / this->textureWidth;
+	float t1 = (float)character.textureSize.y / this->textureHeight;
 
 	std::array<std::array<float, 4>, 6> vertices = { {
 		{ pos.x,          pos.y + size.y, s0, 0.0f },
@@ -117,7 +116,7 @@ std::array<std::array<float, 4>, 6> Font::generateVertices(const char c, glm::ve
 		{ pos.x + size.x, pos.y + size.y, s1, 0.0f }
 	} };
 
-	cursorPos.x += (character.advance.x >> 6) * scale.x;
+	cursorPos.x += character.advance.x * scale.x;
 
 	return vertices;
 }
@@ -187,13 +186,13 @@ void TextRenderer::drawText(const std::string& text, glm::vec2 pos, glm::vec2 sc
 
 		for (char character : line)
 		{
-			lineWidth += (this->font.characters.at(character).advance.x >> 6) * scale.x;
+			lineWidth += this->font.characters.at(character).advance.x * scale.x;
 		}
 
 		lineOffsets.push_back(lineWidth);
 		size.x = std::max(size.x, lineWidth);
 	}
-	size.y = this->font.lineHeight * lines.size();
+	size.y = this->font.lineHeight * lines.size() * scale.y;
 
 	// alignment
 	for (int i = 0; i < lineOffsets.size(); i++)
@@ -216,11 +215,11 @@ void TextRenderer::drawText(const std::string& text, glm::vec2 pos, glm::vec2 sc
 	}
 
 	// origin vertical
-	float yOffset = size.y - this->font.lineHeight;
+	float yOffset = size.y - this->font.lineHeight * scale.y;
 	if (origin == "left" || origin == "center" || origin == "right")
-		yOffset = (size.y / 2.0f) - this->font.lineHeight;
+		yOffset = (size.y / 2.0f) - this->font.lineHeight * scale.y;
 	if (origin == "topleft" || origin == "bottom" || origin == "topright")
-		yOffset =  -(int)this->font.lineHeight;
+		yOffset =  -this->font.lineHeight * scale.y;
 
 	// draw each character
 	this->cursorPos = glm::vec2(pos.x, pos.y + yOffset);
@@ -238,7 +237,7 @@ void TextRenderer::drawText(const std::string& text, glm::vec2 pos, glm::vec2 sc
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
 
-		this->cursorPos.y -= this->font.lineHeight;
+		this->cursorPos.y -= this->font.lineHeight * scale.y;
 	}
 
 	glCall(glBindVertexArray, 0);
