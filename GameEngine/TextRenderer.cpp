@@ -6,7 +6,6 @@
 
 #include <algorithm>
 #include <format>
-#include <vector>
 
 #include "OpenGLFunctions.h"
 #include "TextShader.h"
@@ -94,9 +93,39 @@ Font::Font(const std::string& fontName)
 
 Font::~Font() = default;
 
+std::array<std::array<float, 4>, 6> Font::generateVertices(const char c, glm::vec2& cursorPos, const glm::vec2& scale)
+{
+	Character character = this->characters.at(c);
+
+	glm::vec2 pos = glm::vec2(
+		cursorPos.x + character.bearing.x * scale.x,
+		cursorPos.y - (character.size.y - character.bearing.y) * scale.y
+	);
+	glm::vec2 size = (glm::vec2)character.size * scale;
+
+	float s0 = character.textureAtlasOffset / this->textureWidth;
+	float s1 = (character.textureAtlasOffset + character.size.x) / this->textureWidth;
+	float t1 = (float)character.size.y / this->textureHeight;
+
+	std::array<std::array<float, 4>, 6> vertices = { {
+		{ pos.x,          pos.y + size.y, s0, 0.0f },
+		{ pos.x,          pos.y,          s0, t1 },
+		{ pos.x + size.x, pos.y,          s1, t1 },
+
+		{ pos.x,          pos.y + size.y, s0, 0.0f },
+		{ pos.x + size.x, pos.y,          s1, t1 },
+		{ pos.x + size.x, pos.y + size.y, s1, 0.0f }
+	} };
+
+	cursorPos.x += (character.advance.x >> 6) * scale.x;
+
+	return vertices;
+}
+
 TextRenderer::TextRenderer()
 {
 	this->font = Font("arial");
+	this->cursorPos = glm::vec2(0.0f);
 
 	// create render object
 	glCall(glGenVertexArrays, 1, &this->vao);
@@ -194,45 +223,22 @@ void TextRenderer::drawText(const std::string& text, glm::vec2 pos, glm::vec2 sc
 		yOffset =  -(int)this->font.lineHeight;
 
 	// draw each character
+	this->cursorPos = glm::vec2(pos.x, pos.y + yOffset);
 	for (int i = 0; i < lines.size(); i++)
 	{
-		float xOffset = 0.0f;
+		this->cursorPos.x = pos.x + lineOffsets[i];
 		for (char c : lines[i])
 		{
-			Character character = this->font.characters[c];
-
-			float xpos = pos.x + xOffset + character.bearing.x * scale.x;
-			float ypos = pos.y + yOffset - (character.size.y - character.bearing.y) * scale.y;
-
-			float w = character.size.x * scale.x;
-			float h = character.size.y * scale.y;
-
-			float s0 = character.textureAtlasOffset / this->font.textureWidth;
-			float s1 = (character.textureAtlasOffset + character.size.x) / this->font.textureWidth;
-			float lineOffset = lineOffsets[i];
-
-			float t1 = (float)character.size.y / (float)this->font.textureHeight;
-
-			float vertices[6][4] = {
-				{ xpos + lineOffset,     ypos + h,   s0, 0.0f },
-				{ xpos + lineOffset,     ypos,       s0, t1 },
-				{ xpos + w + lineOffset, ypos,       s1, t1 },
-
-				{ xpos + lineOffset,     ypos + h,   s0, 0.0f },
-				{ xpos + w + lineOffset, ypos,       s1, t1 },
-				{ xpos + w + lineOffset, ypos + h,   s1, 0.0f }
-			};
+			std::array<std::array<float, 4>, 6> vertices = this->font.generateVertices(c, cursorPos, scale);
 
 			glCall(glBindBuffer, GL_ARRAY_BUFFER, this->vbo);
-			glCall(glBufferSubData, GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+			glCall(glBufferSubData, GL_ARRAY_BUFFER, 0, sizeof(vertices), &vertices);
 			glCall(glBindBuffer, GL_ARRAY_BUFFER, 0);
 
 			glDrawArrays(GL_TRIANGLES, 0, 6);
-
-			xOffset += (character.advance.x >> 6) * scale.x;
 		}
 
-		yOffset -= this->font.lineHeight;
+		this->cursorPos.y -= this->font.lineHeight;
 	}
 
 	glCall(glBindVertexArray, 0);

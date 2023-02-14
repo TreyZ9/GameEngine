@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <string>
+#include <array>
 #include <map>
 
 #include "TextShader.h"
@@ -16,13 +17,6 @@ struct Character
 	glm::ivec2 size;
 	glm::ivec2 bearing;
 	glm::ivec2 advance;
-};
-
-struct TextureAtlas
-{
-	GLuint textureID;
-	unsigned int width;
-	unsigned int height;
 };
 
 class Font
@@ -39,11 +33,14 @@ public:
 	Font();
 	Font(const std::string& fontName);
 	~Font();
+
+	std::array<std::array<float, 4>, 6> generateVertices(const char c, glm::vec2& cursorPos, const glm::vec2& scale);
 };
 
 class TextRenderer
 {
 private:
+	glm::vec2 cursorPos;
 	GLuint vao;
 	GLuint vbo;
 	Font font;
