@@ -25,14 +25,17 @@ Font::Font()
 
 Font::Font(const std::string& fontName)
 {
+	unsigned int fontSize = 48;
+
 	// init freetype
 	FT_Library ft;
 	LOG_freetypeLibraryLoad(!FT_Init_FreeType(&ft));
 	FT_Face face;
 	LOG_freetypeFontLoad(!FT_New_Face(ft, std::format("C:\\Windows\\fonts\\{}.ttf", fontName).c_str(), 0, &face), std::format("font:{}", fontName));
+	FT_Set_Char_Size(face, 0, fontSize << 6, 0, 0);
 
 	// save line height
-	this->lineHeight = (face->height >> 6) / 1.5f;
+	this->lineHeight = (fontSize) / 1.5f;
 
 	// cache bitmaps and advance to populate texture atlas
 	std::vector<FT_BitmapGlyph> bitmaps;
