@@ -14,55 +14,92 @@
 #include "Debug.h"
 #include "Maths.h"
 
-Font::Font()
+Font::Font() = default;
+
+Font::Font(const std::string& fontName, unsigned int fontQuality = 24)
 {
-	this->textureWidth = 0;
-	this->textureHeight = 0;
-	this->lineHeight = 0;
-	this->textureID = 0;
-}
+	this->lineSpacing = 1.0f;
 
-Font::Font(const std::string& fontName, unsigned int fontQualtiy = 24)
-{
-	// init freetype
-	FT_Library ft;
-	LOG_freetypeLibraryLoad(!FT_Init_FreeType(&ft));
-	FT_Face face;
-	LOG_freetypeFontLoad(!FT_New_Face(ft, std::format("C:\\Windows\\fonts\\{}.ttf", fontName).c_str(), 0, &face), std::format("font:{}", fontName));
-	FT_Set_Char_Size(face, 0, fontQualtiy << 6, 0, 0);
-
-	// save line height
-	this->lineHeight = (fontQualtiy) / 1.5f / fontQualtiy;
-
-	// cache bitmaps and advance to populate texture atlas
-	std::vector<FT_BitmapGlyph> bitmaps;
-	std::vector<glm::vec2> advance;
-	this->textureWidth = 0;
-	this->textureHeight = 0;
-	for (unsigned char c = 0; c < 128; c++)
+	// load library
+	FT_Library library;
+	if (FT_Init_FreeType(&library))
 	{
-		// load char
-		if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+		LOG_freetypeLibraryLoad(false);
+		return;
+	}
+
+	// load font
+	FT_Face face;
+	FT_Error error = FT_New_Face(library, std::format("C:\\Windows\\fonts\\{}.ttf", fontName).c_str(), 0, &face);
+	if (error == FT_Err_Unknown_File_Format)
+	{
+		LOG_freetypeFontLoad(false, std::format("{} font exists but is not supported", fontName));
+		return;
+	}
+	else if (error)
+	{
+		LOG_freetypeFontLoad(false, std::format("{} font either does not exist, cannot be opened, or is broken", fontName));
+		return;
+	}
+
+	// configure font
+	if (FT_Set_Char_Size(face, 0, fontQuality << 6, 0, 0))
+	{
+		LOG_freetypeFontLoad(false, std::format("{} font could not be configured", fontName));
+		return;
+	}
+
+	// render bitmaps
+	std::vector<FT_BitmapGlyph> bitmapGlyphs;
+	this->textureWidth = 0;
+	this->textureHeight = 0;
+	for (unsigned char i = 0; i < 128; i++)
+	{
+		// load character
+		if (FT_Load_Char(face, i, FT_LOAD_RENDER))
 		{
-			LOG_freetypeCharacterLoad(false, "");
-			continue;
+			LOG_freetypeCharacterLoad(false, std::format("failed to load char:{} for font:{}", (char)i, fontName));
+			return;
 		}
 
-		// render bitmap
+		// load glyph
 		FT_Glyph glyph;
-		FT_Get_Glyph(face->glyph, &glyph);
-		if (glyph->format != FT_GLYPH_FORMAT_BITMAP)
-			FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, 0, 1);
-		FT_BitmapGlyph glyphBitmap = (FT_BitmapGlyph)glyph;
+		if (FT_Get_Glyph(face->glyph, &glyph))
+		{
+			LOG_freetypeGlyphLoad(false, std::format("failed to load glyph:{} for font:{}", (char)i, fontName));
+			return;
+		}
 
-		bitmaps.push_back(glyphBitmap);
-		advance.push_back(glm::vec2((float)(face->glyph->advance.x >> 6) / fontQualtiy, (float)(face->glyph->advance.y >> 6) / fontQualtiy));
-		this->textureWidth += glyphBitmap->bitmap.width + 2; // add 2px buffer to help with aa bleed
-		this->textureHeight = std::max(this->textureHeight, glyphBitmap->bitmap.rows);
+		// render bitmap if necessary
+		if (glyph->format != FT_GLYPH_FORMAT_BITMAP)
+		{
+			if (FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, 0, 1))
+			{
+				LOG_freetypeRenderBitmap(false, std::format("failed to render bitmap:{} for font:{}", (char)i, fontName));
+				return;
+			}
+		}
+
+		// cache bitmap
+		FT_BitmapGlyph bitmapGlyph = (FT_BitmapGlyph)glyph;
+		bitmapGlyphs.push_back((FT_BitmapGlyph)bitmapGlyph);
+
+		// cache character
+		Character character = {
+			this->textureWidth,
+			glm::ivec2(bitmapGlyph->bitmap.width, bitmapGlyph->bitmap.rows),
+			glm::vec2((float)bitmapGlyph->bitmap.width / fontQuality, (float)bitmapGlyph->bitmap.rows / fontQuality),
+			glm::vec2((float)bitmapGlyph->left / fontQuality, (float)bitmapGlyph->top / fontQuality),
+			glm::vec2((float)(face->glyph->advance.x >> 6) / fontQuality, (float)(face->glyph->advance.y >> 6) / fontQuality)
+		};
+		this->characters.insert(std::pair<char, Character>(i, character));
+
+		// update texture size
+		this->textureWidth += bitmapGlyph->bitmap.width + 1;
+		this->textureHeight = std::max(this->textureHeight, bitmapGlyph->bitmap.rows);
 	}
 
 	// create empty texture atlas
-	this->textureID;
 	glCall(glGenTextures, 1, &this->textureID);
 	glCall(glBindTexture, GL_TEXTURE_2D, this->textureID);
 	glCall(glPixelStorei, GL_UNPACK_ALIGNMENT, 1);
@@ -72,40 +109,35 @@ Font::Font(const std::string& fontName, unsigned int fontQualtiy = 24)
 	glCall(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glCall(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	// populate atlas with textures and create character map
-	int x = 0;
-	for (unsigned int i = 0; i < 128; i++)
+	// fill texture atlas
+	for (unsigned char i = 0; i < bitmapGlyphs.size(); i++)
 	{
-		glCall(glTexSubImage2D, GL_TEXTURE_2D, 0, x, 0, bitmaps[i]->bitmap.width, bitmaps[i]->bitmap.rows, GL_RED, GL_UNSIGNED_BYTE, bitmaps[i]->bitmap.buffer);
-
-		Character character = {
-			x,
-			glm::ivec2(bitmaps[i]->bitmap.width, bitmaps[i]->bitmap.rows),
-			glm::vec2((float)bitmaps[i]->bitmap.width / fontQualtiy, (float)bitmaps[i]->bitmap.rows / fontQualtiy),
-			glm::vec2((float)bitmaps[i]->left / fontQualtiy, (float)bitmaps[i]->top / fontQualtiy),
-			advance[i]
-		};
-		this->characters.insert(std::pair<char, Character>((char)i, character));
-		x += bitmaps[i]->bitmap.width + 2; // 2px buffer
+		glCall(glTexSubImage2D, GL_TEXTURE_2D, 0, this->characters[i].textureAtlasOffset, 0, bitmapGlyphs[i]->bitmap.width, bitmapGlyphs[i]->bitmap.rows, GL_RED, GL_UNSIGNED_BYTE, bitmapGlyphs[i]->bitmap.buffer);
 	}
 }
 
-Font::~Font() = default;
+Font::~Font()
+{
+	glCall(glDeleteTextures, 1, &this->textureID);
+}
 
 std::array<std::array<float, 4>, 6> Font::generateVertices(const char c, glm::vec2& cursorPos, const glm::vec2& scale)
 {
 	Character character = this->characters.at(c);
 
+	// calculate vertex coords
 	glm::vec2 pos = glm::vec2(
 		cursorPos.x + character.bearing.x * scale.x,
 		cursorPos.y - (character.size.y - character.bearing.y) * scale.y
 	);
-	glm::vec2 size = (glm::vec2)character.size * scale;
+	glm::vec2 size = character.size * scale;
 
+	// calculate texture coords
 	float s0 = character.textureAtlasOffset / this->textureWidth;
 	float s1 = (character.textureAtlasOffset + character.textureSize.x) / this->textureWidth;
 	float t1 = (float)character.textureSize.y / this->textureHeight;
 
+	// create vertices
 	std::array<std::array<float, 4>, 6> vertices = { {
 		{ pos.x,          pos.y + size.y, s0, 0.0f },
 		{ pos.x,          pos.y,          s0, t1 },
@@ -117,8 +149,27 @@ std::array<std::array<float, 4>, 6> Font::generateVertices(const char c, glm::ve
 	} };
 
 	cursorPos.x += character.advance.x * scale.x;
-
 	return vertices;
+}
+
+GLuint Font::getTextureID()
+{
+	return this->textureID;
+}
+
+float Font::calculateLineWidth(const std::string& text, const glm::vec2& scale)
+{
+	float lineWidth = 0.0f;
+	for (char c : text)
+	{
+		lineWidth += this->characters.at(c).advance.x * scale.x;
+	}
+	return lineWidth;
+}
+
+float Font::getLineHeight(const glm::vec2 scale)
+{
+	return this->lineSpacing * scale.y;
 }
 
 TextRenderer::TextRenderer()
@@ -138,7 +189,11 @@ TextRenderer::TextRenderer()
 	glCall(glBindVertexArray, 0);
 }
 
-TextRenderer::~TextRenderer() {}
+TextRenderer::~TextRenderer()
+{
+	glCall(glDeleteVertexArrays, 1, &this->vao);
+	glCall(glDeleteBuffers, 1, &this->vbo);
+}
 
 std::vector<std::string> TextRenderer::splitString(const std::string& text, const std::string& delimiter)
 {
@@ -154,79 +209,74 @@ std::vector<std::string> TextRenderer::splitString(const std::string& text, cons
 	return elements;
 }
 
-void TextRenderer::drawText(const std::string& text, glm::vec2 pos, glm::vec2 scale, std::string alignment, std::string origin)
+void TextRenderer::drawText(const std::string& text, const glm::vec2& pos, const glm::vec2& scale, std::string alignment, std::string origin)
 {
 	// bind vao and texture atlas
 	glCall(glActiveTexture, GL_TEXTURE0);
 	glCall(glBindVertexArray, this->vao);
-	glCall(glBindTexture, GL_TEXTURE_2D, this->font.textureID);
+	glCall(glBindTexture, GL_TEXTURE_2D, this->font.getTextureID());
 
-	// ensure alignment is valid default:left
-	if (alignment != "left" && alignment != "center" && alignment != "right")
-	{
-		alignment = "left";
-	}
-
-	// ensure origin is valid default:center
-	if (origin != "topleft" && origin != "top" && origin != "topright" &&
-		origin != "left" && origin != "center" && origin != "right" &&
-		origin != "bottomleft" && origin != "bottom" && origin != "bottomright")
-	{
-		origin = "center";
-	}
-
-	// calculate bounding box
-	glm::vec2 size = glm::vec2(0.0f);
+	// calculate text bounding box
+	glm::vec2 boundingBox(0.0f);
 
 	std::vector<std::string> lines = this->splitString(text, "\n");
 	std::vector<float> lineOffsets;
+
 	for (std::string line : lines)
 	{
-		float lineWidth = 0.0f;
-
-		for (char character : line)
-		{
-			lineWidth += this->font.characters.at(character).advance.x * scale.x;
-		}
-
+		float lineWidth = this->font.calculateLineWidth(line, scale);
 		lineOffsets.push_back(lineWidth);
-		size.x = std::max(size.x, lineWidth);
+		boundingBox.x = std::max(boundingBox.x, lineWidth);
 	}
-	size.y = this->font.lineHeight * lines.size() * scale.y;
+	boundingBox.y = this->font.getLineHeight(scale) * lines.size();
 
 	// alignment
-	for (int i = 0; i < lineOffsets.size(); i++)
+	for (float& offset : lineOffsets)
 	{
 		if (alignment == "left")
-			lineOffsets[i] = 0.0f;
+		{
+			offset = 0.0f;
+		}
 		else if (alignment == "center")
-			lineOffsets[i] = (size.x - lineOffsets[i]) / 2.0f;
-		else if (alignment == "right")
-			lineOffsets[i] = size.x - lineOffsets[i];
+		{
+			offset = (boundingBox.x - offset) / 2.0f;
+		}
+		else
+		{
+			offset = (boundingBox.x - offset);
+		}
 	}
 
 	// origin horizontal
-	for (int i = 0; i < lineOffsets.size(); i++)
+	for (float& offset : lineOffsets)
 	{
-		if (origin == "top" || origin == "center" || origin == "bottom")
-			lineOffsets[i] -= size.x / 2.0f;
-		if (origin == "topright" || origin == "right" || origin == "bottomright")
-			lineOffsets[i] -= size.x;
+		if (origin == "top" || origin == "center" || origin == "bottom") // center column
+		{
+			offset -= boundingBox.x / 2.0f;
+		}
+		else if (origin == "topright" || origin == "right" || origin == "bottomright") // right column
+		{
+			offset -= boundingBox.x;
+		}
 	}
 
 	// origin vertical
-	float yOffset = size.y - this->font.lineHeight * scale.y;
-	if (origin == "left" || origin == "center" || origin == "right")
-		yOffset = (size.y / 2.0f) - this->font.lineHeight * scale.y;
-	if (origin == "topleft" || origin == "bottom" || origin == "topright")
-		yOffset =  -this->font.lineHeight * scale.y;
+	float yOffset = boundingBox.y - this->font.getLineHeight(scale);
+	if (origin == "left" || origin == "center" || origin == "right") // center row
+	{
+		yOffset -= boundingBox.y / 2.0f;
+	}
+	else if (origin == "topleft" || origin == "bottom" || origin == "topright") // top row
+	{
+		yOffset -= boundingBox.y;
+	}
 
 	// draw each character
-	this->cursorPos = glm::vec2(pos.x, pos.y + yOffset);
-	for (int i = 0; i < lines.size(); i++)
+	this->cursorPos.y = pos.y + yOffset;
+	for (unsigned int i = 0; i < lines.size(); i++)
 	{
 		this->cursorPos.x = pos.x + lineOffsets[i];
-		for (char c : lines[i])
+		for (char& c : lines[i])
 		{
 			std::array<std::array<float, 4>, 6> vertices = this->font.generateVertices(c, cursorPos, scale);
 
@@ -236,16 +286,16 @@ void TextRenderer::drawText(const std::string& text, glm::vec2 pos, glm::vec2 sc
 
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
-
-		this->cursorPos.y -= this->font.lineHeight * scale.y;
+		this->cursorPos.y -= this->font.getLineHeight(scale);
 	}
 
+	// unbind
 	glCall(glBindVertexArray, 0);
 	glCall(glBindTexture, GL_TEXTURE_2D, 0);
 }
 
-void TextRenderer::drawText(TextShader shader, const std::string& text, glm::vec3 pos, glm::vec3 rot, 
-	glm::vec2 scale, glm::vec3 color, std::string alignment, std::string origin)
+void TextRenderer::drawText(TextShader shader, const std::string& text, const glm::vec3& pos, const glm::vec3& rot, 
+	const glm::vec2& scale, const glm::vec3& color, const std::string& alignment, const std::string& origin)
 {
 	shader.start();
 
@@ -265,8 +315,8 @@ void TextRenderer::drawText(TextShader shader, const std::string& text, glm::vec
 	shader.stop();
 }
 
-void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, glm::vec2 pos, 
-	glm::vec2 scale, glm::vec3 color, std::string alignment, std::string origin)
+void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, const glm::vec2& pos, const glm::vec2& scale,
+	const glm::vec3& color, const std::string& alignment, const std::string& origin)
 {
 	shader.start();
 

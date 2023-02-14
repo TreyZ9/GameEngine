@@ -10,6 +10,8 @@
 #define LOG_freetypeLibraryLoad(success) Debug::freetypeLibraryLoad(__FILE__, __LINE__, success);
 #define LOG_freetypeFontLoad(success, info) Debug::freetypeFontLoad(__FILE__, __LINE__, success, info);
 #define LOG_freetypeCharacterLoad(success, info) Debug::freetypeCharacterLoad(__FILE__, __LINE__, success, info);
+#define LOG_freetypeGlyphLoad(success, info) Debug::freetypeGlyphLoad(__FILE__, __LINE__, success, info);
+#define LOG_freetypeRenderBitmap(success, info) Debug::freetypeRenderBitmap(__FILE__, __LINE__, success, info);
 
 struct Debug
 {
@@ -36,5 +38,11 @@ public:
 		bool success, std::string info = "");
 
 	static void freetypeCharacterLoad(const char* filename, const std::uint_fast32_t line,
+		bool success, std::string info = "");
+
+	static void freetypeGlyphLoad(const char* filename, const std::uint_fast32_t line,
+		bool success, std::string info = "");
+
+	static void freetypeRenderBitmap(const char* filename, const std::uint_fast32_t line,
 		bool success, std::string info = "");
 };

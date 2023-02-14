@@ -111,4 +111,32 @@ void Debug::freetypeCharacterLoad(const char* filename, const std::uint_fast32_t
 	}
 }
 
+void Debug::freetypeGlyphLoad(const char* filename, const std::uint_fast32_t line,
+	bool success, std::string info)
+{
+	if (Debug::debug)
+	{
+		if (!success)
+			std::cout << "[ERROR] Could not load glyph with freetype" << std::endl;
+
+		if (info != "")
+			std::cout << "        " << info << std::endl;
+		std::cout << "        " << filename << " : " << line << std::endl;
+	}
+}
+
+void Debug::freetypeRenderBitmap(const char* filename, const std::uint_fast32_t line,
+	bool success, std::string info)
+{
+	if (Debug::debug)
+	{
+		if (!success)
+			std::cout << "[ERROR] Could not render bitmap with freetype" << std::endl;
+
+		if (info != "")
+			std::cout << "        " << info << std::endl;
+		std::cout << "        " << filename << " : " << line << std::endl;
+	}
+}
+
 const bool Debug::debug = true;

@@ -201,7 +201,7 @@ int main()
 		torus.draw(bsdfShader, torusTransformationMatrix);
 		bsdfShader.stop();
 
-		textRenderer.drawText(textShader, "ERROR", glm::vec3(-5.0f, 2.5f, -5.0f), glm::vec3(0.0f, yRot, 0.0f), glm::vec2(0.03f), glm::vec3(1.0f, 0.0f, 0.0f));
+		textRenderer.drawText(textShader, "ERROR", glm::vec3(-5.0f, 5.0f, -5.0f), glm::vec3(0.0f, yRot, 0.0f), glm::vec2(1.0f), glm::vec3(1.0f, 0.0f, 0.0f), "center", "bottom");
 
 		// FPS Shader Cycle
 		glEnable(GL_BLEND);
@@ -209,8 +209,8 @@ int main()
 		fpsModel.update();
 		fpsModel.render(textShader, textRenderer);
 
-		textRenderer.drawTextOnHUD(textShader, "y Press ESC to Close\nA\nHello World\na\na\na\na\na\na", glm::vec2(10, 0), glm::vec2(48), glm::vec3(0.0f, 1.0f, 0.0f), "center", "bottomleft");
-		textRenderer.drawTextOnHUD(textShader, "y Press ESC to Close\nA\nHello World\na\na\na\na\na\na", glm::vec2(10, Config::Display::HEIGHT), glm::vec2(24), glm::vec3(0.0f, 1.0f, 0.0f), "center", "topleft");
+		textRenderer.drawTextOnHUD(textShader, "This text is centered\nwith a bottom left origin", glm::vec2(10, 0), glm::vec2(24), glm::vec3(0.0f, 1.0f, 0.0f), "center", "bottomleft");
+		textRenderer.drawTextOnHUD(textShader, "This text is right aligned\n with a top left origin", glm::vec2(10, Config::Display::HEIGHT), glm::vec2(20), glm::vec3(0.0f, 1.0f, 0.0f), "right", "topleft");
 
 		// Show Display Buffer
 		DisplayManager::updateDisplay();

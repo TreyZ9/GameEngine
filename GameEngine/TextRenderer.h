@@ -4,8 +4,8 @@
 
 #include <glm/common.hpp>
 
-#include <vector>
 #include <string>
+#include <vector>
 #include <array>
 #include <map>
 
@@ -15,6 +15,7 @@ struct Character
 {
 	float textureAtlasOffset;
 	glm::ivec2 textureSize;
+
 	glm::vec2 size;
 	glm::vec2 bearing;
 	glm::vec2 advance;
@@ -23,19 +24,22 @@ struct Character
 class Font
 {
 private:
-
-public:
 	std::map<char, Character> characters;
+	float lineSpacing;
+
 	unsigned int textureWidth;
 	unsigned int textureHeight;
-	float lineHeight;
 	GLuint textureID;
 
+public:
 	Font();
 	Font(const std::string& fontName, unsigned int fontQuality);
 	~Font();
 
 	std::array<std::array<float, 4>, 6> generateVertices(const char c, glm::vec2& cursorPos, const glm::vec2& scale);
+	GLuint getTextureID();
+	float calculateLineWidth(const std::string& text, const glm::vec2& scale);
+	float getLineHeight(const glm::vec2 scale);
 };
 
 class TextRenderer
@@ -47,12 +51,14 @@ private:
 	Font font;
 
 	std::vector<std::string> splitString(const std::string& text, const std::string& delimiter);
-	void drawText(const std::string& text, glm::vec2 pos, glm::vec2 scale, std::string alignment, std::string origin);
+	void drawText(const std::string& text, const glm::vec2& pos, const glm::vec2& scale, std::string alignment, std::string origin);
 
 public:
 	TextRenderer();
 	~TextRenderer();
 
-	void drawText(TextShader shader, const std::string& text, glm::vec3 pos, glm::vec3 rot, glm::vec2 scale, glm::vec3 color = glm::vec3(1.0f), std::string alignment = "left", std::string origin = "center");
-	void drawTextOnHUD(TextShader shader, const std::string& text, glm::vec2 pos, glm::vec2 scale = glm::vec2(1.0f), glm::vec3 color = glm::vec3(1.0f), std::string alignment = "left", std::string origin = "center");
+	void drawText(TextShader shader, const std::string& text, const glm::vec3& pos, const glm::vec3& rot,
+		const glm::vec2& scale = glm::vec2(24.0f), const glm::vec3& color = glm::vec3(1.0f), const std::string& alignment = "center", const std::string& origin = "center");
+	void drawTextOnHUD(TextShader shader, const std::string& text, const glm::vec2& pos, const glm::vec2& scale = glm::vec2(24.0f),
+		const glm::vec3& color = glm::vec3(1.0f), const std::string& alignment = "center", const std::string& origin = "center");
 };
