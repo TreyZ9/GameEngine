@@ -31,9 +31,8 @@ Font::Font(const std::string& fontName)
 	FT_Face face;
 	LOG_freetypeFontLoad(!FT_New_Face(ft, std::format("C:\\Windows\\fonts\\{}.ttf", fontName).c_str(), 0, &face), std::format("font:{}", fontName));
 
-	// set line height
-	this->lineHeight = 16;
-	FT_Set_Pixel_Sizes(face, 0, this->lineHeight << 1);
+	// save line height
+	this->lineHeight = (face->height >> 6) / 1.5f;
 
 	// cache bitmaps and advance to populate texture atlas
 	std::vector<FT_BitmapGlyph> bitmaps;
@@ -58,7 +57,7 @@ Font::Font(const std::string& fontName)
 
 		bitmaps.push_back(glyphBitmap);
 		advance.push_back(glm::ivec2(face->glyph->advance.x, face->glyph->advance.y));
-		this->textureWidth += glyphBitmap->bitmap.width + 2; // add 2px buffer to help with scaling bleed
+		this->textureWidth += glyphBitmap->bitmap.width + 2; // add 2px buffer to help with aa bleed
 		this->textureHeight = std::max(this->textureHeight, glyphBitmap->bitmap.rows);
 	}
 
@@ -205,8 +204,8 @@ void TextRenderer::drawText(const std::string& text, glm::vec2 pos, glm::vec2 sc
 			float w = character.size.x * scale.x;
 			float h = character.size.y * scale.y;
 
-			float s0 = (float)character.textureAtlasOffset / this->font.textureWidth;
-			float s1 = ((float)character.textureAtlasOffset + character.size.x) / this->font.textureWidth;
+			float s0 = character.textureAtlasOffset / this->font.textureWidth;
+			float s1 = (character.textureAtlasOffset + character.size.x) / this->font.textureWidth;
 			float lineOffset = lineOffsets[i];
 
 			float t1 = (float)character.size.y / (float)this->font.textureHeight;

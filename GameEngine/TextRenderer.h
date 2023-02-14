@@ -12,7 +12,7 @@
 
 struct Character
 {
-	unsigned int textureAtlasOffset;
+	float textureAtlasOffset;
 	glm::ivec2 size;
 	glm::ivec2 bearing;
 	glm::ivec2 advance;
