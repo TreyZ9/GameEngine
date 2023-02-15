@@ -2,9 +2,9 @@
 #include "SkyboxModel.h"
 
 #include "OpenGLFunctions.h"
+#include "DisplayManager.h"
 #include "Loader.h"
 #include "Camera.h"
-#include "Config.h"
 #include "Maths.h"
 
 SkyboxModel::SkyboxModel(const std::string& directory)
@@ -22,18 +22,13 @@ SkyboxModel::SkyboxModel(const std::string& directory)
 	this->texture = Loader::loadCubeMap(directory);
 }
 
-SkyboxModel::~SkyboxModel() {}
-
 void SkyboxModel::draw(SkyboxShader shader)
 {
 	glCall(glActiveTexture, GL_TEXTURE0);
 	glCall(glUniform1i, glGetUniformLocation(shader.getProgramID(), "texture_cubeMap0"), 0);
 	glCall(glBindTexture, GL_TEXTURE_CUBE_MAP, texture.ID);
 
-	glm::mat4 projectionMatrix = glm::perspective(Config::Display::FOV,
-		(float)Config::Display::WIDTH / (float)Config::Display::HEIGHT,
-		Config::Display::NEAR_PLANE, Config::Display::FAR_PLANE);
-	shader.loadProjectionMatrix(projectionMatrix);
+	shader.loadProjectionMatrix(DisplayManager::getProjectionMatrix());
 
 	glm::mat4 viewMatrix;
 	Maths::createTransformationMatrix(viewMatrix, glm::vec3(0.0f), 

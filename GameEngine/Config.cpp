@@ -21,8 +21,6 @@ void Config::loadConfigs(const std::string& filename)
 	Config::Display::OPENGL_VERSION_MINOR = std::stoi(openGLVersion.substr(openGLVersion.find('.') + 1));
 
 	std::string resolution = reader.Get("Display", "Resolution", "Default");
-	Config::Display::WIDTH = std::stoi(resolution.substr(0, resolution.find('x')));
-	Config::Display::HEIGHT = std::stoi(resolution.substr(resolution.find('x') + 1));
 
 	Config::Display::FPS_BUFFER_SIZE = reader.GetInteger("Display", "FpsBufferSize", 0);
 
@@ -44,9 +42,6 @@ void Config::loadConfigs(const std::string& filename)
 }
 
 std::string Config::Display::TITLE;
-
-unsigned short int Config::Display::WIDTH;
-unsigned short int Config::Display::HEIGHT;
 
 int Config::Display::OPENGL_VERSION_MAJOR;
 int Config::Display::OPENGL_VERSION_MINOR;

@@ -63,7 +63,7 @@ private:
 public:
 	SkyboxModel(const std::string& directory);
 
-	~SkyboxModel();
+	~SkyboxModel() = default;
 
 	void draw(SkyboxShader shader);
 };

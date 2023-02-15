@@ -6,8 +6,10 @@
 #include "OpenGLFunctions.h"
 #include "Config.h"
 
-double DisplayManager::LAST_TIME = DisplayManager::getTime();
-double DisplayManager::DELTA = 0.1;
+glm::mat4 DisplayManager::projectionMatrix = glm::mat4(1.0f);
+glm::ivec2 DisplayManager::resolution = glm::ivec2(0.0f);
+double DisplayManager::lastTime = DisplayManager::getTime();
+double DisplayManager::frameDelta = 0.1;
 
 GLFWwindow* DisplayManager::window;
 
@@ -18,8 +20,12 @@ double DisplayManager::getTime()
 
 int DisplayManager::createDisplay(int width, int height) 
 {
-	Config::Display::WIDTH = width;
-	Config::Display::HEIGHT = height;
+	DisplayManager::resolution = glm::ivec2(width, height);
+	DisplayManager::projectionMatrix = glm::perspective(
+		Config::Display::FOV,
+		(float)DisplayManager::resolution.x / (float)DisplayManager::resolution.y,
+		Config::Display::NEAR_PLANE,
+		Config::Display::FAR_PLANE);
 
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, Config::Display::OPENGL_VERSION_MAJOR);
@@ -27,10 +33,10 @@ int DisplayManager::createDisplay(int width, int height)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_REFRESH_RATE, 60);
 
-	GLFWwindow* window = glfwCreateWindow(Config::Display::WIDTH, Config::Display::HEIGHT, Config::Display::TITLE.c_str(), NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(DisplayManager::resolution.x, DisplayManager::resolution.y, Config::Display::TITLE.c_str(), NULL, NULL);
 	if (window == NULL) 
 	{
-		spdlog::error("Failed to create GLFW window");
+		spdlog::error("Failed to create GLFW window with size {:d}x{:d}", DisplayManager::resolution.x, DisplayManager::resolution.y);
 		glfwTerminate();
 		return -1;
 	}
@@ -42,7 +48,7 @@ int DisplayManager::createDisplay(int width, int height)
 		return -1;
 	}
 
-	glCall(glViewport, 0, 0, Config::Display::WIDTH, Config::Display::HEIGHT);
+	glCall(glViewport, 0, 0, DisplayManager::resolution.x, DisplayManager::resolution.y);
 	glfwSetFramebufferSizeCallback(window, DisplayManager::framebuffer_size_callback);
 
 	glCall(glEnable, GL_CULL_FACE);
@@ -51,7 +57,7 @@ int DisplayManager::createDisplay(int width, int height)
 
 	DisplayManager::window = window;
 
-	glfwSetCursorPos(DisplayManager::window, Config::Display::WIDTH / 2, Config::Display::HEIGHT / 2);
+	glfwSetCursorPos(DisplayManager::window, DisplayManager::resolution.x / 2, DisplayManager::resolution.y / 2);
 
 	return 0;
 }
@@ -62,8 +68,8 @@ void DisplayManager::updateDisplay()
 	glfwPollEvents();
 
 	double thisTime = DisplayManager::getTime();
-	DisplayManager::DELTA = thisTime - DisplayManager::LAST_TIME;
-	DisplayManager::LAST_TIME = thisTime;
+	DisplayManager::frameDelta = thisTime - DisplayManager::lastTime;
+	DisplayManager::lastTime = thisTime;
 }
 
 void DisplayManager::clearScreenBuffer()
@@ -72,13 +78,21 @@ void DisplayManager::clearScreenBuffer()
 	glCall(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void DisplayManager::closeDisplay() { glfwTerminate(); }
+void DisplayManager::closeDisplay() 
+{ 
+	glfwTerminate(); 
+}
 
 void DisplayManager::framebuffer_size_callback(GLFWwindow* window, int width, int height) 
 {
 	glCall(glViewport, 0, 0, width, height);
-	Config::Display::WIDTH = width;
-	Config::Display::HEIGHT = height;
+	DisplayManager::resolution.x = width;
+	DisplayManager::resolution.y = height;
+	DisplayManager::projectionMatrix = glm::perspective(
+		Config::Display::FOV, 
+		(float)DisplayManager::resolution.x / (float)DisplayManager::resolution.y, 
+		Config::Display::NEAR_PLANE, 
+		Config::Display::FAR_PLANE);
 }
 
 void DisplayManager::hideCursor() 
@@ -89,4 +103,19 @@ void DisplayManager::hideCursor()
 void DisplayManager::showCursor() 
 { 
 	glfwSetInputMode(DisplayManager::window, GLFW_CURSOR, GLFW_CURSOR_NORMAL); 
+}
+
+glm::mat4 DisplayManager::getProjectionMatrix()
+{
+	return DisplayManager::projectionMatrix;
+}
+
+glm::ivec2 DisplayManager::getResolution()
+{
+	return DisplayManager::resolution;
+}
+
+double DisplayManager::getFrameDelta()
+{
+	return DisplayManager::frameDelta;
 }

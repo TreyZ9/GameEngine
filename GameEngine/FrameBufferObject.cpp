@@ -3,7 +3,7 @@
 #include <spdlog/spdlog.h>
 
 #include "OpenGLFunctions.h"
-#include "Config.h"
+#include "DisplayManager.h"
 
 FrameBufferObject::FrameBufferObject()
 {
@@ -43,7 +43,7 @@ void FrameBufferObject::bind()
 void FrameBufferObject::unbind()
 {
 	glCall(glBindFramebuffer, GL_FRAMEBUFFER, 0);
-	glCall(glViewport, 0, 0, Config::Display::WIDTH, Config::Display::HEIGHT);
+	glCall(glViewport, 0, 0, DisplayManager::getResolution().x, DisplayManager::getResolution().y);
 }
 
 void FrameBufferObject::destroy()

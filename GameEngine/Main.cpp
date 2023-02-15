@@ -66,7 +66,7 @@ int main()
 	Source source1 = Source("Resources/audio/ambientMono.wav", glm::vec3(-4.25f, 0.125f, -4.25f), glm::vec3(0.0f), 1.0f, 1.0f, 0.0f, 10.0f, 1.0f, AL_FALSE);
 	Source source2 = Source("Resources/audio/heavy.wav");
 
-	DisplayManager::createDisplay(Config::Display::WIDTH, Config::Display::HEIGHT);
+	DisplayManager::createDisplay(1280, 720);
 
 	Shader shader = Shader(
 		"Shaders/Shader/shader.vert",
@@ -204,12 +204,12 @@ int main()
 		fpsModel.render(textShader, textRenderer);
 
 		textRenderer.drawTextOnHUD(textShader, "This text is centered\nwith a bottom left origin", glm::vec2(10, 0), glm::vec2(24), glm::vec3(0.0f, 1.0f, 0.0f), "center", "bottomleft");
-		textRenderer.drawTextOnHUD(textShader, "This text is right aligned\n with a top left origin", glm::vec2(10, Config::Display::HEIGHT), glm::vec2(20), glm::vec3(0.0f, 1.0f, 0.0f), "right", "topleft");
+		textRenderer.drawTextOnHUD(textShader, "This text is right aligned\n with a top left origin", glm::vec2(10, DisplayManager::getResolution().y), glm::vec2(20), glm::vec3(0.0f, 1.0f, 0.0f), "right", "topleft");
 
 		// Show Display Buffer
 		DisplayManager::updateDisplay();
 
-		yRot += DisplayManager::DELTA * 80.0f;
+		yRot += DisplayManager::getFrameDelta() * 80.0f;
 		if (yRot > 360.0f)
 			yRot -= 360.0f;
 	}

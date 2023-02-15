@@ -16,10 +16,10 @@ void Camera::move()
 {
 	double xPos, yPos;
 	glfwGetCursorPos(DisplayManager::window, &xPos, &yPos);
-	glfwSetCursorPos(DisplayManager::window, Config::Display::WIDTH / 2, Config::Display::HEIGHT / 2);
+	glfwSetCursorPos(DisplayManager::window, DisplayManager::getResolution().x / 2, DisplayManager::getResolution().y / 2);
 
-	Camera::rotation.x += Config::Camera::LOOK_SPEED * (float)DisplayManager::DELTA * ((float)yPos - (Config::Display::HEIGHT / 2));
-	Camera::rotation.y += Config::Camera::LOOK_SPEED * (float)DisplayManager::DELTA * ((float)xPos - (Config::Display::WIDTH / 2));
+	Camera::rotation.x += Config::Camera::LOOK_SPEED * (float)DisplayManager::getFrameDelta() * ((float)yPos - (DisplayManager::getResolution().y / 2));
+	Camera::rotation.y += Config::Camera::LOOK_SPEED * (float)DisplayManager::getFrameDelta() * ((float)xPos - (DisplayManager::getResolution().x / 2));
 
 	if (Camera::rotation.x > Config::Camera::PITCH_MAX) 
 	{ 
@@ -34,20 +34,20 @@ void Camera::move()
 	float speedRight = 0.0f;
 	if (glfwGetKey(DisplayManager::window, GLFW_KEY_W))
 	{
-		speedForward += Config::Camera::MOVEMENT_SPEED * (float)DisplayManager::DELTA;
+		speedForward += Config::Camera::MOVEMENT_SPEED * (float)DisplayManager::getFrameDelta();
 	}
 	if (glfwGetKey(DisplayManager::window, GLFW_KEY_S))
 	{
-		speedForward -= Config::Camera::MOVEMENT_SPEED * (float)DisplayManager::DELTA;
+		speedForward -= Config::Camera::MOVEMENT_SPEED * (float)DisplayManager::getFrameDelta();
 	}
 
 	if (glfwGetKey(DisplayManager::window, GLFW_KEY_D))
 	{
-		speedRight += Config::Camera::MOVEMENT_SPEED * (float)DisplayManager::DELTA;
+		speedRight += Config::Camera::MOVEMENT_SPEED * (float)DisplayManager::getFrameDelta();
 	}
 	if (glfwGetKey(DisplayManager::window, GLFW_KEY_A))
 	{
-		speedRight -= Config::Camera::MOVEMENT_SPEED * (float)DisplayManager::DELTA;
+		speedRight -= Config::Camera::MOVEMENT_SPEED * (float)DisplayManager::getFrameDelta();
 	}
 
 	if (Camera::rotation.y < 0.0f) 
@@ -67,11 +67,11 @@ void Camera::move()
 
 	if (glfwGetKey(DisplayManager::window, GLFW_KEY_SPACE))
 	{
-		Camera::position.y += Config::Camera::MOVEMENT_SPEED * (float)DisplayManager::DELTA;
+		Camera::position.y += Config::Camera::MOVEMENT_SPEED * (float)DisplayManager::getFrameDelta();
 	}
 	if (glfwGetKey(DisplayManager::window, GLFW_KEY_LEFT_SHIFT))
 	{
-		Camera::position.y -= Config::Camera::MOVEMENT_SPEED * (float)DisplayManager::DELTA;
+		Camera::position.y -= Config::Camera::MOVEMENT_SPEED * (float)DisplayManager::getFrameDelta();
 	}
 
 	Camera::update();

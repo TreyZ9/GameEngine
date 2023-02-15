@@ -9,8 +9,8 @@
 #include <format>
 
 #include "OpenGLFunctions.h"
+#include "DisplayManager.h"
 #include "TextShader.h"
-#include "Config.h"
 #include "Camera.h"
 #include "Maths.h"
 
@@ -286,14 +286,11 @@ void TextRenderer::drawText(TextShader shader, const std::string& text, const gl
 {
 	shader.start();
 
-	glm::mat4 projectionMatrix = glm::perspective(Config::Display::FOV, (float)Config::Display::WIDTH /
-		(float)Config::Display::HEIGHT, Config::Display::NEAR_PLANE, Config::Display::FAR_PLANE);
-
 	glm::mat4 transformationMatrix;
 	Maths::createTransformationMatrix(transformationMatrix, pos, rot.x, rot.y, rot.z, 1.0f);
 
 	shader.loadTransformationMatrix(transformationMatrix);
-	shader.loadProjectionMatrix(projectionMatrix);
+	shader.loadProjectionMatrix(DisplayManager::getProjectionMatrix());
 	shader.loadViewMatrix(Camera::viewMatrix);
 	shader.loadTextColor(color);
 
@@ -307,7 +304,7 @@ void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, con
 {
 	shader.start();
 
-	glm::mat4 projectionMatrix = glm::ortho(0.0f, (float)Config::Display::WIDTH, 0.0f, (float)Config::Display::HEIGHT);
+	glm::mat4 projectionMatrix = glm::ortho(0.0f, (float)DisplayManager::getResolution().x, 0.0f, (float)DisplayManager::getResolution().y);
 	shader.loadTransformationMatrix(glm::mat4(1.0f));
 	shader.loadProjectionMatrix(projectionMatrix);
 	shader.loadViewMatrix(glm::mat4(1.0f));

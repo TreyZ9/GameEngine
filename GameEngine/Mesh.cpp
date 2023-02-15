@@ -2,6 +2,7 @@
 #include "Mesh.h"
 
 #include "OpenGLFunctions.h"
+#include "DisplayManager.h"
 #include "Config.h"
 #include "Loader.h"
 
@@ -73,9 +74,7 @@ void Mesh::draw(Shader shader, glm::mat4 transformationMatrix)
 	this->bindTextures(shader.getProgramID());
 
 	shader.loadTransformationMatrix(transformationMatrix);
-	glm::mat4 projectionMatrix = glm::perspective(Config::Display::FOV, (float)Config::Display::WIDTH / 
-		(float)Config::Display::HEIGHT, Config::Display::NEAR_PLANE, Config::Display::FAR_PLANE);
-	shader.loadProjectionMatrix(projectionMatrix);
+	shader.loadProjectionMatrix(DisplayManager::getProjectionMatrix());
 	shader.loadViewMatrix();
 
 	glCall(glBindVertexArray, this->vao);
@@ -91,9 +90,7 @@ void Mesh::draw(BSDFShader shader, glm::mat4 transformationMatrix)
 	
 	shader.loadMaterialInfo(this->mat);
 	shader.loadTransformationMatrix(transformationMatrix);
-	glm::mat4 projectionMatrix = glm::perspective(Config::Display::FOV, (float)Config::Display::WIDTH /
-		(float)Config::Display::HEIGHT, Config::Display::NEAR_PLANE, Config::Display::FAR_PLANE);
-	shader.loadProjectionMatrix(projectionMatrix);
+	shader.loadProjectionMatrix(DisplayManager::getProjectionMatrix());
 	shader.loadViewMatrix();
 
 	glCall(glBindVertexArray, this->vao);
