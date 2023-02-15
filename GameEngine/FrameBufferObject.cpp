@@ -3,6 +3,8 @@
 #include "OpenGLFunctions.h"
 #include "Config.h"
 
+#include <spdlog/spdlog.h>
+
 FrameBufferObject::FrameBufferObject()
 {
 	glCall(glGenFramebuffers, 1, &this->fbo);
@@ -21,7 +23,9 @@ FrameBufferObject::FrameBufferObject()
 	glCall(glFramebufferRenderbuffer, GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, this->rbo);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		std::cout << "[ERROR] Framebuffer Incomplete" << std::endl;
+	{
+		spdlog::error("Framebuffer incomplete");
+	}
 
 	glCall(glBindFramebuffer, GL_FRAMEBUFFER, 0);
 }

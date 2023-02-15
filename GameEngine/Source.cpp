@@ -2,7 +2,8 @@
 
 #include "OpenALFunctions.h"
 #include "Loader.h"
-#include "Debug.h"
+
+#include <spdlog/spdlog.h>
 
 Source::Source() {}
 
@@ -13,7 +14,9 @@ Source::Source(const std::string filename, glm::vec3 position, glm::vec3 velocit
 {
 	this->sound = Loader::loadWav(filename);
 	if (this->sound.RawSoundData == nullptr || this->sound.DataSize == 0)
-		LOG_fileLoad(filename, "Audio", false);
+	{
+		spdlog::error("Loaded audio file '{}'", filename);
+	}
 	alCall(alGenBuffers, 1, &this->buffer);
 
 	ALenum format;
@@ -27,7 +30,7 @@ Source::Source(const std::string filename, glm::vec3 position, glm::vec3 velocit
 		format = AL_FORMAT_STEREO16;
 	else
 	{
-		LOG_fileLoad(filename, "Audio", false, "Unrecognized Wave Format");
+		spdlog::error("Unrecognized wave format '{}'", filename);
 		format = NULL;
 	}
 

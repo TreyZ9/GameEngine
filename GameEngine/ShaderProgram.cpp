@@ -2,10 +2,11 @@
 #include "ShaderProgram.h"
 
 #include "OpenGLFunctions.h"
-#include "Debug.h"
 
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
+
+#include <spdlog/spdlog.h>
 
 #include <iostream>
 #include <fstream>
@@ -50,7 +51,7 @@ ShaderProgram::ShaderProgram(std::string vertexFilename, std::string fragmentFil
 	if (!success)
 	{
 		glGetProgramInfoLog(programID, 1024, NULL, infoLog); // glCall Currently Incompatible, Needs Fixed
-		std::cout << infoLog << std::endl;
+		// spdlog::error("Error loading shader, {}", infoLog);
 	}
 
 	this->getAllUniformLocations();
@@ -130,8 +131,8 @@ int ShaderProgram::loadShader(std::string filename, int type)
 		data = dataStream.str();
 	}
 	catch (std::ifstream::failure e) 
-	{ 
-		LOG_fileLoadInfo(filename, "shader", false, "File does not exist"); 
+	{
+		spdlog::error("Could not load shader '{}' because file does not exist", filename);
 	}
 
 	const char* shaderCode = data.c_str();
@@ -145,22 +146,34 @@ int ShaderProgram::loadShader(std::string filename, int type)
 	if (!success) 
 	{
 		if (type == GL_VERTEX_SHADER)
-			LOG_fileLoad(filename, "vertexShader", false);
+		{
+			spdlog::error("Could not load vertex shader '{}'", filename);
+		}
 		else if (type == GL_FRAGMENT_SHADER)
-			LOG_fileLoad(filename, "fragmentShader", false);
+		{
+			spdlog::error("Could not load fragment shader '{}'", filename);
+		}
 		else if (type == GL_TESS_CONTROL_SHADER)
-			LOG_fileLoad(filename, "controlShader", false);
+		{
+			spdlog::error("Could not load tesselation control shader '{}'", filename);
+		}
 		else if (type == GL_TESS_EVALUATION_SHADER)
-			LOG_fileLoad(filename, "evaluationShader", false);
+		{
+			spdlog::error("Could not load tesselation evaluation shader '{}'", filename);
+		}
 		else if (type == GL_GEOMETRY_SHADER)
-			LOG_fileLoad(filename, "geometryShader", false);
+		{
+			spdlog::error("Could not load geometry shader '{}'", filename);
+		}
 		else
-			LOG_fileLoad(filename, "unknownShader", false);
+		{
+			spdlog::error("Could not load unknown shader '{}'", filename);
+		}
 
 		glGetShaderInfoLog(shader, 1024, NULL, infoLog); // glCall Currently Incompatible, Needs Fixed
 		std::cout << infoLog << std::endl;
 	}
-	LOG_fileLoad(filename, "shader", true);
+	spdlog::debug("Loaded shader '{}'", filename);
 
 	return shader;
 }

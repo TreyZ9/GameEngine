@@ -4,6 +4,8 @@
 #include "OpenGLFunctions.h"
 #include "Config.h"
 
+#include <spdlog/spdlog.h>
+
 #include <iostream>
 
 double DisplayManager::LAST_TIME = DisplayManager::getTime();
@@ -25,14 +27,14 @@ int DisplayManager::createDisplay(int width, int height) {
 
 	GLFWwindow* window = glfwCreateWindow(Config::Display::WIDTH, Config::Display::HEIGHT, Config::Display::TITLE.c_str(), NULL, NULL);
 	if (window == NULL) {
-		std::cout << "could not create window" << std::endl;
+		spdlog::error("Failed to create GLFW window");
 		glfwTerminate();
 		return -1;
 	}
 
 	glfwMakeContextCurrent(window);
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-		std::cout << "could not load glad" << std::endl;
+		spdlog::error("Failed to load glad");
 		return -1;
 	}
 

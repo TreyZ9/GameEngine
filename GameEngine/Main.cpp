@@ -24,6 +24,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/common.hpp>
 
+#include <spdlog/spdlog.h>
+
 #include "stb_image.h"
 
 // Headers
@@ -64,6 +66,9 @@
 
 int main() 
 {
+	spdlog::set_level(spdlog::level::debug);
+	spdlog::set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [thread %t] %v");
+
 	// Loader::loadSceneJSON("Resources/TestScene/test.json");
 	Config::loadConfigs("Settings/settings.ini");
 

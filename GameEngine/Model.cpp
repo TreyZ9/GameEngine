@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+#include <spdlog/spdlog.h>
+
 #include "OpenGLFunctions.h"
 
 Model::Model(const std::string& path, bool gamma) : gammaCorrection(gamma)
@@ -32,7 +34,7 @@ void Model::loadModel(const std::string& path)
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
-		std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
+		// spdlog::error("Assimp error, {}", importer.GetErrorString());
 		return;
 	}
 

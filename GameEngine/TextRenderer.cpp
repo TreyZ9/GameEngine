@@ -3,6 +3,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include <freetype/ftglyph.h>
+#include <spdlog/spdlog.h>
 
 #include <algorithm>
 #include <format>
@@ -11,43 +12,41 @@
 #include "TextShader.h"
 #include "Config.h"
 #include "Camera.h"
-#include "Debug.h"
 #include "Maths.h"
-
-Font::Font() = default;
 
 Font::Font(const std::string& fontName, unsigned int fontQuality = 24)
 {
-	this->lineSpacing = 1.0f;
-
 	// load library
 	FT_Library library;
 	if (FT_Init_FreeType(&library))
 	{
-		LOG_freetypeLibraryLoad(false);
+		spdlog::error("Could not init FreeType library");
 		return;
 	}
+	spdlog::debug("Loaded FreeType library");
 
 	// load font
 	FT_Face face;
 	FT_Error error = FT_New_Face(library, std::format("C:\\Windows\\fonts\\{}.ttf", fontName).c_str(), 0, &face);
 	if (error == FT_Err_Unknown_File_Format)
 	{
-		LOG_freetypeFontLoad(false, std::format("{} font exists but is not supported", fontName));
+		spdlog::error("Could not load font '{}' because format is not supported", fontName);
 		return;
 	}
 	else if (error)
 	{
-		LOG_freetypeFontLoad(false, std::format("{} font either does not exist, cannot be opened, or is broken", fontName));
+		spdlog::error("Could not load font '{}' because it (does not exist / cannot be opened / is broken)", fontName);
 		return;
 	}
+	spdlog::debug("Loaded font '{}'", fontName);
 
 	// configure font
 	if (FT_Set_Char_Size(face, 0, fontQuality << 6, 0, 0))
 	{
-		LOG_freetypeFontLoad(false, std::format("{} font could not be configured", fontName));
+		spdlog::error("Could not configure font '{}'", fontName);
 		return;
 	}
+	spdlog::debug("Configured font '{}'", fontName);
 
 	// render bitmaps
 	std::vector<FT_BitmapGlyph> bitmapGlyphs;
@@ -58,7 +57,7 @@ Font::Font(const std::string& fontName, unsigned int fontQuality = 24)
 		// load character
 		if (FT_Load_Char(face, i, FT_LOAD_RENDER))
 		{
-			LOG_freetypeCharacterLoad(false, std::format("failed to load char:{} for font:{}", (char)i, fontName));
+			spdlog::error("Failed to load character '{}' for font '{}'", (char)i, fontName);
 			return;
 		}
 
@@ -66,7 +65,7 @@ Font::Font(const std::string& fontName, unsigned int fontQuality = 24)
 		FT_Glyph glyph;
 		if (FT_Get_Glyph(face->glyph, &glyph))
 		{
-			LOG_freetypeGlyphLoad(false, std::format("failed to load glyph:{} for font:{}", (char)i, fontName));
+			spdlog::error("Failed to load glyph '{}' for font '{}'", (char)i, fontName);
 			return;
 		}
 
@@ -75,7 +74,7 @@ Font::Font(const std::string& fontName, unsigned int fontQuality = 24)
 		{
 			if (FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, 0, 1))
 			{
-				LOG_freetypeRenderBitmap(false, std::format("failed to render bitmap:{} for font:{}", (char)i, fontName));
+				spdlog::error("Failed to render bitmap '{}' for font '{}'", (char)i, fontName);
 				return;
 			}
 		}
@@ -114,11 +113,6 @@ Font::Font(const std::string& fontName, unsigned int fontQuality = 24)
 	{
 		glCall(glTexSubImage2D, GL_TEXTURE_2D, 0, this->characters[i].textureAtlasOffset, 0, bitmapGlyphs[i]->bitmap.width, bitmapGlyphs[i]->bitmap.rows, GL_RED, GL_UNSIGNED_BYTE, bitmapGlyphs[i]->bitmap.buffer);
 	}
-}
-
-Font::~Font()
-{
-	glCall(glDeleteTextures, 1, &this->textureID);
 }
 
 std::array<std::array<float, 4>, 6> Font::generateVertices(const char c, glm::vec2& cursorPos, const glm::vec2& scale)
@@ -187,12 +181,6 @@ TextRenderer::TextRenderer()
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
 	glCall(glBindBuffer, GL_ARRAY_BUFFER, 0);
 	glCall(glBindVertexArray, 0);
-}
-
-TextRenderer::~TextRenderer()
-{
-	glCall(glDeleteVertexArrays, 1, &this->vao);
-	glCall(glDeleteBuffers, 1, &this->vbo);
 }
 
 std::vector<std::string> TextRenderer::splitString(const std::string& text, const std::string& delimiter)
@@ -294,7 +282,7 @@ void TextRenderer::drawText(const std::string& text, const glm::vec2& pos, const
 	glCall(glBindTexture, GL_TEXTURE_2D, 0);
 }
 
-void TextRenderer::drawText(TextShader shader, const std::string& text, const glm::vec3& pos, const glm::vec3& rot, 
+void TextRenderer::drawText(TextShader shader, const std::string& text, const glm::vec3& pos, const glm::vec3& rot,
 	const glm::vec2& scale, const glm::vec3& color, const std::string& alignment, const std::string& origin)
 {
 	shader.start();

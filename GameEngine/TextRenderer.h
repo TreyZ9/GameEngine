@@ -25,16 +25,16 @@ class Font
 {
 private:
 	std::map<char, Character> characters;
-	float lineSpacing;
+	float lineSpacing = 1.0f;
 
-	unsigned int textureWidth;
-	unsigned int textureHeight;
-	GLuint textureID;
+	unsigned int textureWidth = 0;
+	unsigned int textureHeight = 0;
+	GLuint textureID = 0;
 
 public:
-	Font();
+	Font() = default;
 	Font(const std::string& fontName, unsigned int fontQuality);
-	~Font();
+	~Font() = default;
 
 	std::array<std::array<float, 4>, 6> generateVertices(const char c, glm::vec2& cursorPos, const glm::vec2& scale);
 	GLuint getTextureID();
@@ -55,7 +55,7 @@ private:
 
 public:
 	TextRenderer();
-	~TextRenderer();
+	~TextRenderer() = default;
 
 	void drawText(TextShader shader, const std::string& text, const glm::vec3& pos, const glm::vec3& rot,
 		const glm::vec2& scale = glm::vec2(24.0f), const glm::vec3& color = glm::vec3(1.0f), const std::string& alignment = "center", const std::string& origin = "center");

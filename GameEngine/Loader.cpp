@@ -4,12 +4,12 @@
 #include <rapidjson/istreamwrapper.h>
 #include <rapidjson/rapidjson.h>
 #include <rapidjson/document.h>
+#include <spdlog/spdlog.h>
 
 #include <fstream>
 
 #include "OpenGLFunctions.h"
 #include "OpenALFunctions.h"
-#include "Debug.h"
 
 std::map<std::string, Sound> Loader::sounds;
 std::map<std::string, Texture> Loader::textures;
@@ -19,7 +19,7 @@ std::vector<GLuint> Loader::ebos;
 
 void Loader::loadSceneJSON(const std::string& filename)
 {
-	LOG_fileLoad(filename, "JSON", true);
+	spdlog::debug("Loaded scene json '{}'", filename);
 	std::ifstream jsonFile(filename);
 	rapidjson::IStreamWrapper jsonFileWrapped(jsonFile);
 
@@ -56,59 +56,59 @@ bool Loader::loadWavFileHeader(std::ifstream& file, Sound& sound)
 	// the RIFF
 	if (!file.read(buffer, 4))
 	{
-		std::cerr << "ERROR: could not read RIFF" << std::endl;
+		spdlog::error("Could not read RIFF");
 		return false;
 	}
 	if (std::strncmp(buffer, "RIFF", 4) != 0)
 	{
-		std::cerr << "ERROR: file is not a valid WAVE file (header doesn't begin with RIFF)" << std::endl;
+		spdlog::error("File is not a valid WAVE file (header doesn't begin with RIFF)");
 		return false;
 	}
 
 	// the size of the file
 	if (!file.read(buffer, 4))
 	{
-		std::cerr << "ERROR: could not read size of file" << std::endl;
+		spdlog::error("Could not read size of file");
 		return false;
 	}
 
 	// the WAVE
 	if (!file.read(buffer, 4))
 	{
-		std::cerr << "ERROR: could not read WAVE" << std::endl;
+		spdlog::error("Could not read WAVE");
 		return false;
 	}
 	if (std::strncmp(buffer, "WAVE", 4) != 0)
 	{
-		std::cerr << "ERROR: file is not a valid WAVE file (header doesn't contain WAVE)" << std::endl;
+		spdlog::error("File is not a valid WAVE file (header doesn't contain WAVE)");
 		return false;
 	}
 
 	// "fmt/0"
 	if (!file.read(buffer, 4))
 	{
-		std::cerr << "ERROR: could not read fmt/0" << std::endl;
+		spdlog::error("Could not read fmt/0");
 		return false;
 	}
 
 	// this is always 16, the size of the fmt data chunk
 	if (!file.read(buffer, 4))
 	{
-		std::cerr << "ERROR: could not read the 16" << std::endl;
+		spdlog::error("Could not read the 16");
 		return false;
 	}
 
 	// PCM should be 1?
 	if (!file.read(buffer, 2))
 	{
-		std::cerr << "ERROR: could not read PCM" << std::endl;
+		spdlog::error("Could not read PCM");
 		return false;
 	}
 
 	// the number of channels
 	if (!file.read(buffer, 2))
 	{
-		std::cerr << "ERROR: could not read number of channels" << std::endl;
+		spdlog::error("Could not read number of channels");
 		return false;
 	}
 	sound.Channels = Loader::convertToInt(buffer, 2);
@@ -116,7 +116,7 @@ bool Loader::loadWavFileHeader(std::ifstream& file, Sound& sound)
 	// sample rate
 	if (!file.read(buffer, 4))
 	{
-		std::cerr << "ERROR: could not read sample rate" << std::endl;
+		spdlog::error("Could not read sample rate");
 		return false;
 	}
 	sound.SampleRate = Loader::convertToInt(buffer, 4);
@@ -124,21 +124,21 @@ bool Loader::loadWavFileHeader(std::ifstream& file, Sound& sound)
 	// (sampleRate * bitsPerSample * channels) / 8
 	if (!file.read(buffer, 4))
 	{
-		std::cerr << "ERROR: could not read (sampleRate * bitsPerSample * channels) / 8" << std::endl;
+		spdlog::error("Could not read (sampleRate * bitsPerSample * channels) / 8");
 		return false;
 	}
 
 	// ?? dafaq
 	if (!file.read(buffer, 2))
 	{
-		std::cerr << "ERROR: could not read dafaq" << std::endl;
+		spdlog::error("Could not read dafaq");
 		return false;
 	}
 
 	// bitsPerSample
 	if (!file.read(buffer, 2))
 	{
-		std::cerr << "ERROR: could not read bits per sample" << std::endl;
+		spdlog::error("Could not read bits per sample");
 		return false;
 	}
 	sound.BitsPerSample = Loader::convertToInt(buffer, 2);
@@ -146,19 +146,19 @@ bool Loader::loadWavFileHeader(std::ifstream& file, Sound& sound)
 	// data chunk header "data"
 	if (!file.read(buffer, 4))
 	{
-		std::cerr << "ERROR: could not read data chunk header" << std::endl;
+		spdlog::error("Could not read data chunk header");
 		return false;
 	}
 	if (std::strncmp(buffer, "data", 4) != 0)
 	{
-		std::cerr << "ERROR: file is not a valid WAVE file (doesn't have 'data' tag)" << std::endl;
+		spdlog::error("File is not a valid WAVE file (doesn't have 'data' tag)");
 		return false;
 	}
 
 	// size of data
 	if (!file.read(buffer, 4))
 	{
-		std::cerr << "ERROR: could not read data size" << std::endl;
+		spdlog::error("Could nor read data size");
 		return false;
 	}
 	sound.DataSize = Loader::convertToInt(buffer, 4);
@@ -166,12 +166,12 @@ bool Loader::loadWavFileHeader(std::ifstream& file, Sound& sound)
 	/* cannot be at the end of file */
 	if (file.eof())
 	{
-		std::cerr << "ERROR: reached EOF on the file" << std::endl;
+		spdlog::error("Prematurely reached EOF");
 		return false;
 	}
 	if (file.fail())
 	{
-		std::cerr << "ERROR: fail state set on the file" << std::endl;
+		spdlog::error("Fail state is set on the file");
 		return false;
 	}
 
@@ -187,12 +187,12 @@ Sound Loader::loadWav(const std::string& filename)
 		std::ifstream in(filename, std::ios::binary);
 		if (!in.is_open())
 		{
-			std::cerr << "ERROR: Could not open \"" << filename << "\"" << std::endl;
+			spdlog::error("Could not open '{}'", filename);
 			exit(-1);
 		}
 		if (!Loader::loadWavFileHeader(in, sound))
 		{
-			std::cerr << "ERROR: Could not load wav header of \"" << filename << "\"" << std::endl;
+			spdlog::error("Could not load wav header of '{}'", filename);
 			exit(-1);
 		}
 
@@ -266,8 +266,7 @@ Texture Loader::loadTexture(const std::string& filename, const std::string& type
 		}
 		else
 		{
-			std::cout << "Texture failed to load at path: " << filename << std::endl;
-			std::cout << stbi_failure_reason << std::endl;
+			spdlog::error("Failed to load texture at '{}', {}", filename, stbi_failure_reason());
 			stbi_image_free(data);
 		}
 
@@ -366,7 +365,7 @@ Texture Loader::loadTextureFromPath(const std::string& path, const std::string& 
 		}
 		else
 		{
-			std::cout << "Texture failed to load at path: " << path << std::endl;
+			spdlog::error("Failed to load texture at '{}'", path);
 			stbi_image_free(data);
 		}
 

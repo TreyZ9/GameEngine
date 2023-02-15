@@ -2,29 +2,42 @@
 
 #include "OpenALFunctions.h"
 #include "Camera.h"
-#include "Debug.h"
 #include "Maths.h"
+
+#include <spdlog/spdlog.h>
 
 Listener::Listener(glm::vec3 position, ALenum distanceModel) : 
 	position(position), distanceModel(distanceModel)
 {
 	this->device = alcOpenDevice(nullptr);
 	if (!this->device)
-		LOG_alcOpenDevice(false);
+	{
+		spdlog::error("Could not open audio device");
+	}
 	else
-		LOG_alcOpenDevice(true);
+	{
+		spdlog::debug("Opened audio device");
+	}
 
 	if (!alcCall(alcCreateContext, this->openALContext, this->device, this->device, nullptr) || !this->openALContext)
-		LOG_alcCreateContext(false);
+	{
+		spdlog::error("Could not create alc context");
+	}
 	else
-		LOG_alcCreateContext(true);
+	{
+		spdlog::debug("Created alc context");
+	}
 
 	this->contextMadeCurrent = false;
 	if (!alcCall(alcMakeContextCurrent, this->contextMadeCurrent, this->device, this->openALContext)
 		|| this->contextMadeCurrent != ALC_TRUE)
-		LOG_alcMakeContextCurrent(false);
+	{
+		spdlog::error("Could not make alc context current");
+	}
 	else
-		LOG_alcMakeContextCurrent(true);
+	{
+		spdlog::debug("Made alc context current");
+	}
 
 	alCall(alDistanceModel, AL_LINEAR_DISTANCE_CLAMPED);
 }

@@ -1,34 +1,32 @@
 #include "OpenALFunctions.h"
 
-#include <iostream>
+#include <spdlog/spdlog.h>
 
 bool OpenALFunctions::check_al_errors(const std::string& filename, const std::uint_fast32_t line)
 {
 	ALenum error = alGetError();
 	if (error != AL_NO_ERROR)
 	{
-		std::cerr << "***ERROR*** (" << filename << ": " << line << ")\n";
 		switch (error)
 		{
 		case AL_INVALID_NAME:
-			std::cerr << "AL_INVALID_NAME: a bad name (ID) was passed to an OpenAL function";
+			spdlog::error("OpenAL Error {} : {}, AL_INVALID_NAME: a bad name (ID) was passed to an OpenAL function", filename, line);
 			break;
 		case AL_INVALID_ENUM:
-			std::cerr << "AL_INVALID_ENUM: an invalid enum value was passed to an OpenAL function";
+			spdlog::error("OpenAL Error {} : {}, AL_INVALID_ENUM: an invalid enum value was passed to an OpenAL function", filename, line);
 			break;
 		case AL_INVALID_VALUE:
-			std::cerr << "AL_INVALID_VALUE: an invalid value was passed to an OpenAL function";
+			spdlog::error("OpenAL Error {} : {}, AL_INVALID_VALUE: an invalid value was passed to an OpenAL function", filename, line);
 			break;
 		case AL_INVALID_OPERATION:
-			std::cerr << "AL_INVALID_OPERATION: the requested operation is not valid";
+			spdlog::error("OpenAL Error {} : {}, AL_INVALID_OPERATION: the requested operation is not valid", filename, line);
 			break;
 		case AL_OUT_OF_MEMORY:
-			std::cerr << "AL_OUT_OF_MEMORY: the requested operation resulted in OpenAL running out of memory";
+			spdlog::error("OpenAL Error {} : {}, AL_OUT_OF_MEMORY: the requested operation resulted in OpenAL running out of memory", filename, line);
 			break;
 		default:
-			std::cerr << "UNKNOWN AL ERROR: " << error;
+			spdlog::error("OpenAL Error {} : {}, UNKNOWN AL ERROR", filename, line);
 		}
-		std::cerr << std::endl;
 		return false;
 	}
 	return true;
@@ -39,28 +37,26 @@ bool OpenALFunctions::check_alc_errors(const std::string& filename, const std::u
 	ALCenum error = alcGetError(device);
 	if (error != ALC_NO_ERROR)
 	{
-		std::cerr << "***ERROR*** (" << filename << ": " << line << ")\n";
 		switch (error)
 		{
 		case ALC_INVALID_VALUE:
-			std::cerr << "ALC_INVALID_VALUE: an invalid value was passed to an OpenAL function";
+			spdlog::error("OpenAL Error {} : {:d}, ALC_INVALID_VALUE: an invalid value was passed to an OpenAL function", filename, line);
 			break;
 		case ALC_INVALID_DEVICE:
-			std::cerr << "ALC_INVALID_DEVICE: a bad device was passed to an OpenAL function";
+			spdlog::error("OpenAL Error {} : {:d}, ALC_INVALID_DEVICE: a bad device was passed to an OpenAL function", filename, line);
 			break;
 		case ALC_INVALID_CONTEXT:
-			std::cerr << "ALC_INVALID_CONTEXT: a bad context was passed to an OpenAL function";
+			spdlog::error("OpenAL Error {} : {:d}, ALC_INVALID_CONTEXT: a bad context was passed to an OpenAL function", filename, line);
 			break;
 		case ALC_INVALID_ENUM:
-			std::cerr << "ALC_INVALID_ENUM: an unknown enum value was passed to an OpenAL function";
+			spdlog::error("OpenAL Error {} : {:d}, ALC_INVALID_ENUM: an unknown enum value was passed to an OpenAL function", filename, line);
 			break;
 		case ALC_OUT_OF_MEMORY:
-			std::cerr << "ALC_OUT_OF_MEMORY: an unknown enum value was passed to an OpenAL function";
+			spdlog::error("OpenAL Error {} : {:d}, ALC_OUT_OF_MEMORY: an unknown enum value was passed to an OpenAL function", filename, line);
 			break;
 		default:
-			std::cerr << "UNKNOWN ALC ERROR: " << error;
+			spdlog::error("OpenAL Error {} : {:d}, UNKNOWN ALC ERROR", filename, line);
 		}
-		std::cerr << std::endl;
 		return false;
 	}
 	return true;
