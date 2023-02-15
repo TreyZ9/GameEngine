@@ -18,11 +18,11 @@ public:
 	int location_materialD;
 	int location_materialIllum;
 
-	BSDFShader();
+	BSDFShader() = default;
 
 	BSDFShader(std::string vertexShaderFilename, std::string fragmentShaderFilename);
 
-	~BSDFShader();
+	~BSDFShader() = default;
 
 	void bindAttributes();
 

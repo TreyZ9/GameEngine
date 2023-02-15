@@ -1,9 +1,9 @@
 #include "FrameBufferObject.h"
 
+#include <spdlog/spdlog.h>
+
 #include "OpenGLFunctions.h"
 #include "Config.h"
-
-#include <spdlog/spdlog.h>
 
 FrameBufferObject::FrameBufferObject()
 {

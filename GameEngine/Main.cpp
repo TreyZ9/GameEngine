@@ -6,16 +6,6 @@
 #include <openAL/al.h>
 #include <openAL/alc.h>
 
-// Standard
-#include <algorithm>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <string>
-#include <chrono>
-#include <map>
-
 // Include Libraries
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
@@ -51,7 +41,6 @@
 #include "Shader.h"
 #include "Config.h"
 #include "Camera.h"
-#include "Debug.h"
 #include "Maths.h"
 #include "Model.h"
 #include "Light.h"
@@ -64,7 +53,7 @@
 #include <bullet3/btBulletDynamicsCommon.h>
 
 
-int main() 
+int main()
 {
 	spdlog::set_level(spdlog::level::debug);
 	spdlog::set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [thread %t] %v");
@@ -88,7 +77,7 @@ int main()
 		"Shaders/BSDFShader/shader.frag");
 
 	StaticShader staticShader = StaticShader(
-		"Shaders/LightShader/shader.vert", 
+		"Shaders/LightShader/shader.vert",
 		"Shaders/LightShader/shader.frag");
 
 	NormalShader normalShader = NormalShader(
@@ -100,7 +89,7 @@ int main()
 		"Shaders/tessellationShader/fragment.frag",
 		"Shaders/tessellationShader/control.tesc",
 		"Shaders/tessellationShader/evaluation.tese");
-		// "shaders/tessellationShader/geometry.geom");
+	// "shaders/tessellationShader/geometry.geom");
 
 	ReflectionShader reflectionShader = ReflectionShader(
 		"Shaders/reflectionShader/shader.vert",
@@ -151,7 +140,7 @@ int main()
 	// temp vars
 	float yRot = 0.0f;
 
-	while (!glfwWindowShouldClose(DisplayManager::window) && !glfwGetKey(DisplayManager::window, GLFW_KEY_ESCAPE)) 
+	while (!glfwWindowShouldClose(DisplayManager::window) && !glfwGetKey(DisplayManager::window, GLFW_KEY_ESCAPE))
 	{
 		if (glfwGetKey(DisplayManager::window, GLFW_KEY_0))
 			source2.play();
@@ -183,7 +172,7 @@ int main()
 
 		bsdfShader.start();
 		model.draw(bsdfShader, glm::mat4(1.0f));
-		
+
 		// physicsCubeGround.draw(bsdfShader, glm::mat4(1.0f));
 		// glm::vec3 position((float)dynamicBox.getPosition().getX(), (float)dynamicBox.getPosition().getY(), (float)dynamicBox.getPosition().getZ());
 		// glm::mat4 transform;

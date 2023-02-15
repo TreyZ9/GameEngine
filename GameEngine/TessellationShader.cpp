@@ -4,8 +4,6 @@
 #include "Camera.h"
 #include "Maths.h"
 
-TessellationShader::TessellationShader() { }
-
 TessellationShader::TessellationShader(std::string vertexShaderFilename, std::string fragmentShaderFilename,
 	std::string tessellationControlFilename, std::string tessellationEvaluationFilename, std::string geometryFilename)
 	: ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename, tessellationControlFilename,
@@ -13,8 +11,6 @@ TessellationShader::TessellationShader(std::string vertexShaderFilename, std::st
 {
 	this->getAllUniformLocations();
 }
-
-TessellationShader::~TessellationShader() { }
 
 void TessellationShader::bindAttributes() 
 {

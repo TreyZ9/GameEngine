@@ -19,11 +19,11 @@ public:
 	int location_gamma;
 	int location_cameraPosition;
 
-	NormalShader();
+	NormalShader() = default;
 
 	NormalShader(std::string vertexShaderFilename, std::string fragmentShaderFilename);
 
-	~NormalShader();
+	~NormalShader() = default;
 
 	void bindAttributes();
 

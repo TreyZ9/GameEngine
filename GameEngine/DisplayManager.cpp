@@ -1,21 +1,23 @@
 
 #include "DisplayManager.h"
 
-#include "OpenGLFunctions.h"
-#include "Config.h"
-
 #include <spdlog/spdlog.h>
 
-#include <iostream>
+#include "OpenGLFunctions.h"
+#include "Config.h"
 
 double DisplayManager::LAST_TIME = DisplayManager::getTime();
 double DisplayManager::DELTA = 0.1;
 
 GLFWwindow* DisplayManager::window;
 
-double DisplayManager::getTime() { return glfwGetTime(); }
+double DisplayManager::getTime() 
+{ 
+	return glfwGetTime(); 
+}
 
-int DisplayManager::createDisplay(int width, int height) {
+int DisplayManager::createDisplay(int width, int height) 
+{
 	Config::Display::WIDTH = width;
 	Config::Display::HEIGHT = height;
 
@@ -26,14 +28,16 @@ int DisplayManager::createDisplay(int width, int height) {
 	glfwWindowHint(GLFW_REFRESH_RATE, 60);
 
 	GLFWwindow* window = glfwCreateWindow(Config::Display::WIDTH, Config::Display::HEIGHT, Config::Display::TITLE.c_str(), NULL, NULL);
-	if (window == NULL) {
+	if (window == NULL) 
+	{
 		spdlog::error("Failed to create GLFW window");
 		glfwTerminate();
 		return -1;
 	}
 
 	glfwMakeContextCurrent(window);
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) 
+	{
 		spdlog::error("Failed to load glad");
 		return -1;
 	}
@@ -52,7 +56,8 @@ int DisplayManager::createDisplay(int width, int height) {
 	return 0;
 }
 
-void DisplayManager::updateDisplay() {
+void DisplayManager::updateDisplay() 
+{
 	glfwSwapBuffers(DisplayManager::window);
 	glfwPollEvents();
 
@@ -69,12 +74,19 @@ void DisplayManager::clearScreenBuffer()
 
 void DisplayManager::closeDisplay() { glfwTerminate(); }
 
-void DisplayManager::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+void DisplayManager::framebuffer_size_callback(GLFWwindow* window, int width, int height) 
+{
 	glCall(glViewport, 0, 0, width, height);
 	Config::Display::WIDTH = width;
 	Config::Display::HEIGHT = height;
 }
 
-void DisplayManager::hideCursor() { glfwSetInputMode(DisplayManager::window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); }
+void DisplayManager::hideCursor() 
+{ 
+	glfwSetInputMode(DisplayManager::window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); 
+}
 
-void DisplayManager::showCursor() { glfwSetInputMode(DisplayManager::window, GLFW_CURSOR, GLFW_CURSOR_NORMAL); }
+void DisplayManager::showCursor() 
+{ 
+	glfwSetInputMode(DisplayManager::window, GLFW_CURSOR, GLFW_CURSOR_NORMAL); 
+}

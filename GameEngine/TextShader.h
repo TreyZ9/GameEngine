@@ -15,11 +15,11 @@ public:
 	int location_viewMatrix;
 	int location_textColor;
 
-	TextShader();
+	TextShader() = default;
 
 	TextShader(std::string vertexShaderFilename, std::string fragmentShaderFilename);
 
-	~TextShader();
+	~TextShader() = default;
 
 	void bindAttributes();
 

@@ -4,28 +4,10 @@
 #include "Camera.h"
 #include "Maths.h"
 
-#include <iostream>
-
-BSDFShader::BSDFShader()
-{
-	this->location_transformationMatrix = NULL;
-	this->location_projectionMatrix = NULL;
-	this->location_viewMatrix = NULL;
-	this->location_materialKa = NULL;
-	this->location_materialKd = NULL;
-	this->location_materialKs = NULL;
-	this->location_materialKe = NULL;
-	this->location_materialNi = NULL;
-	this->location_materialD = NULL;
-	this->location_materialIllum = NULL;
-}
-
 BSDFShader::BSDFShader(std::string vertexShaderFilename, std::string fragmentShaderFilename) : ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename)
 {
 	this->getAllUniformLocations();
 }
-
-BSDFShader::~BSDFShader() { }
 
 void BSDFShader::bindAttributes()
 {

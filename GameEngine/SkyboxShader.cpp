@@ -4,18 +4,10 @@
 #include "Camera.h"
 #include "Maths.h"
 
-SkyboxShader::SkyboxShader() 
-{
-	this->location_projectionMatrix = NULL;
-	this->location_viewMatrix = NULL;
-}
-
 SkyboxShader::SkyboxShader(std::string vertexShaderFilename, std::string fragmentShaderFilename) : ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename)
 {
 	this->getAllUniformLocations();
 }
-
-SkyboxShader::~SkyboxShader() { }
 
 void SkyboxShader::bindAttributes() 
 {

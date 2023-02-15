@@ -1,10 +1,10 @@
 #include "Listener.h"
 
+#include <spdlog/spdlog.h>
+
 #include "OpenALFunctions.h"
 #include "Camera.h"
 #include "Maths.h"
-
-#include <spdlog/spdlog.h>
 
 Listener::Listener(glm::vec3 position, ALenum distanceModel) : 
 	position(position), distanceModel(distanceModel)

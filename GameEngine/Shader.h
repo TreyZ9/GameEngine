@@ -9,11 +9,11 @@ public:
 	int location_projectionMatrix;
 	int location_viewMatrix;
 
-	Shader();
+	Shader() = default;
 
 	Shader(std::string vertexShaderFilename, std::string fragmentShaderFilename);
 
-	~Shader();
+	~Shader() = default;
 
 	void bindAttributes();
 

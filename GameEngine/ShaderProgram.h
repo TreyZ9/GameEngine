@@ -31,11 +31,11 @@ protected:
 
 
 public:
-	ShaderProgram();
+	ShaderProgram() = default;
 
 	ShaderProgram(std::string vertexFilename, std::string fragmentFilename, std::string tessellationControlFilename = "null", std::string tessellationEvaluationFilename = "null", std::string geometryFilename = "null");
 
-	~ShaderProgram();
+	~ShaderProgram() = default;
 
 	void cleanUp();
 

@@ -10,5 +10,5 @@ public:
 
 	Light(glm::vec3 position, glm::vec3 color);
 
-	~Light();
+	~Light() = default;
 };

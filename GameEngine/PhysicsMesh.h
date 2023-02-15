@@ -18,9 +18,9 @@ private:
 public:
 	std::vector<Mesh> meshes;
 
-	PhysicsMesh();
+	PhysicsMesh() = default;
 	PhysicsMesh(std::string filename, btVector3 position);
-	~PhysicsMesh();
+	~PhysicsMesh() = default;
 
 	btVector3 getPosition();
 

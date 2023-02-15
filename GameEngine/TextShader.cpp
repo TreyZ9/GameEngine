@@ -1,14 +1,10 @@
 
 #include "TextShader.h"
 
-TextShader::TextShader() {}
-
 TextShader::TextShader(std::string vertexShaderFilename, std::string fragmentShaderFilename) : ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename)
 {
 	this->getAllUniformLocations();
 }
-
-TextShader::~TextShader() {}
 
 void TextShader::bindAttributes()
 {

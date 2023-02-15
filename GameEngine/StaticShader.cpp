@@ -4,22 +4,10 @@
 #include "Camera.h"
 #include "Maths.h"
 
-StaticShader::StaticShader() 
-{
-	this->location_transformationMatrix = NULL;
-	this->location_projectionMatrix = NULL;
-	this->location_viewMatrix = NULL;
-	this->location_lightPosition = NULL;
-	this->location_lightColor = NULL;
-	this->location_gamma = NULL;
-}
-
 StaticShader::StaticShader(std::string vertexShaderFilename, std::string fragmentShaderFilename) : ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename)
 {
 	this->getAllUniformLocations();
 }
-
-StaticShader::~StaticShader() { }
 
 void StaticShader::bindAttributes() 
 {

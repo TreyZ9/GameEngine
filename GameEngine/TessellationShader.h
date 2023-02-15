@@ -16,13 +16,13 @@ public:
 	int location_blackPoint;
 
 
-	TessellationShader();
+	TessellationShader() = default;
 
 	TessellationShader(std::string vertexShaderFilename, std::string fragmentShaderFilename, 
 		std::string tessellationControlFilename, std::string tessellationEvaluationFilename,
 		std::string geometryFilename = "null");
 
-	~TessellationShader();
+	~TessellationShader() = default;
 
 	void bindAttributes();
 

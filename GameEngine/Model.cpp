@@ -2,8 +2,6 @@
 
 #include "stb_image.h"
 
-#include <iostream>
-
 #include <spdlog/spdlog.h>
 
 #include "OpenGLFunctions.h"
@@ -16,7 +14,9 @@ Model::Model(const std::string& path, bool gamma) : gammaCorrection(gamma)
 void Model::draw(Shader shader, glm::mat4 transformationMatrix)
 {
 	for (unsigned int i = 0; i < this->meshes.size(); i++)
+	{
 		this->meshes[i].draw(shader, transformationMatrix);
+	}
 }
 
 void Model::draw(BSDFShader shader, glm::mat4 transformationMatrix)
@@ -34,7 +34,7 @@ void Model::loadModel(const std::string& path)
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
-		// spdlog::error("Assimp error, {}", importer.GetErrorString());
+		spdlog::error("Assimp error, {}", importer.GetErrorString());
 		return;
 	}
 
@@ -52,7 +52,9 @@ void Model::processNode(aiNode* node, const aiScene* scene)
 	}
 
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
+	{
 		processNode(node->mChildren[i], scene);
+	}
 }
 
 Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
@@ -84,7 +86,9 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 			vertex.TexCoords = vec;
 		}
 		else
+		{
 			vertex.TexCoords = glm::vec2(0.0f);
+		}
 
 		vector.x = mesh->mTangents[i].x;
 		vector.y = mesh->mTangents[i].y;
@@ -103,7 +107,9 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	{
 		aiFace face = mesh->mFaces[i];
 		for (unsigned int j = 0; j < face.mNumIndices; j++)
+		{
 			indices.push_back(face.mIndices[j]);
+		}
 	}
 
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];

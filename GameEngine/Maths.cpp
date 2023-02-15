@@ -3,7 +3,8 @@
 
 #include "Camera.h"
 
-void Maths::createTransformationMatrix(glm::mat4& mat, glm::vec3 translation, float rx, float ry, float rz, float scale) {
+void Maths::createTransformationMatrix(glm::mat4& mat, glm::vec3 translation, float rx, float ry, float rz, float scale) 
+{
 	mat = glm::mat4(1.0f);
 	mat = glm::translate(mat, translation);
 	mat = glm::rotate(mat, glm::radians(rx), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -12,7 +13,8 @@ void Maths::createTransformationMatrix(glm::mat4& mat, glm::vec3 translation, fl
 	mat = glm::scale(mat, glm::vec3(scale));
 }
 
-void Maths::createViewMatrix(glm::mat4& mat) {
+void Maths::createViewMatrix(glm::mat4& mat) 
+{
 	mat = glm::mat4(1.0f);
 	mat = glm::rotate(mat, glm::radians(Camera::rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
 	mat = glm::rotate(mat, glm::radians(Camera::rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));

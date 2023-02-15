@@ -1,8 +1,6 @@
 
 #include "ShaderProgram.h"
 
-#include "OpenGLFunctions.h"
-
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
 
@@ -12,7 +10,7 @@
 #include <fstream>
 #include <sstream>
 
-ShaderProgram::ShaderProgram() { }
+#include "OpenGLFunctions.h"
 
 ShaderProgram::ShaderProgram(std::string vertexFilename, std::string fragmentFilename, std::string tessellationControlFilename, std::string tessellationEvaluationFilename, std::string geometryFilename)
 {
@@ -20,25 +18,37 @@ ShaderProgram::ShaderProgram(std::string vertexFilename, std::string fragmentFil
 	this->fragmentShaderID = this->loadShader(fragmentFilename, GL_FRAGMENT_SHADER);
 
 	if (tessellationControlFilename != "null")
+	{
 		this->tessellationControlShaderID = this->loadShader(tessellationControlFilename, GL_TESS_CONTROL_SHADER);
+	}
 
 	if (tessellationEvaluationFilename != "null")
+	{
 		this->tessellationEvaluationShaderID = this->loadShader(tessellationEvaluationFilename, GL_TESS_EVALUATION_SHADER);
+	}
 
 	if (geometryFilename != "null")
+	{
 		this->geometryShaderID = this->loadShader(geometryFilename, GL_GEOMETRY_SHADER);
+	}
 
 	this->programID = glCall(glCreateProgram);
 	glCall(glAttachShader, this->programID, this->vertexShaderID);
 
 	if (tessellationEvaluationFilename != "null")
+	{
 		glCall(glAttachShader, this->programID, this->tessellationEvaluationShaderID);
+	}
 
 	if (tessellationControlFilename != "null")
+	{
 		glCall(glAttachShader, this->programID, this->tessellationControlShaderID);
+	}
 
 	if (geometryFilename != "null")
+	{
 		glCall(glAttachShader, this->programID, this->geometryShaderID);
+	}
 
 	glCall(glAttachShader, this->programID, this->fragmentShaderID);
 	this->bindAttributes();
@@ -56,8 +66,6 @@ ShaderProgram::ShaderProgram(std::string vertexFilename, std::string fragmentFil
 
 	this->getAllUniformLocations();
 }
-
-ShaderProgram::~ShaderProgram() { }
 
 int ShaderProgram::getUniformLocation(std::string uniformName) 
 { 
@@ -82,9 +90,13 @@ void ShaderProgram::loadVec3(int location, glm::vec3 vector)
 void ShaderProgram::loadBoolean(int location, bool value) 
 {
 	if (value)
+	{
 		glCall(glUniform1f, location, 1);
+	}
 	else
+	{
 		glCall(glUniform1f, location, 0);
+	}
 }
 
 void ShaderProgram::loadMat4(int location, const glm::mat4& matrix)

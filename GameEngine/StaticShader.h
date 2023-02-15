@@ -16,11 +16,11 @@ public:
 	int location_lightColor;
 	int location_gamma;
 
-	StaticShader();
+	StaticShader() = default;
 
 	StaticShader(std::string vertexShaderFilename, std::string fragmentShaderFilename);
 
-	~StaticShader();
+	~StaticShader() = default;
 
 	void bindAttributes();
 

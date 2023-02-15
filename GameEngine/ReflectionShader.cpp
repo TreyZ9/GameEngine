@@ -4,24 +4,10 @@
 #include "Camera.h"
 #include "Maths.h"
 
-ReflectionShader::ReflectionShader() 
-{
-	this->location_transformationMatrix = NULL;
-	this->location_projectionMatrix = NULL;
-	this->location_viewMatrix = NULL;
-	this->location_lightPosition = NULL;
-	this->location_lightColor = NULL;
-	this->location_gamma = NULL;
-	this->location_useSpecularMap = NULL;
-	this->location_cameraPosition = NULL;
-}
-
 ReflectionShader::ReflectionShader(std::string vertexShaderFilename, std::string fragmentShaderFilename) : ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename)
 {
 	this->getAllUniformLocations();
 }
-
-ReflectionShader::~ReflectionShader() { }
 
 void ReflectionShader::bindAttributes() 
 {

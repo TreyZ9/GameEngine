@@ -10,9 +10,9 @@ private:
 	btRigidBody* body;
 
 public:
-	PhysicsBox();
+	PhysicsBox() = default;
 	PhysicsBox(btVector3 size, btVector3 position, btScalar mass);
-	~PhysicsBox();
+	~PhysicsBox() = default;
 
 	btVector3 getPosition();
 

@@ -4,19 +4,10 @@
 #include "Camera.h"
 #include "Maths.h"
 
-Shader::Shader() 
-{
-	this->location_transformationMatrix = NULL;
-	this->location_projectionMatrix = NULL;
-	this->location_viewMatrix = NULL;
-}
-
 Shader::Shader(std::string vertexShaderFilename, std::string fragmentShaderFilename) : ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename)
 {
 	this->getAllUniformLocations();
 }
-
-Shader::~Shader() {}
 
 void Shader::bindAttributes() 
 {

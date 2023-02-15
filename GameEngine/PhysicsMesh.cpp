@@ -3,8 +3,6 @@
 #include "Vertex.h"
 #include "Model.h"
 
-PhysicsMesh::PhysicsMesh() { }
-
 PhysicsMesh::PhysicsMesh(std::string filename, btVector3 position)
 {
 	Model model(filename);
@@ -40,8 +38,6 @@ PhysicsMesh::PhysicsMesh(std::string filename, btVector3 position)
 	
 }
 
-PhysicsMesh::~PhysicsMesh() { }
-
 btVector3 PhysicsMesh::getPosition()
 {
 	btTransform transform;
@@ -49,6 +45,12 @@ btVector3 PhysicsMesh::getPosition()
 	return transform.getOrigin();
 }
 
-btCollisionShape* PhysicsMesh::getShape() { return this->shape; }
+btCollisionShape* PhysicsMesh::getShape() 
+{ 
+	return this->shape; 
+}
 
-btRigidBody* PhysicsMesh::getBody() { return this->body; }
+btRigidBody* PhysicsMesh::getBody() 
+{ 
+	return this->body; 
+}

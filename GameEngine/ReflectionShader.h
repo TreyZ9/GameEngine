@@ -18,11 +18,11 @@ public:
 	int location_cameraPosition;
 	int location_useSpecularMap;
 
-	ReflectionShader();
+	ReflectionShader() = default;
 
 	ReflectionShader(std::string vertexShaderFilename, std::string fragmentShaderFilename);
 
-	~ReflectionShader();
+	~ReflectionShader() = default;
 
 	void bindAttributes();
 

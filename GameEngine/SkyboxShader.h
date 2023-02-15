@@ -12,11 +12,11 @@ public:
 	int location_projectionMatrix;
 	int location_viewMatrix;
 
-	SkyboxShader();
+	SkyboxShader() = default;
 
 	SkyboxShader(std::string vertexShaderFilename, std::string fragmentShaderFilename);
 
-	~SkyboxShader();
+	~SkyboxShader() = default;
 
 	void bindAttributes();
 

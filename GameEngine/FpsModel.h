@@ -19,9 +19,9 @@ private:
 	std::string fps = "60";
 
 public:
-	FpsModel();
+	FpsModel() = default;
 
-	~FpsModel();
+	~FpsModel() = default;
 
 	void update();
 

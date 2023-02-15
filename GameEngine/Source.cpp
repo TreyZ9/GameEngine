@@ -1,11 +1,9 @@
 #include "Source.h"
 
-#include "OpenALFunctions.h"
-#include "Loader.h"
-
 #include <spdlog/spdlog.h>
 
-Source::Source() {}
+#include "OpenALFunctions.h"
+#include "Loader.h"
 
 Source::Source(const std::string filename, glm::vec3 position, glm::vec3 velocity, ALfloat pitch, ALfloat gain,
 	ALfloat referenceDistance, ALfloat maxDistance, ALfloat rolloffFactor, ALboolean looping) :
@@ -21,13 +19,21 @@ Source::Source(const std::string filename, glm::vec3 position, glm::vec3 velocit
 
 	ALenum format;
 	if (sound.Channels == 1 && sound.BitsPerSample == 8)
+	{
 		format = AL_FORMAT_MONO8;
+	}
 	else if (sound.Channels == 1 && sound.BitsPerSample == 16)
+	{
 		format = AL_FORMAT_MONO16;
+	}
 	else if (sound.Channels == 2 && sound.BitsPerSample == 8)
+	{
 		format = AL_FORMAT_STEREO8;
+	}
 	else if (sound.Channels == 2 && sound.BitsPerSample == 16)
+	{
 		format = AL_FORMAT_STEREO16;
+	}
 	else
 	{
 		spdlog::error("Unrecognized wave format '{}'", filename);

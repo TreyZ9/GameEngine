@@ -27,7 +27,7 @@ private:
 	ALint state;
 
 public:
-	Source();
+	Source() = default;
 
 	Source(const std::string filename, glm::vec3 position = glm::vec3(0.0f), glm::vec3 velocity = glm::vec3(0.0f),
 		ALfloat pitch = 1.0f, ALfloat gain = 1.0f, ALfloat referenceDistance = 0.0f, ALfloat maxDistance = 10.0f,

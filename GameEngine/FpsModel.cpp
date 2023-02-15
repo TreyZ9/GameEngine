@@ -1,20 +1,16 @@
 
 #include "FpsModel.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <sstream>
+
 #include "OpenGLFunctions.h"
 #include "DisplayManager.h"
 #include "Config.h"
 #include "Vertex.h"
 #include "Loader.h"
 #include "Maths.h"
-
-#include <glm/gtc/matrix_transform.hpp>
-
-#include <sstream>
-
-FpsModel::FpsModel() {}
-
-FpsModel::~FpsModel() {}
 
 void FpsModel::update()
 {

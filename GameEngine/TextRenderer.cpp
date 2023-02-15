@@ -122,8 +122,7 @@ std::array<std::array<float, 4>, 6> Font::generateVertices(const char c, glm::ve
 	// calculate vertex coords
 	glm::vec2 pos = glm::vec2(
 		cursorPos.x + character.bearing.x * scale.x,
-		cursorPos.y - (character.size.y - character.bearing.y) * scale.y
-	);
+		cursorPos.y - (character.size.y - character.bearing.y) * scale.y);
 	glm::vec2 size = character.size * scale;
 
 	// calculate texture coords
