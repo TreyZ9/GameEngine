@@ -25,7 +25,6 @@
 #include "OpenALFunctions.h"
 #include "OpenGLFunctions.h"
 #include "DisplayManager.h"
-#include "StaticShader.h"
 #include "NormalShader.h"
 #include "SkyboxShader.h"
 #include "TextRenderer.h"
@@ -73,8 +72,8 @@ int main()
 		"Shaders/Shader/shader.frag");*/
 
 	BSDFShader bsdfShader = BSDFShader(
-		"Shaders/BSDFShader/shader.vert",
-		"Shaders/BSDFShader/shader.frag");
+		"Shaders/BSDFShader/bsdfShader.vert",
+		"Shaders/BSDFShader/bsdfShader.frag");
 
 	/*StaticShader staticShader = StaticShader(
 		"Shaders/LightShader/shader.vert",
@@ -96,12 +95,12 @@ int main()
 		"Shaders/reflectionShader/shader.frag");*/
 
 	SkyboxShader skyboxShader = SkyboxShader(
-		"Shaders/SkyboxShader/shader.vert",
-		"Shaders/SkyboxShader/shader.frag");
+		"Shaders/SkyboxShader/skyboxShader.vert",
+		"Shaders/SkyboxShader/skyboxShader.frag");
 
 	TextShader textShader = TextShader(
-		"Shaders/TextShader/shader.vert",
-		"Shaders/TextShader/shader.frag");
+		"Shaders/TextShader/textShader.vert",
+		"Shaders/TextShader/textShader.frag");
 
 	TextRenderer textRenderer = TextRenderer();
 

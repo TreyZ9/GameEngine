@@ -164,7 +164,6 @@
     <ClInclude Include="SkyboxShader.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Source.h" />
-    <ClInclude Include="StaticShader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="TessellationShader.h" />
     <ClInclude Include="TextRenderer.h" />
@@ -199,31 +198,28 @@
     <ClCompile Include="SkyboxModel.cpp" />
     <ClCompile Include="SkyboxShader.cpp" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="StaticShader.cpp" />
     <ClCompile Include="stb.cpp" />
     <ClCompile Include="TessellationShader.cpp" />
     <ClCompile Include="TextRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Settings\settings.ini" />
-    <None Include="Shaders\BSDFShader\shader.frag" />
-    <None Include="Shaders\BSDFShader\shader.vert" />
-    <None Include="Shaders\NormalShader\shader.frag" />
-    <None Include="Shaders\NormalShader\shader.vert" />
-    <None Include="shaders\reflectionShader\shader.frag" />
-    <None Include="shaders\reflectionShader\shader.vert" />
-    <None Include="shaders\shader\shader.frag" />
-    <None Include="shaders\shader\shader.vert" />
-    <None Include="shaders\skyboxShader\shader.frag" />
-    <None Include="shaders\skyboxShader\shader.vert" />
-    <None Include="shaders\staticShader\staticShader.frag" />
-    <None Include="shaders\staticShader\staticShader.vert" />
-    <None Include="shaders\tessellationShader\control.tesc" />
-    <None Include="shaders\tessellationShader\evaluation.tese" />
-    <None Include="shaders\tessellationShader\fragment.frag" />
-    <None Include="shaders\tessellationShader\vertex.vert" />
-    <None Include="Shaders\textShader\shader.frag" />
-    <None Include="Shaders\textShader\shader.vert" />
+    <None Include="Shaders\BSDFShader\bsdfShader.frag" />
+    <None Include="Shaders\BSDFShader\bsdfShader.vert" />
+    <None Include="Shaders\NormalShader\normalShader.frag" />
+    <None Include="Shaders\NormalShader\normalShader.vert" />
+    <None Include="Shaders\ReflectionShader\reflectionShader.frag" />
+    <None Include="Shaders\ReflectionShader\reflectionShader.vert" />
+    <None Include="Shaders\shader\shader.frag" />
+    <None Include="Shaders\shader\shader.vert" />
+    <None Include="Shaders\SkyboxShader\skyboxShader.frag" />
+    <None Include="Shaders\SkyboxShader\skyboxShader.vert" />
+    <None Include="Shaders\TessellationShader\tessellationShader.frag" />
+    <None Include="Shaders\TessellationShader\tessellationShader.tesc" />
+    <None Include="Shaders\TessellationShader\tessellationShader.tese" />
+    <None Include="Shaders\TessellationShader\tessellationShader.vert" />
+    <None Include="Shaders\TextShader\textShader.frag" />
+    <None Include="Shaders\TextShader\textShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="StyleRules.txt" />
