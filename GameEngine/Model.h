@@ -8,6 +8,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+#include "ReflectionShader.h"
 #include "BSDFShader.h"
 #include "Shader.h"
 #include "Loader.h"

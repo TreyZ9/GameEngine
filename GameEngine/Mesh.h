@@ -9,6 +9,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "ReflectionShader.h"
 #include "BSDFShader.h"
 #include "Material.h"
 #include "Texture.h"

@@ -8,15 +8,10 @@
 
 glm::mat4 DisplayManager::projectionMatrix = glm::mat4(1.0f);
 glm::ivec2 DisplayManager::resolution = glm::ivec2(0.0f);
-double DisplayManager::lastTime = DisplayManager::getTime();
-double DisplayManager::frameDelta = 0.1;
+double DisplayManager::lastTime = 0.0f;
+double DisplayManager::frameDelta = 0.1f;
 
 GLFWwindow* DisplayManager::window;
-
-double DisplayManager::getTime() 
-{ 
-	return glfwGetTime(); 
-}
 
 int DisplayManager::createDisplay(int width, int height) 
 {
@@ -62,12 +57,17 @@ int DisplayManager::createDisplay(int width, int height)
 	return 0;
 }
 
+void DisplayManager::closeDisplay()
+{
+	glfwTerminate();
+}
+
 void DisplayManager::updateDisplay() 
 {
 	glfwSwapBuffers(DisplayManager::window);
 	glfwPollEvents();
 
-	double thisTime = DisplayManager::getTime();
+	double thisTime = glfwGetTime();
 	DisplayManager::frameDelta = thisTime - DisplayManager::lastTime;
 	DisplayManager::lastTime = thisTime;
 }
@@ -76,11 +76,6 @@ void DisplayManager::clearScreenBuffer()
 {
 	glCall(glClearColor, 0.0f, 1.0f, 1.0f, 1.0f);
 	glCall(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
-void DisplayManager::closeDisplay() 
-{ 
-	glfwTerminate(); 
 }
 
 void DisplayManager::framebuffer_size_callback(GLFWwindow* window, int width, int height) 

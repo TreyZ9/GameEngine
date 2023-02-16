@@ -208,8 +208,8 @@
     <None Include="Settings\settings.ini" />
     <None Include="Shaders\BSDFShader\shader.frag" />
     <None Include="Shaders\BSDFShader\shader.vert" />
-    <None Include="shaders\normalShader\normalShader.frag" />
-    <None Include="shaders\normalShader\normalShader.vert" />
+    <None Include="Shaders\NormalShader\shader.frag" />
+    <None Include="Shaders\NormalShader\shader.vert" />
     <None Include="shaders\reflectionShader\shader.frag" />
     <None Include="shaders\reflectionShader\shader.vert" />
     <None Include="shaders\shader\shader.frag" />

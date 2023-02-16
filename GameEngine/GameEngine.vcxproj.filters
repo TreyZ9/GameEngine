@@ -328,12 +328,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\normalShader\normalShader.frag">
-      <Filter>Source Files\Shaders\Children\NormalShader</Filter>
-    </None>
-    <None Include="shaders\normalShader\normalShader.vert">
-      <Filter>Source Files\Shaders\Children\NormalShader</Filter>
-    </None>
     <None Include="shaders\reflectionShader\shader.frag">
       <Filter>Source Files\Shaders\Children\ReflectionShader</Filter>
     </None>
@@ -384,6 +378,12 @@
     </None>
     <None Include="Shaders\textShader\shader.frag">
       <Filter>Source Files\Shaders\Children\TextShader</Filter>
+    </None>
+    <None Include="Shaders\NormalShader\shader.vert">
+      <Filter>Source Files\Shaders\Children\NormalShader</Filter>
+    </None>
+    <None Include="Shaders\NormalShader\shader.frag">
+      <Filter>Source Files\Shaders\Children\NormalShader</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

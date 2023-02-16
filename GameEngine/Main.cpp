@@ -68,40 +68,40 @@ int main()
 
 	DisplayManager::createDisplay(1280, 720);
 
-	Shader shader = Shader(
+	/*Shader shader = Shader(
 		"Shaders/Shader/shader.vert",
-		"Shaders/Shader/shader.frag");
+		"Shaders/Shader/shader.frag");*/
 
 	BSDFShader bsdfShader = BSDFShader(
 		"Shaders/BSDFShader/shader.vert",
 		"Shaders/BSDFShader/shader.frag");
 
-	StaticShader staticShader = StaticShader(
+	/*StaticShader staticShader = StaticShader(
 		"Shaders/LightShader/shader.vert",
-		"Shaders/LightShader/shader.frag");
+		"Shaders/LightShader/shader.frag");*/
 
-	NormalShader normalShader = NormalShader(
+	/*NormalShader normalShader = NormalShader(
 		"Shaders/NormalShader/shader.vert",
-		"Shaders/NormalShader/shader.frag");
+		"Shaders/NormalShader/shader.frag");*/
 
-	TessellationShader tessShader = TessellationShader(
+	/*TessellationShader tessShader = TessellationShader(
 		"Shaders/tessellationShader/vertex.vert",
 		"Shaders/tessellationShader/fragment.frag",
 		"Shaders/tessellationShader/control.tesc",
-		"Shaders/tessellationShader/evaluation.tese");
+		"Shaders/tessellationShader/evaluation.tese");*/
 	// "shaders/tessellationShader/geometry.geom");
 
-	ReflectionShader reflectionShader = ReflectionShader(
+	/*ReflectionShader reflectionShader = ReflectionShader(
 		"Shaders/reflectionShader/shader.vert",
-		"Shaders/reflectionShader/shader.frag");
+		"Shaders/reflectionShader/shader.frag");*/
 
 	SkyboxShader skyboxShader = SkyboxShader(
-		"Shaders/skyboxShader/shader.vert",
-		"Shaders/skyboxShader/shader.frag");
+		"Shaders/SkyboxShader/shader.vert",
+		"Shaders/SkyboxShader/shader.frag");
 
 	TextShader textShader = TextShader(
-		"Shaders/textShader/shader.vert",
-		"Shaders/textShader/shader.frag");
+		"Shaders/TextShader/shader.vert",
+		"Shaders/TextShader/shader.frag");
 
 	TextRenderer textRenderer = TextRenderer();
 
@@ -110,10 +110,9 @@ int main()
 	FpsModel fpsModel = FpsModel();
 	SkyboxModel skyboxModel = SkyboxModel("Resources/skyboxDay");
 
-	Model model = Model("Resources/TestScene/TestScene.obj");
-	Model physicsCubeGround = Model("Resources/CollisionTest/100x10x100_box.obj");
-	Model physicsCubeDynamic = Model("Resources/CollisionTest/10x10x10_box.obj");
-	Model torus = Model("Resources/Torus/torus.obj");
+	Model model = Model("Resources/TestScene/Mesh.obj");
+	// Model physicsCubeGround = Model("Resources/CollisionTest/100x10x100_box.obj");
+	// Model physicsCubeDynamic = Model("Resources/CollisionTest/10x10x10_box.obj");
 
 	DisplayManager::hideCursor();
 	//DisplayManager::showCursor();
@@ -126,20 +125,21 @@ int main()
 	source1.play();
 
 	// Physics
-	PhysicsManager physicsManager = PhysicsManager();
+	// PhysicsManager physicsManager = PhysicsManager();
 
-	PhysicsBox groundBox = PhysicsBox(btVector3(100, 10, 100), btVector3(0, -10, 0), btScalar(0.0f));
-	physicsManager.addCollisionShape(groundBox.getShape(), groundBox.getBody());
+	// PhysicsBox groundBox = PhysicsBox(btVector3(100, 10, 100), btVector3(0, -10, 0), btScalar(0.0f));
+	// physicsManager.addCollisionShape(groundBox.getShape(), groundBox.getBody());
 	// PhysicsBox dynamicBox = PhysicsBox(btVector3(10, 10, 10), btVector3(0, 100, 0), btScalar(1.0f));
 	// physicsManager.addCollisionShape(dynamicBox.getShape(), dynamicBox.getBody());
 
-	PhysicsMesh dynamicBox = PhysicsMesh("Resources/Cube/cube.obj", btVector3(0, 50, 0));
-	physicsManager.addCollisionShape(dynamicBox.getShape(), dynamicBox.getBody());
+	// PhysicsMesh dynamicBox = PhysicsMesh("Resources/Cube/cube.obj", btVector3(0, 50, 0));
+	// physicsManager.addCollisionShape(dynamicBox.getShape(), dynamicBox.getBody());
 
 
 	// temp vars
-	float yRot = 0.0f;
+	unsigned int mirrorMeshID = 2;
 
+	spdlog::debug("Starting main loop");
 	while (!glfwWindowShouldClose(DisplayManager::window) && !glfwGetKey(DisplayManager::window, GLFW_KEY_ESCAPE))
 	{
 		if (glfwGetKey(DisplayManager::window, GLFW_KEY_0))
@@ -150,7 +150,7 @@ int main()
 
 		listener.updatePosition();
 
-		physicsManager.stepSimulation(1.0f / 60.0f);
+		// physicsManager.stepSimulation(1.0f / 60.0f);
 
 		// Buffered Shader Cycle (Mirror)
 		fbo.bind();
@@ -167,8 +167,8 @@ int main()
 		DisplayManager::clearScreenBuffer();
 
 		// Shader Cycle
-		GLuint tempTexture = model.meshes[1].textures[0].ID;
-		model.meshes[1].textures[0].ID = fbo.textureColorID;
+		GLuint tempTexture = model.meshes[mirrorMeshID].textures[0].ID;
+		model.meshes[mirrorMeshID].textures[0].ID = fbo.textureColorID;
 
 		bsdfShader.start();
 		model.draw(bsdfShader, glm::mat4(1.0f));
@@ -181,21 +181,14 @@ int main()
 
 		bsdfShader.stop();
 
-		model.meshes[1].textures[0].ID = tempTexture;
+		model.meshes[mirrorMeshID].textures[0].ID = tempTexture;
 
 		// Skybox Shader Cycle
 		skyboxShader.start();
 		skyboxModel.draw(skyboxShader);
 		skyboxShader.stop();
 
-		// Transparent pass
-		bsdfShader.start();
-		glm::mat4 torusTransformationMatrix;
-		Maths::createTransformationMatrix(torusTransformationMatrix, glm::vec3(0.0f, 0.5f, 0.0f), 0.0f, 0.0f, 0.0f, 1.0f);
-		torus.draw(bsdfShader, torusTransformationMatrix);
-		bsdfShader.stop();
-
-		textRenderer.drawText(textShader, "ERROR", glm::vec3(-5.0f, 5.0f, -5.0f), glm::vec3(0.0f, yRot, 0.0f), glm::vec2(1.0f), glm::vec3(1.0f, 0.0f, 0.0f), "center", "bottom");
+		textRenderer.drawText(textShader, "Controls\n--------------------------------------------------------\nW - Move Forward\nS - Move Backward\nA - Move Left\nD - Move Right\nSpace - Move Up\nLShift - Move Down\nESC - Close Window", glm::vec3(-0.0f, 2.9f, -4.82f), glm::vec3(0.0f), glm::vec2(0.2f), glm::vec3(0.0f, 1.0f, 0.0f), "center", "top");
 
 		// FPS Shader Cycle
 		glEnable(GL_BLEND);
@@ -203,22 +196,16 @@ int main()
 		fpsModel.update();
 		fpsModel.render(textShader, textRenderer);
 
-		textRenderer.drawTextOnHUD(textShader, "This text is centered\nwith a bottom left origin", glm::vec2(10, 0), glm::vec2(24), glm::vec3(0.0f, 1.0f, 0.0f), "center", "bottomleft");
-		textRenderer.drawTextOnHUD(textShader, "This text is right aligned\n with a top left origin", glm::vec2(10, DisplayManager::getResolution().y), glm::vec2(20), glm::vec3(0.0f, 1.0f, 0.0f), "right", "topleft");
-
 		// Show Display Buffer
 		DisplayManager::updateDisplay();
-
-		yRot += DisplayManager::getFrameDelta() * 80.0f;
-		if (yRot > 360.0f)
-			yRot -= 360.0f;
 	}
 
 	fbo.destroy();
-	shader.cleanUp();
-	staticShader.cleanUp();
-	normalShader.cleanUp();
-	tessShader.cleanUp();
+	// shader.cleanUp();
+	// staticShader.cleanUp();
+	// normalShader.cleanUp();
+	// tessShader.cleanUp();
+	bsdfShader.cleanUp();
 	textShader.cleanUp();
 	Loader::destroy();
 	DisplayManager::closeDisplay();

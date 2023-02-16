@@ -253,7 +253,7 @@ void TextRenderer::drawText(const std::string& text, const glm::vec2& pos, const
 	{
 		yOffset -= boundingBox.y / 2.0f;
 	}
-	else if (origin == "topleft" || origin == "bottom" || origin == "topright") // top row
+	else if (origin == "topleft" || origin == "top" || origin == "topright") // top row
 	{
 		yOffset -= boundingBox.y;
 	}
