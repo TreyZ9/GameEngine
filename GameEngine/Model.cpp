@@ -11,27 +11,27 @@ Model::Model(const std::string& path, const bool gamma) : gammaCorrection(gamma)
 	this->loadModel(path);
 }
 
-void Model::draw(Shader shader, const glm::mat4& transformationMatrix)
+void Model::draw(Shader shader, const glm::mat4& transformationMatrix, const glm::mat4& projectionMatrix)
 {
 	for (unsigned int i = 0; i < this->meshes.size(); i++)
 	{
-		this->meshes[i].draw(shader, transformationMatrix);
+		this->meshes[i].draw(shader, transformationMatrix, projectionMatrix);
 	}
 }
 
-void Model::draw(BSDFShader shader, const glm::mat4& transformationMatrix)
+void Model::draw(BSDFShader shader, const glm::mat4& transformationMatrix, const glm::mat4& projectionMatrix)
 {
 	for (unsigned int i = 0; i < this->meshes.size(); i++)
 	{
-		this->meshes[i].draw(shader, transformationMatrix);
+		this->meshes[i].draw(shader, transformationMatrix, projectionMatrix);
 	}
 }
 
-void Model::draw(ReflectionShader shader, const glm::mat4& transformationMatrix, const std::vector<Light>& lights)
+void Model::draw(ReflectionShader shader, const glm::mat4& transformationMatrix, const glm::mat4& projectionMatrix, const std::vector<Light>& lights)
 {
 	for (unsigned int i = 0; i < this->meshes.size(); i++)
 	{
-		this->meshes[i].draw(shader, transformationMatrix, lights);
+		this->meshes[i].draw(shader, transformationMatrix, projectionMatrix, lights);
 	}
 }
 

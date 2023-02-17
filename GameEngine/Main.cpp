@@ -65,30 +65,11 @@ int main()
 	Source source1 = Source("Resources/audio/ambientMono.wav", glm::vec3(-4.25f, 0.125f, -4.25f), glm::vec3(0.0f), 1.0f, 1.0f, 0.0f, 10.0f, 1.0f, AL_FALSE);
 	Source source2 = Source("Resources/audio/heavy.wav");
 
-	DisplayManager::createDisplay(1280, 720);
-
-	/*Shader shader = Shader(
-		"Shaders/Shader/shader.vert",
-		"Shaders/Shader/shader.frag");*/
+	Display display = Display(1280, 720, "OpenGL Game Engine");
 
 	BSDFShader bsdfShader = BSDFShader(
 		"Shaders/BSDFShader/bsdfShader.vert",
 		"Shaders/BSDFShader/bsdfShader.frag");
-
-	/*StaticShader staticShader = StaticShader(
-		"Shaders/LightShader/shader.vert",
-		"Shaders/LightShader/shader.frag");*/
-
-	/*NormalShader normalShader = NormalShader(
-		"Shaders/NormalShader/shader.vert",
-		"Shaders/NormalShader/shader.frag");*/
-
-	/*TessellationShader tessShader = TessellationShader(
-		"Shaders/tessellationShader/vertex.vert",
-		"Shaders/tessellationShader/fragment.frag",
-		"Shaders/tessellationShader/control.tesc",
-		"Shaders/tessellationShader/evaluation.tese");*/
-	// "shaders/tessellationShader/geometry.geom");
 
 	ReflectionShader reflectionShader = ReflectionShader(
 		"Shaders/ReflectionShader/reflectionShader.vert",
@@ -114,14 +95,10 @@ int main()
 	Model barrel = Model("Resources/Crate/crate.obj");
 	Model barrel2 = Model("Resources/Crate/crate.obj");
 	Texture skyboxTexture = Loader::loadCubeMap("Resources/skyboxDay");
-	// skyboxTexture = Loader::createEmptyCubeMap();
 	barrel2.setCubeMap(skyboxTexture);
-	// Model physicsCubeGround = Model("Resources/CollisionTest/100x10x100_box.obj");
-	// Model physicsCubeDynamic = Model("Resources/CollisionTest/10x10x10_box.obj");
 
-	DisplayManager::hideCursor();
+	display.hideCursor();
 	//DisplayManager::showCursor();
-
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	FrameBufferObject fbo = FrameBufferObject();
@@ -129,16 +106,27 @@ int main()
 
 	source1.play();
 
-	// Physics
-	// PhysicsManager physicsManager = PhysicsManager();
+	/* Physics
+	Model physicsCubeGround = Model("Resources/CollisionTest/100x10x100_box.obj");
+	
+	Model physicsCubeDynamic = Model("Resources/CollisionTest/10x10x10_box.obj");
+	PhysicsManager physicsManager = PhysicsManager();
 
-	// PhysicsBox groundBox = PhysicsBox(btVector3(100, 10, 100), btVector3(0, -10, 0), btScalar(0.0f));
-	// physicsManager.addCollisionShape(groundBox.getShape(), groundBox.getBody());
-	// PhysicsBox dynamicBox = PhysicsBox(btVector3(10, 10, 10), btVector3(0, 100, 0), btScalar(1.0f));
-	// physicsManager.addCollisionShape(dynamicBox.getShape(), dynamicBox.getBody());
+	PhysicsBox groundBox = PhysicsBox(btVector3(100, 10, 100), btVector3(0, -10, 0), btScalar(0.0f));
+	physicsManager.addCollisionShape(groundBox.getShape(), groundBox.getBody());
+	PhysicsBox dynamicBox = PhysicsBox(btVector3(10, 10, 10), btVector3(0, 100, 0), btScalar(1.0f));
+	physicsManager.addCollisionShape(dynamicBox.getShape(), dynamicBox.getBody());
 
-	// PhysicsMesh dynamicBox = PhysicsMesh("Resources/Cube/cube.obj", btVector3(0, 50, 0));
-	// physicsManager.addCollisionShape(dynamicBox.getShape(), dynamicBox.getBody());
+	PhysicsMesh dynamicBox = PhysicsMesh("Resources/Cube/cube.obj", btVector3(0, 50, 0));
+	physicsManager.addCollisionShape(dynamicBox.getShape(), dynamicBox.getBody());
+
+		physicsManager.stepSimulation(1.0f / 60.0f);
+		physicsCubeGround.draw(bsdfShader, glm::mat4(1.0f));
+		glm::vec3 position((float)dynamicBox.getPosition().getX(), (float)dynamicBox.getPosition().getY(), (float)dynamicBox.getPosition().getZ());
+		glm::mat4 transform;
+		Maths::createTransformationMatrix(transform, position, 0, 0, 0, 1);
+		physicsCubeDynamic.draw(bsdfShader, transform);
+	*/
 
 
 	// temp vars
@@ -146,13 +134,13 @@ int main()
 	float yRot = 0.0f;
 
 	spdlog::debug("Starting main loop");
-	while (!glfwWindowShouldClose(DisplayManager::window) && !glfwGetKey(DisplayManager::window, GLFW_KEY_ESCAPE))
+	while (!glfwWindowShouldClose(display.getWindow()) && !glfwGetKey(display.getWindow(), GLFW_KEY_ESCAPE))
 	{
-		if (glfwGetKey(DisplayManager::window, GLFW_KEY_0))
+		if (glfwGetKey(display.getWindow(), GLFW_KEY_0))
 			source2.play();
 		source2.setPosition(Camera::position);
 
-		Camera::move();
+		Camera::move(display);
 
 		listener.updatePosition();
 
@@ -161,23 +149,30 @@ int main()
 		// Buffered Shader Cycle (Mirror)
 		fbo.bind();
 		bsdfShader.start();
-		model.draw(bsdfShader, glm::mat4(1.0f));
+		model.draw(bsdfShader, glm::mat4(1.0f), display.getProjectionMatrix());
 		bsdfShader.stop();
 
 		skyboxShader.start();
-		skyboxModel.draw(skyboxShader);
+		skyboxModel.draw(skyboxShader, display.getProjectionMatrix());
 		skyboxShader.stop();
-		fbo.unbind();
+		fbo.unbind(display.getResolution());
 
 		// Clear Screen Buffers
-		DisplayManager::clearScreenBuffer();
+		display.clear();
 
 		// Shader Cycle
 		GLuint tempTexture = model.meshes[mirrorMeshID].textures[0].ID;
 		model.meshes[mirrorMeshID].textures[0].ID = fbo.textureColorID;
 
+		glCall(glViewport, 0, 0, display.getResolution().x, display.getResolution().y);
+		spdlog::info("{} {}", display.getResolution().x, display.getResolution().y);
+
+		// ------------------------------
+		// BSDF Shader
+		// ------------------------------
 		bsdfShader.start();
-		model.draw(bsdfShader, glm::mat4(1.0f));
+		model.draw(bsdfShader, glm::mat4(1.0f), display.getProjectionMatrix());
+		bsdfShader.stop();
 
 		// physicsCubeGround.draw(bsdfShader, glm::mat4(1.0f));
 		// glm::vec3 position((float)dynamicBox.getPosition().getX(), (float)dynamicBox.getPosition().getY(), (float)dynamicBox.getPosition().getZ());
@@ -187,33 +182,36 @@ int main()
 
 		bsdfShader.stop();
 
+		// ------------------------------
+		// Reflection Shader
+		// ------------------------------
 		reflectionShader.start();
 		glm::mat4 barrelTransformationMatrix;
 		Maths::createTransformationMatrix(barrelTransformationMatrix, glm::vec3(-4.25f, 0.85f, 4.5f), 0.0f, yRot, 0.0f, 1.0f);
-		barrel.draw(reflectionShader, barrelTransformationMatrix, lights);
+		barrel.draw(reflectionShader, barrelTransformationMatrix, display.getProjectionMatrix(), lights);
 		Maths::createTransformationMatrix(barrelTransformationMatrix, glm::vec3(-4.25f, 1.9f, 4.5f), 0.0f, yRot, 0.0f, 1.0f);
-		barrel2.draw(reflectionShader, barrelTransformationMatrix, lights);
+		barrel2.draw(reflectionShader, barrelTransformationMatrix, display.getProjectionMatrix(), lights);
 		reflectionShader.stop();
 
 		model.meshes[mirrorMeshID].textures[0].ID = tempTexture;
 
 		// Skybox Shader Cycle
 		skyboxShader.start();
-		skyboxModel.draw(skyboxShader);
+		skyboxModel.draw(skyboxShader, display.getProjectionMatrix());
 		skyboxShader.stop();
 
-		textRenderer.drawText(textShader, "Controls\n--------------------------------------------------------\nW - Move Forward\nS - Move Backward\nA - Move Left\nD - Move Right\nSpace - Move Up\nLShift - Move Down\nESC - Close Window", glm::vec3(-0.0f, 2.9f, -4.82f), glm::vec3(0.0f), glm::vec2(0.2f), glm::vec3(0.0f, 1.0f, 0.0f), "center", "top");
+		textRenderer.drawText(display, textShader, "Controls\n--------------------------------------------------------\nW - Move Forward\nS - Move Backward\nA - Move Left\nD - Move Right\nSpace - Move Up\nLShift - Move Down\nESC - Close Window", glm::vec3(-0.0f, 2.9f, -4.82f), glm::vec3(0.0f), glm::vec2(0.2f), glm::vec3(0.0f, 1.0f, 0.0f), "center", "top");
 
 		// FPS Shader Cycle
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		fpsModel.update();
-		fpsModel.render(textShader, textRenderer);
+		fpsModel.update(display);
+		fpsModel.render(display, textShader, textRenderer);
 
 		// Show Display Buffer
-		DisplayManager::updateDisplay();
+		display.update();
 
-		yRot += DisplayManager::getFrameDelta() * 16.0f;
+		yRot += display.getFrameDelta() * 16.0f;
 		if (yRot > 360.0f)
 		{
 			yRot -= 360.0f;
@@ -221,12 +219,7 @@ int main()
 	}
 
 	fbo.destroy();
-	// shader.cleanUp();
-	// staticShader.cleanUp();
-	// normalShader.cleanUp();
-	// tessShader.cleanUp();
 	bsdfShader.cleanUp();
 	textShader.cleanUp();
 	Loader::destroy();
-	DisplayManager::closeDisplay();
 }

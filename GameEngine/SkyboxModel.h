@@ -65,5 +65,5 @@ public:
 
 	~SkyboxModel() = default;
 
-	void draw(SkyboxShader shader);
+	void draw(SkyboxShader shader, const glm::mat4& projectionMatrix);
 };

@@ -9,7 +9,6 @@
 #include <format>
 
 #include "OpenGLFunctions.h"
-#include "DisplayManager.h"
 #include "TextShader.h"
 #include "Camera.h"
 #include "Maths.h"
@@ -281,7 +280,7 @@ void TextRenderer::drawText(const std::string& text, const glm::vec2& pos, const
 	glCall(glBindTexture, GL_TEXTURE_2D, 0);
 }
 
-void TextRenderer::drawText(TextShader shader, const std::string& text, const glm::vec3& pos, const glm::vec3& rot,
+void TextRenderer::drawText(const Display& display, TextShader shader, const std::string& text, const glm::vec3& pos, const glm::vec3& rot,
 	const glm::vec2& scale, const glm::vec3& color, const std::string& alignment, const std::string& origin)
 {
 	shader.start();
@@ -290,7 +289,7 @@ void TextRenderer::drawText(TextShader shader, const std::string& text, const gl
 	Maths::createTransformationMatrix(transformationMatrix, pos, rot.x, rot.y, rot.z, 1.0f);
 
 	shader.loadTransformationMatrix(transformationMatrix);
-	shader.loadProjectionMatrix(DisplayManager::getProjectionMatrix());
+	shader.loadProjectionMatrix(display.getProjectionMatrix());
 	shader.loadViewMatrix(Camera::viewMatrix);
 	shader.loadTextColor(color);
 
@@ -299,12 +298,12 @@ void TextRenderer::drawText(TextShader shader, const std::string& text, const gl
 	shader.stop();
 }
 
-void TextRenderer::drawTextOnHUD(TextShader shader, const std::string& text, const glm::vec2& pos, const glm::vec2& scale,
+void TextRenderer::drawTextOnHUD(const Display& display, TextShader shader, const std::string& text, const glm::vec2& pos, const glm::vec2& scale,
 	const glm::vec3& color, const std::string& alignment, const std::string& origin)
 {
 	shader.start();
 
-	glm::mat4 projectionMatrix = glm::ortho(0.0f, (float)DisplayManager::getResolution().x, 0.0f, (float)DisplayManager::getResolution().y);
+	glm::mat4 projectionMatrix = glm::ortho(0.0f, (float)display.getResolution().x, 0.0f, (float)display.getResolution().y);
 	shader.loadTransformationMatrix(glm::mat4(1.0f));
 	shader.loadProjectionMatrix(projectionMatrix);
 	shader.loadViewMatrix(glm::mat4(1.0f));

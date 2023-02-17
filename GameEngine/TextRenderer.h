@@ -1,5 +1,8 @@
 #pragma once
 
+#include "DisplayManager.h"
+#include "TextShader.h"
+
 #include <glad/glad.h>
 
 #include <glm/common.hpp>
@@ -9,7 +12,7 @@
 #include <array>
 #include <map>
 
-#include "TextShader.h"
+
 
 struct Character
 {
@@ -57,8 +60,8 @@ public:
 	TextRenderer();
 	~TextRenderer() = default;
 
-	void drawText(TextShader shader, const std::string& text, const glm::vec3& pos, const glm::vec3& rot,
+	void drawText(const Display& display, TextShader shader, const std::string& text, const glm::vec3& pos, const glm::vec3& rot,
 		const glm::vec2& scale = glm::vec2(24.0f), const glm::vec3& color = glm::vec3(1.0f), const std::string& alignment = "center", const std::string& origin = "center");
-	void drawTextOnHUD(TextShader shader, const std::string& text, const glm::vec2& pos, const glm::vec2& scale = glm::vec2(24.0f),
+	void drawTextOnHUD(const Display& display, TextShader shader, const std::string& text, const glm::vec2& pos, const glm::vec2& scale = glm::vec2(24.0f),
 		const glm::vec3& color = glm::vec3(1.0f), const std::string& alignment = "center", const std::string& origin = "center");
 };

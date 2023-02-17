@@ -22,13 +22,13 @@ SkyboxModel::SkyboxModel(const std::string& directory)
 	this->texture = Loader::loadCubeMap(directory);
 }
 
-void SkyboxModel::draw(SkyboxShader shader)
+void SkyboxModel::draw(SkyboxShader shader, const glm::mat4& projectionMatrix)
 {
 	glCall(glActiveTexture, GL_TEXTURE0);
 	glCall(glUniform1i, glGetUniformLocation(shader.getProgramID(), "texture_cubeMap0"), 0);
 	glCall(glBindTexture, GL_TEXTURE_CUBE_MAP, texture.ID);
 
-	shader.loadProjectionMatrix(DisplayManager::getProjectionMatrix());
+	shader.loadProjectionMatrix(projectionMatrix);
 
 	glm::mat4 viewMatrix;
 	Maths::createTransformationMatrix(viewMatrix, glm::vec3(0.0f), 

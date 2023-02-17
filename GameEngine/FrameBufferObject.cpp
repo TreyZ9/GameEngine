@@ -40,10 +40,10 @@ void FrameBufferObject::bind()
 	glCall(glViewport, 0, 0, 1024, 1024);
 }
 
-void FrameBufferObject::unbind()
+void FrameBufferObject::unbind(glm::ivec2 resolution)
 {
 	glCall(glBindFramebuffer, GL_FRAMEBUFFER, 0);
-	glCall(glViewport, 0, 0, DisplayManager::getResolution().x, DisplayManager::getResolution().y);
+	glCall(glViewport, 0, 0, resolution.x, resolution.y);
 }
 
 void FrameBufferObject::destroy()

@@ -6,27 +6,44 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/common.hpp>
 
-struct DisplayManager {
+#include <string>
+#include <map>
+
+class Display
+{
 private:
-	static glm::mat4 projectionMatrix;
-	static glm::ivec2 resolution;
-	static double frameDelta;
-	static double lastTime;
+	glm::mat4 projectionMatrix;
+	glm::ivec2 resolution;
+	double frameDelta = 0.016;
+	double lastTime = 0.0;
+
+	GLFWwindow* window;
 
 public:
-	static GLFWwindow* window;
+	Display(const unsigned int width, const unsigned int height, const std::string& title);
+	~Display();
 
-	static int createDisplay(const int width, const int height);
-	static void closeDisplay();
-	static void updateDisplay();
-	static void clearScreenBuffer();
+	void update();
+	void clear();
+
+	void hideCursor();
+	void showCursor();
+
+	glm::ivec2 getResolution() const;
+	double getFrameDelta() const;
+	GLFWwindow* getWindow() const;
+	glm::mat4 getProjectionMatrix() const;
+
+	void setResolution(const unsigned int width, const unsigned int height);
+};
+
+struct DisplayManager {
+private:
+	static std::map<GLFWwindow*, Display*> displays;
+
+public:
+	static void addDisplay(Display& display);
+	static void removeDisplay(const Display& display);
 
 	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-
-	static void hideCursor();
-	static void showCursor();
-
-	static glm::mat4 getProjectionMatrix();
-	static glm::ivec2 getResolution();
-	static double getFrameDelta();
 };

@@ -84,12 +84,12 @@ void Mesh::bindTextures(GLuint programID)
 	}
 }
 
-void Mesh::draw(Shader shader, const glm::mat4& transformationMatrix)
+void Mesh::draw(Shader shader, const glm::mat4& transformationMatrix, const glm::mat4& projectionMatrix)
 {
 	this->bindTextures(shader.getProgramID());
 
 	shader.loadTransformationMatrix(transformationMatrix);
-	shader.loadProjectionMatrix(DisplayManager::getProjectionMatrix());
+	shader.loadProjectionMatrix(projectionMatrix);
 	shader.loadViewMatrix();
 
 	glCall(glBindVertexArray, this->vao);
@@ -99,13 +99,13 @@ void Mesh::draw(Shader shader, const glm::mat4& transformationMatrix)
 	glCall(glActiveTexture, GL_TEXTURE0);
 }
 
-void Mesh::draw(BSDFShader shader, const glm::mat4& transformationMatrix)
+void Mesh::draw(BSDFShader shader, const glm::mat4& transformationMatrix, const glm::mat4& projectionMatrix)
 {
 	this->bindTextures(shader.getProgramID());
 	
 	shader.loadMaterialInfo(this->mat);
 	shader.loadTransformationMatrix(transformationMatrix);
-	shader.loadProjectionMatrix(DisplayManager::getProjectionMatrix());
+	shader.loadProjectionMatrix(projectionMatrix);
 	shader.loadViewMatrix();
 
 	glCall(glBindVertexArray, this->vao);
@@ -115,13 +115,13 @@ void Mesh::draw(BSDFShader shader, const glm::mat4& transformationMatrix)
 	glCall(glActiveTexture, GL_TEXTURE0);
 }
 
-void Mesh::draw(ReflectionShader shader, const glm::mat4& transformationMatrix, const std::vector<Light>& lights)
+void Mesh::draw(ReflectionShader shader, const glm::mat4& transformationMatrix, const glm::mat4& projectionMatrix, const std::vector<Light>& lights)
 {
 	this->bindTextures(shader.getProgramID());
 
 	shader.loadMaterialInfo(this->mat);
 	shader.loadTransformationMatrix(transformationMatrix);
-	shader.loadProjectionMatrix(DisplayManager::getProjectionMatrix());
+	shader.loadProjectionMatrix(projectionMatrix);
 	shader.loadViewMatrix();
 
 	shader.loadLights(lights);

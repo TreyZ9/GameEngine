@@ -2,6 +2,8 @@
 
 #include <glad/glad.h>
 
+#include <glm/common.hpp>
+
 class FrameBufferObject
 {
 private:
@@ -17,7 +19,7 @@ public:
 
 	void bind();
 
-	void unbind();
+	void unbind(glm::ivec2 resolution);
 
 	void destroy();
 };

@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 
-#include <iostream>
+#include <string>
 
 #define glCall(function, ...) OpenGLFunctions::glCallImpl(__FILE__, __LINE__, function, __VA_ARGS__)
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DisplayManager.h"
 #include "TextShader.h"
 
 #include <glad/glad.h>
@@ -23,7 +24,7 @@ public:
 
 	~FpsModel() = default;
 
-	void update();
+	void update(const Display& display);
 
-	void render(TextShader shader, TextRenderer textRenderer);
+	void render(const Display& display, TextShader shader, TextRenderer textRenderer);
 };
