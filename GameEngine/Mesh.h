@@ -37,7 +37,11 @@ public:
 
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material mat, unsigned int numFaces);
 
-	void draw(Shader shader, glm::mat4 transformationMatrix);
+	void draw(Shader shader, const glm::mat4& transformationMatrix);
 
-	void draw(BSDFShader shader, glm::mat4 transformationMatrix);
+	void draw(BSDFShader shader, const glm::mat4& transformationMatrix);
+
+	void draw(ReflectionShader shader, const glm::mat4& transformationMatrix, const std::vector<Light>& lights);
+
+	void setCubeMap(Texture cubeMapTexture);
 };

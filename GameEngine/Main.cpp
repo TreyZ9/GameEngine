@@ -90,9 +90,9 @@ int main()
 		"Shaders/tessellationShader/evaluation.tese");*/
 	// "shaders/tessellationShader/geometry.geom");
 
-	/*ReflectionShader reflectionShader = ReflectionShader(
-		"Shaders/reflectionShader/shader.vert",
-		"Shaders/reflectionShader/shader.frag");*/
+	ReflectionShader reflectionShader = ReflectionShader(
+		"Shaders/ReflectionShader/reflectionShader.vert",
+		"Shaders/ReflectionShader/reflectionShader.frag");
 
 	SkyboxShader skyboxShader = SkyboxShader(
 		"Shaders/SkyboxShader/skyboxShader.vert",
@@ -104,12 +104,18 @@ int main()
 
 	TextRenderer textRenderer = TextRenderer();
 
-	Light light(glm::vec3(60.0f, 100.0f, 100.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+	std::vector<Light> lights;
+	lights.push_back(Light(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 
 	FpsModel fpsModel = FpsModel();
 	SkyboxModel skyboxModel = SkyboxModel("Resources/skyboxDay");
 
 	Model model = Model("Resources/TestScene/Mesh.obj");
+	Model barrel = Model("Resources/Crate/crate.obj");
+	Model barrel2 = Model("Resources/Crate/crate.obj");
+	Texture skyboxTexture = Loader::loadCubeMap("Resources/skyboxDay");
+	// skyboxTexture = Loader::createEmptyCubeMap();
+	barrel2.setCubeMap(skyboxTexture);
 	// Model physicsCubeGround = Model("Resources/CollisionTest/100x10x100_box.obj");
 	// Model physicsCubeDynamic = Model("Resources/CollisionTest/10x10x10_box.obj");
 
@@ -137,6 +143,7 @@ int main()
 
 	// temp vars
 	unsigned int mirrorMeshID = 2;
+	float yRot = 0.0f;
 
 	spdlog::debug("Starting main loop");
 	while (!glfwWindowShouldClose(DisplayManager::window) && !glfwGetKey(DisplayManager::window, GLFW_KEY_ESCAPE))
@@ -180,6 +187,14 @@ int main()
 
 		bsdfShader.stop();
 
+		reflectionShader.start();
+		glm::mat4 barrelTransformationMatrix;
+		Maths::createTransformationMatrix(barrelTransformationMatrix, glm::vec3(-4.25f, 0.85f, 4.5f), 0.0f, yRot, 0.0f, 1.0f);
+		barrel.draw(reflectionShader, barrelTransformationMatrix, lights);
+		Maths::createTransformationMatrix(barrelTransformationMatrix, glm::vec3(-4.25f, 1.9f, 4.5f), 0.0f, yRot, 0.0f, 1.0f);
+		barrel2.draw(reflectionShader, barrelTransformationMatrix, lights);
+		reflectionShader.stop();
+
 		model.meshes[mirrorMeshID].textures[0].ID = tempTexture;
 
 		// Skybox Shader Cycle
@@ -197,6 +212,12 @@ int main()
 
 		// Show Display Buffer
 		DisplayManager::updateDisplay();
+
+		yRot += DisplayManager::getFrameDelta() * 16.0f;
+		if (yRot > 360.0f)
+		{
+			yRot -= 360.0f;
+		}
 	}
 
 	fbo.destroy();

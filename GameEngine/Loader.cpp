@@ -324,7 +324,7 @@ Texture Loader::loadCubeMap(const std::string& path)
 
 		Texture texture;
 		texture.ID = textureID;
-		texture.Type = "cubeMap";
+		texture.Type = "texture_cubeMap";
 		texture.Path = path;
 
 		Loader::textures.insert(std::pair(path, texture));
@@ -333,6 +333,41 @@ Texture Loader::loadCubeMap(const std::string& path)
 	}
 	else
 		return Loader::textures[path];
+}
+
+Texture Loader::createEmptyCubeMap()
+{
+	if (Loader::textures.count("empty_cubemap") == 0)
+	{
+		GLuint textureID;
+		glCall(glGenTextures, 1, &textureID);
+		glCall(glBindTexture, GL_TEXTURE_CUBE_MAP, textureID);
+
+		std::vector<GLubyte> empty(4, 0);
+		glCall(glTexImage2D, GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGB, 1, 1, 0, GL_BGRA, GL_UNSIGNED_BYTE, &empty);
+		glCall(glTexImage2D, GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1, 0, GL_RGB, 1, 1, 0, GL_BGRA, GL_UNSIGNED_BYTE, &empty);
+		glCall(glTexImage2D, GL_TEXTURE_CUBE_MAP_POSITIVE_X + 2, 0, GL_RGB, 1, 1, 0, GL_BGRA, GL_UNSIGNED_BYTE, &empty);
+		glCall(glTexImage2D, GL_TEXTURE_CUBE_MAP_POSITIVE_X + 3, 0, GL_RGB, 1, 1, 0, GL_BGRA, GL_UNSIGNED_BYTE, &empty);
+		glCall(glTexImage2D, GL_TEXTURE_CUBE_MAP_POSITIVE_X + 4, 0, GL_RGB, 1, 1, 0, GL_BGRA, GL_UNSIGNED_BYTE, &empty);
+		glCall(glTexImage2D, GL_TEXTURE_CUBE_MAP_POSITIVE_X + 5, 0, GL_RGB, 1, 1, 0, GL_BGRA, GL_UNSIGNED_BYTE, &empty);
+
+		glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glCall(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+		Texture texture;
+		texture.ID = textureID;
+		texture.Type = "texture_cubeMap";
+		texture.Path = "empty_cubemap";
+
+		Loader::textures.insert(std::pair("empty_cubemap", texture));
+
+		return texture;
+	}
+	else
+		return Loader::textures["empty_cubemap"];
 }
 
 Texture Loader::loadTextureFromPath(const std::string& path, const std::string& directory, const std::string& type, bool gamma)

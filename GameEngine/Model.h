@@ -33,7 +33,11 @@ public:
 
 	Model(const std::string& path, bool gamma = false);
 
-	void draw(Shader shader, glm::mat4 transformationMatrix);
+	void draw(Shader shader, const glm::mat4& transformationMatrix);
 
-	void draw(BSDFShader shader, glm::mat4 transformationMatrix);
+	void draw(BSDFShader shader, const glm::mat4& transformationMatrix);
+
+	void draw(ReflectionShader shader, const glm::mat4& transformationMatrix, const std::vector<Light>& lights);
+
+	void setCubeMap(Texture cubeMapTexture);
 };

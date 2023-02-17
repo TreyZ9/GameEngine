@@ -37,6 +37,8 @@ struct Loader
 
 	static Texture loadCubeMap(const std::string& path);
 
+	static Texture createEmptyCubeMap();
+
 	static Texture loadTextureFromPath(const std::string& path, const std::string& directory, const std::string& type, bool gamma = false);
 
 	template <typename dataType> static void storeDataInAttributeList(GLuint attributeNumber, GLuint coordinateSize, std::vector<dataType> data);

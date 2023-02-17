@@ -47,6 +47,7 @@ void Mesh::bindTextures(GLuint programID)
 		{"texture_cubeMap", 0}
 	});
 
+	bool cubeMapBound = false;
 	for (unsigned int i = 0; i < this->textures.size(); i++)
 	{
 		glCall(glActiveTexture, GL_TEXTURE0 + i);
@@ -56,9 +57,23 @@ void Mesh::bindTextures(GLuint programID)
 
 		glCall(glUniform1i, glGetUniformLocation(programID, (name + number).c_str()), i);
 		if (name == "texture_cubeMap")
+		{
 			glCall(glBindTexture, GL_TEXTURE_CUBE_MAP, textures[i].ID);
+			cubeMapBound = true;
+		}
 		else
+		{
 			glCall(glBindTexture, GL_TEXTURE_2D, textures[i].ID);
+		}
+
+		// bind empty cubemap if none exists
+		if (!cubeMapBound && i == this->textures.size() - 1)
+		{
+			Texture empty = Loader::createEmptyCubeMap();
+			glCall(glActiveTexture, GL_TEXTURE0 + i + 1);
+			glCall(glUniform1i, glGetUniformLocation(programID, "texture_cubeMap0"), i + 1);
+			glCall(glBindTexture, GL_TEXTURE_CUBE_MAP, empty.ID);
+		}
 	}
 
 	for (const auto& [name, amount] : textureCount)
@@ -69,7 +84,7 @@ void Mesh::bindTextures(GLuint programID)
 	}
 }
 
-void Mesh::draw(Shader shader, glm::mat4 transformationMatrix)
+void Mesh::draw(Shader shader, const glm::mat4& transformationMatrix)
 {
 	this->bindTextures(shader.getProgramID());
 
@@ -84,7 +99,7 @@ void Mesh::draw(Shader shader, glm::mat4 transformationMatrix)
 	glCall(glActiveTexture, GL_TEXTURE0);
 }
 
-void Mesh::draw(BSDFShader shader, glm::mat4 transformationMatrix)
+void Mesh::draw(BSDFShader shader, const glm::mat4& transformationMatrix)
 {
 	this->bindTextures(shader.getProgramID());
 	
@@ -98,4 +113,36 @@ void Mesh::draw(BSDFShader shader, glm::mat4 transformationMatrix)
 	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
 	glCall(glBindVertexArray, 0);
 	glCall(glActiveTexture, GL_TEXTURE0);
+}
+
+void Mesh::draw(ReflectionShader shader, const glm::mat4& transformationMatrix, const std::vector<Light>& lights)
+{
+	this->bindTextures(shader.getProgramID());
+
+	shader.loadMaterialInfo(this->mat);
+	shader.loadTransformationMatrix(transformationMatrix);
+	shader.loadProjectionMatrix(DisplayManager::getProjectionMatrix());
+	shader.loadViewMatrix();
+
+	shader.loadLights(lights);
+	shader.loadCameraPosition();
+
+	glCall(glBindVertexArray, this->vao);
+	glCall(glBindBufferRange, GL_UNIFORM_BUFFER, 0, this->uniformBlockIndex, 0, sizeof(Material));
+	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
+	glCall(glBindVertexArray, 0);
+	glCall(glActiveTexture, GL_TEXTURE0);
+}
+
+void Mesh::setCubeMap(Texture cubeMapTexture)
+{
+	for (Texture& texture : this->textures)
+	{
+		if (texture.Type == "texture_cubeMap")
+		{
+			texture.ID = cubeMapTexture.ID;
+			return;
+		}
+	}
+	this->textures.push_back(cubeMapTexture);
 }

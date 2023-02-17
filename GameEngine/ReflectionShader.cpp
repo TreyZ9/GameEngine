@@ -1,8 +1,11 @@
 
 #include "ReflectionShader.h"
 
+#include "OpenGLFunctions.h"
 #include "Camera.h"
 #include "Maths.h"
+
+#include <vector>
 
 ReflectionShader::ReflectionShader(std::string vertexShaderFilename, std::string fragmentShaderFilename) : ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename)
 {
@@ -23,21 +26,30 @@ void ReflectionShader::getAllUniformLocations()
 	this->location_transformationMatrix = this->getUniformLocation("transformationMatrix");
 	this->location_projectionMatrix = this->getUniformLocation("projectionMatrix");
 	this->location_viewMatrix = this->getUniformLocation("viewMatrix");
-	this->location_lightPosition = this->getUniformLocation("lightPosition");
-	this->location_lightColor = this->getUniformLocation("lightColor");
-	this->location_gamma = this->getUniformLocation("gamma");
+	this->location_materialKa = this->getUniformLocation("materialKa");
+	this->location_materialKd = this->getUniformLocation("materialKd");
+	this->location_materialKs = this->getUniformLocation("materialKs");
+	this->location_materialKe = this->getUniformLocation("materialKe");
+	this->location_materialNi = this->getUniformLocation("materialNi");
+	this->location_materialD = this->getUniformLocation("materialD");
+	this->location_materialIllum = this->getUniformLocation("materialIllum");
 	this->location_cameraPosition = this->getUniformLocation("cameraPosition");
-	this->location_useSpecularMap = this->getUniformLocation("useSpecularMap");
+
+	for (int i = 0; i < this->MAX_LIGHTS; i++)
+	{
+		this->location_lightPositions[i] = this->getUniformLocation("lightPositions[" + std::to_string(i) + "]");
+		this->location_lightColors[i] = this->getUniformLocation("lightColors[" + std::to_string(i) + "]");
+	}
 }
 
-void ReflectionShader::loadTransformationMatrix(glm::mat4 matrix) 
-{ 
-	this->loadMat4(this->location_transformationMatrix, matrix); 
+void ReflectionShader::loadTransformationMatrix(glm::mat4 matrix)
+{
+	this->loadMat4(this->location_transformationMatrix, matrix);
 }
 
-void ReflectionShader::loadProjectionMatrix(glm::mat4 matrix) 
-{ 
-	this->loadMat4(this->location_projectionMatrix, matrix); 
+void ReflectionShader::loadProjectionMatrix(glm::mat4 matrix)
+{
+	this->loadMat4(this->location_projectionMatrix, matrix);
 }
 
 void ReflectionShader::loadViewMatrix()
@@ -45,24 +57,27 @@ void ReflectionShader::loadViewMatrix()
 	this->loadMat4(this->location_viewMatrix, Camera::viewMatrix);
 }
 
-void ReflectionShader::loadLight(Light light)
+void ReflectionShader::loadMaterialInfo(Material mat)
 {
-	this->loadVec3(this->location_lightPosition, light.position);
-	this->loadVec3(this->location_lightColor, light.color);
+	this->loadVec3(this->location_materialKa, mat.Ka);
+	this->loadVec3(this->location_materialKd, mat.Kd);
+	this->loadVec3(this->location_materialKs, mat.Ks);
+	this->loadVec3(this->location_materialKe, mat.Ke);
+	this->loadFloat(this->location_materialNi, mat.Ni);
+	this->loadFloat(this->location_materialD, mat.d);
+	this->loadInt(this->location_materialIllum, mat.illum);
 }
 
-void ReflectionShader::loadGamma(float gamma)
+void ReflectionShader::loadLights(std::vector<Light> lights)
 {
-	this->loadFloat(this->location_gamma, gamma);
+	for (int i = 0; i < lights.size() && i < 4; i++)
+	{
+		this->loadVec3(this->location_lightPositions[i], lights[i].position);
+		this->loadVec3(this->location_lightColors[i], lights[i].color);
+	}
 }
 
-void ReflectionShader::setUseSpecularMap(bool useSpecularMap)
+void ReflectionShader::loadCameraPosition()
 {
-	this->loadBoolean(this->location_useSpecularMap, useSpecularMap);
+	this->loadVec3(this->location_cameraPosition, Camera::position);
 }
-
-void ReflectionShader::loadCameraPosition(glm::vec3 cameraPosition) 
-{ 
-	this->loadVec3(this->location_cameraPosition, cameraPosition); 
-}
-
