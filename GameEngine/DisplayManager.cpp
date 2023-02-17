@@ -8,7 +8,7 @@
 
 
 // ---------- Display ----------
-Display::Display(const unsigned int width, const unsigned int height, const std::string& title)
+Display::Display(const unsigned int width, const unsigned int height, const std::string& title, GLFWwindow* parentWindow)
 {
 	this->setResolution(width, height);
 
@@ -18,7 +18,7 @@ Display::Display(const unsigned int width, const unsigned int height, const std:
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_REFRESH_RATE, 60);
 
-	GLFWwindow* window = glfwCreateWindow(this->resolution.x, this->resolution.y, title.c_str(), NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(this->resolution.x, this->resolution.y, title.c_str(), NULL, parentWindow);
 	if (window == NULL)
 	{
 		spdlog::error("Failed to create GLFW window with size {:d}x{:d}", this->resolution.x, this->resolution.y);
@@ -76,14 +76,14 @@ void Display::showCursor()
 	glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
+glm::mat4 Display::getProjectionMatrix() const
+{
+	return this->projectionMatrix;
+}
+
 glm::ivec2 Display::getResolution() const
 {
 	return this->resolution;
-}
-
-double Display::getFrameDelta() const
-{
-	return this->frameDelta;
 }
 
 GLFWwindow* Display::getWindow() const
@@ -91,9 +91,9 @@ GLFWwindow* Display::getWindow() const
 	return this->window;
 }
 
-glm::mat4 Display::getProjectionMatrix() const
+double Display::getFrameDelta() const
 {
-	return this->projectionMatrix;
+	return this->frameDelta;
 }
 
 void Display::setResolution(const unsigned int width, const unsigned int height)

@@ -66,6 +66,7 @@ int main()
 	Source source2 = Source("Resources/audio/heavy.wav");
 
 	Display display = Display(1280, 720, "OpenGL Game Engine");
+	// Display display2 = Display(1280, 720, "Second Window", display.getWindow());
 
 	BSDFShader bsdfShader = BSDFShader(
 		"Shaders/BSDFShader/bsdfShader.vert",
@@ -136,6 +137,8 @@ int main()
 	spdlog::debug("Starting main loop");
 	while (!glfwWindowShouldClose(display.getWindow()) && !glfwGetKey(display.getWindow(), GLFW_KEY_ESCAPE))
 	{
+		glfwMakeContextCurrent(display.getWindow());
+
 		if (glfwGetKey(display.getWindow(), GLFW_KEY_0))
 			source2.play();
 		source2.setPosition(Camera::position);
@@ -163,9 +166,6 @@ int main()
 		// Shader Cycle
 		GLuint tempTexture = model.meshes[mirrorMeshID].textures[0].ID;
 		model.meshes[mirrorMeshID].textures[0].ID = fbo.textureColorID;
-
-		glCall(glViewport, 0, 0, display.getResolution().x, display.getResolution().y);
-		spdlog::info("{} {}", display.getResolution().x, display.getResolution().y);
 
 		// ------------------------------
 		// BSDF Shader
@@ -210,6 +210,10 @@ int main()
 
 		// Show Display Buffer
 		display.update();
+
+		//glfwMakeContextCurrent(display2.getWindow());
+		// display2.clear();
+		//display2.update();
 
 		yRot += display.getFrameDelta() * 16.0f;
 		if (yRot > 360.0f)

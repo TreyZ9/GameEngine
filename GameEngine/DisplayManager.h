@@ -20,7 +20,7 @@ private:
 	GLFWwindow* window;
 
 public:
-	Display(const unsigned int width, const unsigned int height, const std::string& title);
+	Display(const unsigned int width, const unsigned int height, const std::string& title, GLFWwindow* parentWindow = NULL);
 	~Display();
 
 	void update();
@@ -29,10 +29,10 @@ public:
 	void hideCursor();
 	void showCursor();
 
-	glm::ivec2 getResolution() const;
-	double getFrameDelta() const;
-	GLFWwindow* getWindow() const;
 	glm::mat4 getProjectionMatrix() const;
+	glm::ivec2 getResolution() const;
+	GLFWwindow* getWindow() const;
+	double getFrameDelta() const;
 
 	void setResolution(const unsigned int width, const unsigned int height);
 };
