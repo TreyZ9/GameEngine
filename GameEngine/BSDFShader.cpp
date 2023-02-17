@@ -4,7 +4,7 @@
 #include "Camera.h"
 #include "Maths.h"
 
-BSDFShader::BSDFShader(std::string vertexShaderFilename, std::string fragmentShaderFilename) : ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename)
+BSDFShader::BSDFShader(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename) : ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename)
 {
 	this->getAllUniformLocations();
 }
@@ -32,12 +32,12 @@ void BSDFShader::getAllUniformLocations()
 	this->location_materialIllum = this->getUniformLocation("materialIllum");
 }
 
-void BSDFShader::loadTransformationMatrix(glm::mat4 matrix)
+void BSDFShader::loadTransformationMatrix(const glm::mat4& matrix)
 {
 	this->loadMat4(this->location_transformationMatrix, matrix);
 }
 
-void BSDFShader::loadProjectionMatrix(glm::mat4 matrix)
+void BSDFShader::loadProjectionMatrix(const glm::mat4 matrix)
 {
 	this->loadMat4(this->location_projectionMatrix, matrix);
 }
@@ -47,7 +47,7 @@ void BSDFShader::loadViewMatrix()
 	this->loadMat4(this->location_viewMatrix, Camera::viewMatrix);
 }
 
-void BSDFShader::loadMaterialInfo(Material mat)
+void BSDFShader::loadMaterialInfo(const Material& mat)
 {
 	this->loadVec3(this->location_materialKa, mat.Ka);
 	this->loadVec3(this->location_materialKd, mat.Kd);

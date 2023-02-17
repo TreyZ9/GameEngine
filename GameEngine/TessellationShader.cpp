@@ -4,8 +4,8 @@
 #include "Camera.h"
 #include "Maths.h"
 
-TessellationShader::TessellationShader(std::string vertexShaderFilename, std::string fragmentShaderFilename,
-	std::string tessellationControlFilename, std::string tessellationEvaluationFilename, std::string geometryFilename)
+TessellationShader::TessellationShader(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename,
+	const std::string& tessellationControlFilename, const std::string& tessellationEvaluationFilename, const std::string& geometryFilename)
 	: ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename, tessellationControlFilename,
 		tessellationEvaluationFilename, geometryFilename) 
 {
@@ -33,12 +33,12 @@ void TessellationShader::getAllUniformLocations()
 	this->location_blackPoint = this->getUniformLocation("blackPoint");
 }
 
-void TessellationShader::loadTransformationMatrix(glm::mat4 matrix) 
+void TessellationShader::loadTransformationMatrix(const glm::mat4& matrix)
 { 
 	this->loadMat4(this->location_transformationMatrix, matrix); 
 }
 
-void TessellationShader::loadProjectionMatrix(glm::mat4 matrix) 
+void TessellationShader::loadProjectionMatrix(const glm::mat4& matrix)
 { 
 	this->loadMat4(this->location_projectionMatrix, matrix); 
 }
@@ -50,12 +50,12 @@ void TessellationShader::loadViewMatrix()
 	this->loadMat4(this->location_viewMatrix, view);
 }
 
-void TessellationShader::loadCameraPosition(glm::vec3 pos) 
+void TessellationShader::loadCameraPosition(const glm::vec3& pos)
 { 
 	this->loadVec3(this->location_eyePos, pos); 
 }
 
-void TessellationShader::loadLight(Light light) 
+void TessellationShader::loadLight(const Light& light)
 {
 	this->loadVec3(this->location_lightPosition, light.position);
 	this->loadVec3(this->location_lightColor, light.color);

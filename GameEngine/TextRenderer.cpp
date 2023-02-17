@@ -196,7 +196,7 @@ std::vector<std::string> TextRenderer::splitString(const std::string& text, cons
 	return elements;
 }
 
-void TextRenderer::drawText(const std::string& text, const glm::vec2& pos, const glm::vec2& scale, std::string alignment, std::string origin)
+void TextRenderer::drawText(const std::string& text, const glm::vec2& pos, const glm::vec2& scale, const std::string& alignment, const std::string& origin)
 {
 	// bind vao and texture atlas
 	glCall(glActiveTexture, GL_TEXTURE0);

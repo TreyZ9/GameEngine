@@ -4,7 +4,7 @@
 
 struct Maths 
 {
-	static void createTransformationMatrix(glm::mat4& mat, glm::vec3 translation, float rx, float ry, float rz, float scale);
+	static void createTransformationMatrix(glm::mat4& mat, const glm::vec3& translation, const float rx, const float ry, const float rz, const float scale);
 
 	static void createViewMatrix(glm::mat4& mat);
 

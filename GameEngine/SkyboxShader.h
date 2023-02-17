@@ -14,7 +14,7 @@ public:
 
 	SkyboxShader() = default;
 
-	SkyboxShader(std::string vertexShaderFilename, std::string fragmentShaderFilename);
+	SkyboxShader(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename);
 
 	~SkyboxShader() = default;
 
@@ -22,8 +22,8 @@ public:
 
 	void getAllUniformLocations();
 
-	void loadProjectionMatrix(glm::mat4);
+	void loadProjectionMatrix(const glm::mat4& matrix);
 
-	void loadViewMatrix(glm::mat4 viewMatrix);
+	void loadViewMatrix(const glm::mat4& viewMatrix);
 };
 

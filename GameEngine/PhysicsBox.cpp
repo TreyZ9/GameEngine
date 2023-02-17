@@ -1,6 +1,6 @@
 #include "PhysicsBox.h"
 
-PhysicsBox::PhysicsBox(btVector3 size, btVector3 position, btScalar mass)
+PhysicsBox::PhysicsBox(const btVector3 &size, const btVector3 &position, const btScalar mass)
 {
 	this->shape = new btBoxShape(size);
 	btTransform transform;

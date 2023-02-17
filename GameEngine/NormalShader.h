@@ -21,7 +21,7 @@ public:
 
 	NormalShader() = default;
 
-	NormalShader(std::string vertexShaderFilename, std::string fragmentShaderFilename);
+	NormalShader(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename);
 
 	~NormalShader() = default;
 
@@ -29,15 +29,15 @@ public:
 
 	void getAllUniformLocations();
 
-	void loadTransformationMatrix(glm::mat4 matrix);
+	void loadTransformationMatrix(const glm::mat4& matrix);
 
-	void loadProjectionMatrix(glm::mat4);
+	void loadProjectionMatrix(const glm::mat4& matrix);
 
 	void loadViewMatrix();
 
-	void loadLight(Light light);
+	void loadLight(const Light& light);
 
-	void loadGamma(float gamma);
+	void loadGamma(const float gamma);
 
-	void loadCameraPosition(glm::vec3 cameraPositon);
+	void loadCameraPosition(const glm::vec3& cameraPositon);
 };

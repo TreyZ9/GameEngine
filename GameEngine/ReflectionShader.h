@@ -33,7 +33,7 @@ public:
 
 	ReflectionShader() = default;
 
-	ReflectionShader(std::string vertexShaderFilename, std::string fragmentShaderFilename);
+	ReflectionShader(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename);
 
 	~ReflectionShader() = default;
 
@@ -41,17 +41,17 @@ public:
 
 	void getAllUniformLocations();
 
-	void loadTransformationMatrix(glm::mat4 matrix);
+	void loadTransformationMatrix(const glm::mat4& matrix);
 
-	void loadProjectionMatrix(glm::mat4);
+	void loadProjectionMatrix(const glm::mat4& matrix);
 
 	void loadViewMatrix();
 
-	void loadMaterialInfo(Material mat);
+	void loadMaterialInfo(const Material& mat);
 
-	void loadLights(std::vector<Light> lights);
+	void loadLights(const std::vector<Light>& lights);
 
 	void loadCameraPosition();
 
-	void loadCubemap(const GLuint& textureID);
+	void loadCubemap(const GLuint textureID);
 };

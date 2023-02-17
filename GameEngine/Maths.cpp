@@ -3,7 +3,7 @@
 
 #include "Camera.h"
 
-void Maths::createTransformationMatrix(glm::mat4& mat, glm::vec3 translation, float rx, float ry, float rz, float scale) 
+void Maths::createTransformationMatrix(glm::mat4& mat, const glm::vec3& translation, const float rx, const float ry, const float rz, const float scale)
 {
 	mat = glm::mat4(1.0f);
 	mat = glm::translate(mat, translation);

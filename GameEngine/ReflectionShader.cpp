@@ -7,7 +7,8 @@
 
 #include <vector>
 
-ReflectionShader::ReflectionShader(std::string vertexShaderFilename, std::string fragmentShaderFilename) : ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename)
+ReflectionShader::ReflectionShader(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename) : 
+	ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename)
 {
 	this->getAllUniformLocations();
 }
@@ -42,12 +43,12 @@ void ReflectionShader::getAllUniformLocations()
 	}
 }
 
-void ReflectionShader::loadTransformationMatrix(glm::mat4 matrix)
+void ReflectionShader::loadTransformationMatrix(const glm::mat4& matrix)
 {
 	this->loadMat4(this->location_transformationMatrix, matrix);
 }
 
-void ReflectionShader::loadProjectionMatrix(glm::mat4 matrix)
+void ReflectionShader::loadProjectionMatrix(const glm::mat4& matrix)
 {
 	this->loadMat4(this->location_projectionMatrix, matrix);
 }
@@ -57,7 +58,7 @@ void ReflectionShader::loadViewMatrix()
 	this->loadMat4(this->location_viewMatrix, Camera::viewMatrix);
 }
 
-void ReflectionShader::loadMaterialInfo(Material mat)
+void ReflectionShader::loadMaterialInfo(const Material& mat)
 {
 	this->loadVec3(this->location_materialKa, mat.Ka);
 	this->loadVec3(this->location_materialKd, mat.Kd);
@@ -68,7 +69,7 @@ void ReflectionShader::loadMaterialInfo(Material mat)
 	this->loadInt(this->location_materialIllum, mat.illum);
 }
 
-void ReflectionShader::loadLights(std::vector<Light> lights)
+void ReflectionShader::loadLights(const std::vector<Light>& lights)
 {
 	for (int i = 0; i < lights.size() && i < 4; i++)
 	{

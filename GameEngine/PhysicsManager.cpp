@@ -40,7 +40,7 @@ void PhysicsManager::addCollisionShape(btCollisionShape* collisionShape, btRigid
 	this->dynamicsWorld->addRigidBody(body);
 }
 
-void PhysicsManager::stepSimulation(btScalar timeStep, int maxSubSteps)
+void PhysicsManager::stepSimulation(const btScalar timeStep, const int maxSubSteps)
 {
 	this->dynamicsWorld->stepSimulation(timeStep, maxSubSteps);
 }

@@ -35,7 +35,7 @@ public:
 	unsigned int uniformBlockIndex;
 	unsigned int numFaces;
 
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material mat, unsigned int numFaces);
+	Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture>& textures, const Material& mat, const unsigned int numFaces);
 
 	void draw(Shader shader, const glm::mat4& transformationMatrix);
 

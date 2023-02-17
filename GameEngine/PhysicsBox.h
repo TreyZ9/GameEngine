@@ -11,7 +11,7 @@ private:
 
 public:
 	PhysicsBox() = default;
-	PhysicsBox(btVector3 size, btVector3 position, btScalar mass);
+	PhysicsBox(const btVector3& size, const btVector3& position, const btScalar mass);
 	~PhysicsBox() = default;
 
 	btVector3 getPosition();

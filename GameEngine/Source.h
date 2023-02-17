@@ -29,9 +29,9 @@ private:
 public:
 	Source() = default;
 
-	Source(const std::string filename, glm::vec3 position = glm::vec3(0.0f), glm::vec3 velocity = glm::vec3(0.0f),
-		ALfloat pitch = 1.0f, ALfloat gain = 1.0f, ALfloat referenceDistance = 0.0f, ALfloat maxDistance = 10.0f,
-		ALfloat rolloffFactor = 1.0f, ALboolean looping = AL_FALSE);
+	Source(const std::string& filename, const glm::vec3& position = glm::vec3(0.0f), const glm::vec3& velocity = glm::vec3(0.0f),
+		const ALfloat pitch = 1.0f, const ALfloat gain = 1.0f, const ALfloat referenceDistance = 0.0f, const ALfloat maxDistance = 10.0f,
+		const ALfloat rolloffFactor = 1.0f, const ALboolean looping = AL_FALSE);
 
 	~Source();
 
@@ -41,5 +41,5 @@ public:
 
 	void stop();
 
-	void setPosition(glm::vec3 position);
+	void setPosition(const glm::vec3& position);
 };

@@ -3,7 +3,7 @@
 #include "Vertex.h"
 #include "Model.h"
 
-PhysicsMesh::PhysicsMesh(std::string filename, btVector3 position)
+PhysicsMesh::PhysicsMesh(const std::string& filename, const btVector3& position)
 {
 	Model model(filename);
 	Mesh mesh = model.meshes[0];

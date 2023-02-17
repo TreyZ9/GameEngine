@@ -19,7 +19,7 @@ public:
 	std::vector<Mesh> meshes;
 
 	PhysicsMesh() = default;
-	PhysicsMesh(std::string filename, btVector3 position);
+	PhysicsMesh(const std::string& filename, const btVector3& position);
 	~PhysicsMesh() = default;
 
 	btVector3 getPosition();

@@ -33,7 +33,7 @@ private:
 
 public:
 	Font() = default;
-	Font(const std::string& fontName, unsigned int fontQuality);
+	Font(const std::string& fontName, const unsigned int fontQuality);
 	~Font() = default;
 
 	std::array<std::array<float, 4>, 6> generateVertices(const char c, glm::vec2& cursorPos, const glm::vec2& scale);
@@ -51,7 +51,7 @@ private:
 	Font font;
 
 	std::vector<std::string> splitString(const std::string& text, const std::string& delimiter);
-	void drawText(const std::string& text, const glm::vec2& pos, const glm::vec2& scale, std::string alignment, std::string origin);
+	void drawText(const std::string& text, const glm::vec2& pos, const glm::vec2& scale, const std::string& alignment, const std::string& origin);
 
 public:
 	TextRenderer();

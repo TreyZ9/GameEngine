@@ -29,7 +29,7 @@ struct Loader
 
 	static GLuint createVAO();
 
-	static GLuint createEBO(std::vector<GLuint> indices);
+	static GLuint createEBO(const std::vector<GLuint>& indices);
 
 	static void unbindVAO();
 
@@ -39,16 +39,16 @@ struct Loader
 
 	static Texture createEmptyCubeMap();
 
-	static Texture loadTextureFromPath(const std::string& path, const std::string& directory, const std::string& type, bool gamma = false);
+	static Texture loadTextureFromPath(const std::string& path, const std::string& directory, const std::string& type, const bool gamma = false);
 
-	template <typename dataType> static void storeDataInAttributeList(GLuint attributeNumber, GLuint coordinateSize, std::vector<dataType> data);
+	template <typename dataType> static void storeDataInAttributeList(const GLuint attributeNumber, const GLuint coordinateSize, const std::vector<dataType>& data);
 
-	template <typename dataSize_t, typename offset_t> static void createAttibutePointer(GLuint attributeNumber, GLuint coordinateSize, dataSize_t dataType, offset_t offset);
+	template <typename dataSize_t, typename offset_t> static void createAttibutePointer(const GLuint attributeNumber, const GLuint coordinateSize, const dataSize_t dataType, const offset_t offset);
 
 	static void destroy();
 };
 
-template <typename dataType_t> void Loader::storeDataInAttributeList(GLuint attributeNumber, GLuint coordinateSize, std::vector<dataType_t> data)
+template <typename dataType_t> void Loader::storeDataInAttributeList(const GLuint attributeNumber, const GLuint coordinateSize, const std::vector<dataType_t>& data)
 {
 	GLuint vbo;
 	glGenBuffers(1, &vbo);
@@ -58,7 +58,7 @@ template <typename dataType_t> void Loader::storeDataInAttributeList(GLuint attr
 	glVertexAttribPointer(attributeNumber, coordinateSize, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
-template <typename dataSize_t, typename offset_t> void Loader::createAttibutePointer(GLuint attributeNumber, GLuint coordinateSize, dataSize_t dataSize, offset_t offset)
+template <typename dataSize_t, typename offset_t> void Loader::createAttibutePointer(const GLuint attributeNumber, const GLuint coordinateSize, const dataSize_t dataSize, const offset_t offset)
 {
 	glEnableVertexAttribArray(attributeNumber);
 	glVertexAttribPointer(attributeNumber, coordinateSize, GL_FLOAT, GL_FALSE, (GLsizei)dataSize, offset);

@@ -23,7 +23,7 @@ private:
 
 	Mesh processMesh(aiMesh* mesh, const aiScene* scene);
 
-	std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
+	std::vector<Texture> loadMaterialTextures(const aiMaterial* mat, const aiTextureType type, const std::string& typeName);
 
 public:
 	std::vector<Texture> texturesLoaded;
@@ -31,7 +31,7 @@ public:
 	std::string directory;
 	bool gammaCorrection;
 
-	Model(const std::string& path, bool gamma = false);
+	Model(const std::string& path, const bool gamma = false);
 
 	void draw(Shader shader, const glm::mat4& transformationMatrix);
 
@@ -39,5 +39,5 @@ public:
 
 	void draw(ReflectionShader shader, const glm::mat4& transformationMatrix, const std::vector<Light>& lights);
 
-	void setCubeMap(Texture cubeMapTexture);
+	void setCubeMap(const Texture& cubeMapTexture);
 };

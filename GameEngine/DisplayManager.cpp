@@ -13,7 +13,7 @@ double DisplayManager::frameDelta = 0.1f;
 
 GLFWwindow* DisplayManager::window;
 
-int DisplayManager::createDisplay(int width, int height) 
+int DisplayManager::createDisplay(const int width, const int height)
 {
 	DisplayManager::resolution = glm::ivec2(width, height);
 	DisplayManager::projectionMatrix = glm::perspective(

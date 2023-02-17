@@ -223,7 +223,7 @@ GLuint Loader::createVAO()
 	return vaoID;
 }
 
-GLuint Loader::createEBO(std::vector<GLuint> indices)
+GLuint Loader::createEBO(const std::vector<GLuint>& indices)
 {
 	GLuint eboID;
 	glCall(glGenBuffers, 1, &eboID);

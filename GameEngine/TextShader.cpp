@@ -1,7 +1,8 @@
 
 #include "TextShader.h"
 
-TextShader::TextShader(std::string vertexShaderFilename, std::string fragmentShaderFilename) : ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename)
+TextShader::TextShader(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename) : 
+	ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename)
 {
 	this->getAllUniformLocations();
 }
@@ -19,22 +20,22 @@ void TextShader::getAllUniformLocations()
 	this->location_textColor = this->getUniformLocation("textColor");
 }
 
-void TextShader::loadTransformationMatrix(glm::mat4 matrix)
+void TextShader::loadTransformationMatrix(const glm::mat4& matrix)
 { 
 	this->loadMat4(this->location_transformationMatrix, matrix); 
 }
 
-void TextShader::loadProjectionMatrix(glm::mat4 matrix)
+void TextShader::loadProjectionMatrix(const glm::mat4& matrix)
 {
 	this->loadMat4(this->location_projectionMatrix, matrix);
 }
 
-void TextShader::loadViewMatrix(glm::mat4 matrix)
+void TextShader::loadViewMatrix(const glm::mat4& matrix)
 {
 	this->loadMat4(this->location_viewMatrix, matrix);
 }
 
-void TextShader::loadTextColor(glm::vec3 color)
+void TextShader::loadTextColor(const glm::vec3& color)
 {
 	this->loadVec3(this->location_textColor, color);
 }

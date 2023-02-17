@@ -4,7 +4,8 @@
 #include "Camera.h"
 #include "Maths.h"
 
-Shader::Shader(std::string vertexShaderFilename, std::string fragmentShaderFilename) : ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename)
+Shader::Shader(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename) : 
+	ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename)
 {
 	this->getAllUniformLocations();
 }
@@ -25,12 +26,12 @@ void Shader::getAllUniformLocations()
 	this->location_viewMatrix = this->getUniformLocation("viewMatrix");
 }
 
-void Shader::loadTransformationMatrix(glm::mat4 matrix) 
+void Shader::loadTransformationMatrix(const glm::mat4& matrix)
 { 
 	this->loadMat4(this->location_transformationMatrix, matrix); 
 }
 
-void Shader::loadProjectionMatrix(glm::mat4 matrix) 
+void Shader::loadProjectionMatrix(const glm::mat4& matrix)
 { 
 	this->loadMat4(this->location_projectionMatrix, matrix); 
 }

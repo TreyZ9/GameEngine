@@ -6,7 +6,7 @@
 #include "Camera.h"
 #include "Maths.h"
 
-Listener::Listener(glm::vec3 position, ALenum distanceModel) : 
+Listener::Listener(const glm::vec3& position, const ALenum distanceModel) : 
 	position(position), distanceModel(distanceModel)
 {
 	this->device = alcOpenDevice(nullptr);

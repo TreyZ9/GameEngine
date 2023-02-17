@@ -4,7 +4,8 @@
 #include "Camera.h"
 #include "Maths.h"
 
-SkyboxShader::SkyboxShader(std::string vertexShaderFilename, std::string fragmentShaderFilename) : ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename)
+SkyboxShader::SkyboxShader(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename) : 
+	ShaderProgram::ShaderProgram(vertexShaderFilename, fragmentShaderFilename)
 {
 	this->getAllUniformLocations();
 }
@@ -20,12 +21,12 @@ void SkyboxShader::getAllUniformLocations()
 	this->location_viewMatrix = this->getUniformLocation("viewMatrix");
 }
 
-void SkyboxShader::loadProjectionMatrix(glm::mat4 matrix) 
+void SkyboxShader::loadProjectionMatrix(const glm::mat4& matrix)
 { 
 	this->loadMat4(this->location_projectionMatrix, matrix); 
 }
 
-void SkyboxShader::loadViewMatrix(glm::mat4 viewMatrix) 
+void SkyboxShader::loadViewMatrix(const glm::mat4& viewMatrix)
 {
 	this->loadMat4(this->location_viewMatrix, viewMatrix);
 }

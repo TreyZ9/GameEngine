@@ -6,7 +6,7 @@
 
 #include "OpenGLFunctions.h"
 
-Model::Model(const std::string& path, bool gamma) : gammaCorrection(gamma)
+Model::Model(const std::string& path, const bool gamma) : gammaCorrection(gamma)
 {
 	this->loadModel(path);
 }
@@ -151,7 +151,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	return Mesh(vertices, indices, textures, mat, mesh->mNumFaces);
 }
 
-std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
+std::vector<Texture> Model::loadMaterialTextures(const aiMaterial* mat, const aiTextureType type, const std::string& typeName)
 {
 	std::vector<Texture> textures;
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
@@ -181,7 +181,7 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType 
 	return textures;
 }
 
-void Model::setCubeMap(Texture cubeMapTexture)
+void Model::setCubeMap(const Texture& cubeMapTexture)
 {
 	for (Mesh& mesh : this->meshes)
 	{

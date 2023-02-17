@@ -12,8 +12,8 @@
 struct SkyboxModel
 {
 private:
-	float size = 500.0f;
-	std::vector<float> vertices = {
+	const float size = 500.0f;
+	const std::vector<float> vertices = {
 		-size, size, -size,
 		-size, -size, -size,
 		size, -size, -size,

@@ -17,7 +17,7 @@ public:
 
 	TextShader() = default;
 
-	TextShader(std::string vertexShaderFilename, std::string fragmentShaderFilename);
+	TextShader(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename);
 
 	~TextShader() = default;
 
@@ -25,11 +25,11 @@ public:
 
 	void getAllUniformLocations();
 
-	void loadTransformationMatrix(glm::mat4 matrix);
+	void loadTransformationMatrix(const glm::mat4& matrix);
 
-	void loadProjectionMatrix(glm::mat4 matrix);
+	void loadProjectionMatrix(const glm::mat4& matrix);
 
-	void loadViewMatrix(glm::mat4 matrix);
+	void loadViewMatrix(const glm::mat4& matrix);
 
-	void loadTextColor(glm::vec3 color);
+	void loadTextColor(const glm::vec3& color);
 };

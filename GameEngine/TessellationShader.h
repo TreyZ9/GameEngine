@@ -18,9 +18,9 @@ public:
 
 	TessellationShader() = default;
 
-	TessellationShader(std::string vertexShaderFilename, std::string fragmentShaderFilename, 
-		std::string tessellationControlFilename, std::string tessellationEvaluationFilename,
-		std::string geometryFilename = "null");
+	TessellationShader(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename,
+		const std::string& tessellationControlFilename, const std::string& tessellationEvaluationFilename,
+		const std::string& geometryFilename = "null");
 
 	~TessellationShader() = default;
 
@@ -28,17 +28,17 @@ public:
 
 	void getAllUniformLocations();
 
-	void loadTransformationMatrix(glm::mat4 matrix);
+	void loadTransformationMatrix(const glm::mat4& matrix);
 
-	void loadProjectionMatrix(glm::mat4);
+	void loadProjectionMatrix(const glm::mat4& matrix);
 
 	void loadViewMatrix();
 
-	void loadCameraPosition(glm::vec3 pos);
+	void loadCameraPosition(const glm::vec3& pos);
 
-	void loadLight(Light light);
+	void loadLight(const Light& light);
 
-	void loadGamma(float gamma);
+	void loadGamma(const float gamma);
 
-	void loadBlackPoint(float blackPoint);
+	void loadBlackPoint(const float blackPoint);
 };

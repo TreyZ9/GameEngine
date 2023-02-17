@@ -16,7 +16,7 @@ private:
 public:
 	static GLFWwindow* window;
 
-	static int createDisplay(int width, int height);
+	static int createDisplay(const int width, const int height);
 	static void closeDisplay();
 	static void updateDisplay();
 	static void clearScreenBuffer();

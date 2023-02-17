@@ -20,7 +20,7 @@ public:
 
 	BSDFShader() = default;
 
-	BSDFShader(std::string vertexShaderFilename, std::string fragmentShaderFilename);
+	BSDFShader(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename);
 
 	~BSDFShader() = default;
 
@@ -28,11 +28,11 @@ public:
 
 	void getAllUniformLocations();
 
-	void loadTransformationMatrix(glm::mat4 matrix);
+	void loadTransformationMatrix(const glm::mat4& matrix);
 
-	void loadProjectionMatrix(glm::mat4);
+	void loadProjectionMatrix(const glm::mat4 matrix);
 
 	void loadViewMatrix();
 
-	void loadMaterialInfo(Material mat);
+	void loadMaterialInfo(const Material& mat);
 };

@@ -12,7 +12,8 @@
 
 #include "OpenGLFunctions.h"
 
-ShaderProgram::ShaderProgram(std::string vertexFilename, std::string fragmentFilename, std::string tessellationControlFilename, std::string tessellationEvaluationFilename, std::string geometryFilename)
+ShaderProgram::ShaderProgram(const std::string& vertexFilename, const std::string& fragmentFilename, const std::string& tessellationControlFilename, 
+	const std::string& tessellationEvaluationFilename, const std::string& geometryFilename)
 {
 	this->vertexShaderID = this->loadShader(vertexFilename, GL_VERTEX_SHADER);
 	this->fragmentShaderID = this->loadShader(fragmentFilename, GL_FRAGMENT_SHADER);
@@ -67,27 +68,27 @@ ShaderProgram::ShaderProgram(std::string vertexFilename, std::string fragmentFil
 	this->getAllUniformLocations();
 }
 
-int ShaderProgram::getUniformLocation(std::string uniformName) 
+int ShaderProgram::getUniformLocation(const std::string& uniformName)
 { 
 	return glCall(glGetUniformLocation, this->programID, uniformName.c_str()); 
 }
 
-void ShaderProgram::loadFloat(int location, float value) 
+void ShaderProgram::loadFloat(const int location, const float value)
 { 
 	glCall(glUniform1f, location, value); 
 }
 
-void ShaderProgram::loadInt(int location, int value) 
+void ShaderProgram::loadInt(const int location, const int value)
 { 
 	glCall(glUniform1i, location, value); 
 }
 
-void ShaderProgram::loadVec3(int location, glm::vec3 vector) 
+void ShaderProgram::loadVec3(const int location, const glm::vec3& vector)
 { 
 	glCall(glUniform3f, location, vector.x, vector.y, vector.z); 
 }
 
-void ShaderProgram::loadBoolean(int location, bool value) 
+void ShaderProgram::loadBoolean(const int location, const bool value)
 {
 	if (value)
 	{
@@ -99,7 +100,7 @@ void ShaderProgram::loadBoolean(int location, bool value)
 	}
 }
 
-void ShaderProgram::loadMat4(int location, const glm::mat4& matrix)
+void ShaderProgram::loadMat4(const int location, const glm::mat4& matrix)
 { 
 	glCall(glUniformMatrix4fv, location, 1, GL_FALSE, &matrix[0][0]); 
 }
@@ -123,12 +124,12 @@ void ShaderProgram::stop()
 	glCall(glUseProgram, 0); 
 }
 
-void ShaderProgram::bindAttribute(int attribute, std::string variableName) 
+void ShaderProgram::bindAttribute(const int attribute, const std::string& variableName)
 { 
 	glCall(glBindAttribLocation, this->programID, attribute, variableName.c_str()); 
 }
 
-int ShaderProgram::loadShader(std::string filename, int type) 
+int ShaderProgram::loadShader(const std::string& filename, const int type)
 {
 	std::string data;
 	std::ifstream dataFile;

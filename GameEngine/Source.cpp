@@ -5,8 +5,9 @@
 #include "OpenALFunctions.h"
 #include "Loader.h"
 
-Source::Source(const std::string filename, glm::vec3 position, glm::vec3 velocity, ALfloat pitch, ALfloat gain,
-	ALfloat referenceDistance, ALfloat maxDistance, ALfloat rolloffFactor, ALboolean looping) :
+Source::Source(const std::string& filename, const glm::vec3& position, const glm::vec3& velocity,
+	const ALfloat pitch, const ALfloat gain, const ALfloat referenceDistance, const ALfloat maxDistance,
+	const ALfloat rolloffFactor, const ALboolean looping) :
 	position(position), velocity(velocity), pitch(pitch), gain(gain), referenceDistance(referenceDistance),
 	maxDistance(maxDistance), rolloffFactor(rolloffFactor), looping(looping)
 {
@@ -79,7 +80,7 @@ void Source::stop()
 	alCall(alSourceStop, this->id);
 }
 
-void Source::setPosition(glm::vec3 position)
+void Source::setPosition(const glm::vec3& position)
 {
 	this->position = position;
 	alCall(alSource3f, this->id, AL_POSITION, this->position.x, this->position.y, this->position.z);

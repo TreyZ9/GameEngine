@@ -11,7 +11,7 @@ public:
 
 	Shader() = default;
 
-	Shader(std::string vertexShaderFilename, std::string fragmentShaderFilename);
+	Shader(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename);
 
 	~Shader() = default;
 
@@ -19,9 +19,9 @@ public:
 
 	void getAllUniformLocations();
 
-	void loadTransformationMatrix(glm::mat4 matrix);
+	void loadTransformationMatrix(const glm::mat4& matrix);
 
-	void loadProjectionMatrix(glm::mat4);
+	void loadProjectionMatrix(const glm::mat4& matrix);
 
 	void loadViewMatrix();
 };

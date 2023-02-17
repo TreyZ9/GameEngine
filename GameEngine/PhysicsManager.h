@@ -18,7 +18,7 @@ public:
 	~PhysicsManager();
 
 	void addCollisionShape(btCollisionShape* collisionShape, btRigidBody* body);
-	void stepSimulation(btScalar timeStep, int maxSubSteps = 10);
+	void stepSimulation(const btScalar timeStep, const int maxSubSteps = 10);
 
 	btDiscreteDynamicsWorld* getDyanmicsWorld();
 };
