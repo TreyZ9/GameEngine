@@ -18,6 +18,9 @@
 
 #include "stb_image.h"
 
+// STD
+#include <format>
+
 // Headers
 #include "TessellationShader.h"
 #include "FrameBufferObject.h"
@@ -25,6 +28,7 @@
 #include "OpenALFunctions.h"
 #include "OpenGLFunctions.h"
 #include "DisplayManager.h"
+#include "StatsTracker.h"
 #include "NormalShader.h"
 #include "SkyboxShader.h"
 #include "TextRenderer.h"
@@ -32,7 +36,6 @@
 #include "PhysicsMesh.h"
 #include "BSDFShader.h"
 #include "TextShader.h"
-#include "FpsModel.h"
 #include "Listener.h"
 #include "Texture.h"
 #include "Source.h"
@@ -59,6 +62,7 @@ int main()
 
 	// Loader::loadSceneJSON("Resources/TestScene/test.json");
 	Config::loadConfigs("Settings/settings.ini");
+	StatsTracker statsTracker = StatsTracker();
 
 	Listener listener = Listener();
 
@@ -89,7 +93,6 @@ int main()
 	std::vector<Light> lights;
 	lights.push_back(Light(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
 
-	FpsModel fpsModel = FpsModel();
 	SkyboxModel skyboxModel = SkyboxModel("Resources/skyboxDay");
 
 	Model model = Model("Resources/TestScene/Mesh.obj");
@@ -205,8 +208,11 @@ int main()
 		// FPS Shader Cycle
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		fpsModel.update(display);
-		fpsModel.render(display, textShader, textRenderer);
+		//fpsModel.update(display);
+		//fpsModel.render(display, textShader, textRenderer);
+		statsTracker.update(display.getFrameDelta());
+		textRenderer.drawTextOnHUD(display, textShader, std::format("FPS:{:d}", statsTracker.getFps()),
+			display.getResolution(), glm::vec2(30.0f), glm::vec3(0.0f, 1.0f, 0.0f), Align::right, Origin::topRight);
 
 		// Show Display Buffer
 		display.update();

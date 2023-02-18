@@ -140,7 +140,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="DisplayManager.h" />
-    <ClInclude Include="FpsModel.h" />
+    <ClInclude Include="StatsTracker.h" />
     <ClInclude Include="TextShader.h" />
     <ClInclude Include="FrameBufferObject.h" />
     <ClInclude Include="INIReader.h" />
@@ -175,7 +175,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="DisplayManager.cpp" />
-    <ClCompile Include="FpsModel.cpp" />
+    <ClCompile Include="StatsTracker.cpp" />
     <ClCompile Include="TextShader.cpp" />
     <ClCompile Include="FrameBufferObject.cpp" />
     <ClCompile Include="glad.c" />

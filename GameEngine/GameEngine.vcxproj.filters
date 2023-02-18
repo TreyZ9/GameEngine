@@ -126,9 +126,6 @@
     <ClInclude Include="Light.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="FpsModel.h">
-      <Filter>Header Files\Models</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
@@ -225,6 +222,9 @@
     <ClInclude Include="TextRenderer.h">
       <Filter>Header Files\Toolbox</Filter>
     </ClInclude>
+    <ClInclude Include="StatsTracker.h">
+      <Filter>Header Files\Toolbox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -241,9 +241,6 @@
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="FpsModel.cpp">
-      <Filter>Source Files\Models</Filter>
     </ClCompile>
     <ClCompile Include="ShaderProgram.cpp">
       <Filter>Source Files\Shaders\Parent</Filter>
@@ -315,6 +312,9 @@
       <Filter>Source Files\Physics\CollisionObjects</Filter>
     </ClCompile>
     <ClCompile Include="TextRenderer.cpp">
+      <Filter>Source Files\Toolbox</Filter>
+    </ClCompile>
+    <ClCompile Include="StatsTracker.cpp">
       <Filter>Source Files\Toolbox</Filter>
     </ClCompile>
   </ItemGroup>
