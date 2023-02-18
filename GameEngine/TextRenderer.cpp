@@ -195,7 +195,7 @@ std::vector<std::string> TextRenderer::splitString(const std::string& text, cons
 	return elements;
 }
 
-void TextRenderer::drawText(const std::string& text, const glm::vec2& pos, const glm::vec2& scale, const std::string& alignment, const std::string& origin)
+void TextRenderer::drawText(const std::string& text, const glm::vec2& pos, const glm::vec2& scale, const Align alignment, const Origin origin)
 {
 	// bind vao and texture atlas
 	glCall(glActiveTexture, GL_TEXTURE0);
@@ -219,11 +219,11 @@ void TextRenderer::drawText(const std::string& text, const glm::vec2& pos, const
 	// alignment
 	for (float& offset : lineOffsets)
 	{
-		if (alignment == "left")
+		if (alignment == Align::left)
 		{
 			offset = 0.0f;
 		}
-		else if (alignment == "center")
+		else if (alignment == Align::center)
 		{
 			offset = (boundingBox.x - offset) / 2.0f;
 		}
@@ -236,11 +236,11 @@ void TextRenderer::drawText(const std::string& text, const glm::vec2& pos, const
 	// origin horizontal
 	for (float& offset : lineOffsets)
 	{
-		if (origin == "top" || origin == "center" || origin == "bottom") // center column
+		if (origin == Origin::top || origin == Origin::center || origin == Origin::bottom) // center column
 		{
 			offset -= boundingBox.x / 2.0f;
 		}
-		else if (origin == "topright" || origin == "right" || origin == "bottomright") // right column
+		else if (origin == Origin::topRight || origin == Origin::right || origin == Origin::bottomRight) // right column
 		{
 			offset -= boundingBox.x;
 		}
@@ -248,11 +248,11 @@ void TextRenderer::drawText(const std::string& text, const glm::vec2& pos, const
 
 	// origin vertical
 	float yOffset = boundingBox.y - this->font.getLineHeight(scale);
-	if (origin == "left" || origin == "center" || origin == "right") // center row
+	if (origin == Origin::left || origin == Origin::center || origin == Origin::right) // center row
 	{
 		yOffset -= boundingBox.y / 2.0f;
 	}
-	else if (origin == "topleft" || origin == "top" || origin == "topright") // top row
+	else if (origin == Origin::topLeft || origin == Origin::top || origin == Origin::topRight) // top row
 	{
 		yOffset -= boundingBox.y;
 	}
@@ -281,7 +281,7 @@ void TextRenderer::drawText(const std::string& text, const glm::vec2& pos, const
 }
 
 void TextRenderer::drawText(const Display& display, TextShader shader, const std::string& text, const glm::vec3& pos, const glm::vec3& rot,
-	const glm::vec2& scale, const glm::vec3& color, const std::string& alignment, const std::string& origin)
+	const glm::vec2& scale, const glm::vec3& color, const Align alignment, const Origin origin)
 {
 	shader.start();
 
@@ -299,7 +299,7 @@ void TextRenderer::drawText(const Display& display, TextShader shader, const std
 }
 
 void TextRenderer::drawTextOnHUD(const Display& display, TextShader shader, const std::string& text, const glm::vec2& pos, const glm::vec2& scale,
-	const glm::vec3& color, const std::string& alignment, const std::string& origin)
+	const glm::vec3& color, const Align alignment, const Origin origin)
 {
 	shader.start();
 

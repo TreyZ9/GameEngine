@@ -13,6 +13,15 @@
 #include <map>
 
 
+enum class Align {
+	left, center, right
+};
+
+enum class Origin {
+	topLeft, top, topRight,
+	left, center, right,
+	bottomLeft, bottom, bottomRight
+};
 
 struct Character
 {
@@ -54,14 +63,14 @@ private:
 	Font font;
 
 	std::vector<std::string> splitString(const std::string& text, const std::string& delimiter);
-	void drawText(const std::string& text, const glm::vec2& pos, const glm::vec2& scale, const std::string& alignment, const std::string& origin);
+	void drawText(const std::string& text, const glm::vec2& pos, const glm::vec2& scale, const Align alignment, const Origin origin);
 
 public:
 	TextRenderer();
 	~TextRenderer() = default;
 
 	void drawText(const Display& display, TextShader shader, const std::string& text, const glm::vec3& pos, const glm::vec3& rot,
-		const glm::vec2& scale = glm::vec2(24.0f), const glm::vec3& color = glm::vec3(1.0f), const std::string& alignment = "center", const std::string& origin = "center");
+		const glm::vec2& scale = glm::vec2(24.0f), const glm::vec3& color = glm::vec3(1.0f), const Align = Align::center, const Origin origin = Origin::center);
 	void drawTextOnHUD(const Display& display, TextShader shader, const std::string& text, const glm::vec2& pos, const glm::vec2& scale = glm::vec2(24.0f),
-		const glm::vec3& color = glm::vec3(1.0f), const std::string& alignment = "center", const std::string& origin = "center");
+		const glm::vec3& color = glm::vec3(1.0f), const Align alignment = Align::center, const Origin origin = Origin::center);
 };

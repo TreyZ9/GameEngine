@@ -27,5 +27,5 @@ void FpsModel::update(const Display& display)
 
 void FpsModel::render(const Display& display, TextShader shader, TextRenderer textRenderer)
 {
-	textRenderer.drawTextOnHUD(display, shader, fps, display.getResolution(), glm::vec2(30.0f), glm::vec3(0.0f, 1.0f, 0.0f), "left", "topright");
+	textRenderer.drawTextOnHUD(display, shader, fps, display.getResolution(), glm::vec2(30.0f), glm::vec3(0.0f, 1.0f, 0.0f), Align::right, Origin::topLeft);
 }

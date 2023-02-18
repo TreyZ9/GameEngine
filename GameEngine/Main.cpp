@@ -200,7 +200,7 @@ int main()
 		skyboxModel.draw(skyboxShader, display.getProjectionMatrix());
 		skyboxShader.stop();
 
-		textRenderer.drawText(display, textShader, "Controls\n--------------------------------------------------------\nW - Move Forward\nS - Move Backward\nA - Move Left\nD - Move Right\nSpace - Move Up\nLShift - Move Down\nESC - Close Window", glm::vec3(-0.0f, 2.9f, -4.82f), glm::vec3(0.0f), glm::vec2(0.2f), glm::vec3(0.0f, 1.0f, 0.0f), "center", "top");
+		textRenderer.drawText(display, textShader, "Controls\n--------------------------------------------------------\nW - Move Forward\nS - Move Backward\nA - Move Left\nD - Move Right\nSpace - Move Up\nLShift - Move Down\nESC - Close Window", glm::vec3(-0.0f, 2.9f, -4.82f), glm::vec3(0.0f), glm::vec2(0.2f), glm::vec3(0.0f, 1.0f, 0.0f), Align::center, Origin::top);
 
 		// FPS Shader Cycle
 		glEnable(GL_BLEND);

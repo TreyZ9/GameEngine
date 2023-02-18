@@ -6,8 +6,9 @@
 #include "OpenGLFunctions.h"
 #include "Config.h"
 
-
-// ---------- Display ----------
+// -------------------------------------
+// -------------- Display --------------
+// -------------------------------------
 Display::Display(const unsigned int width, const unsigned int height, const std::string& title, GLFWwindow* parentWindow)
 {
 	this->setResolution(width, height);
@@ -107,8 +108,9 @@ void Display::setResolution(const unsigned int width, const unsigned int height)
 		Config::Display::FAR_PLANE);
 }
 
-
+// -------------------------------------
 // ---------- Display Manager ----------
+// -------------------------------------
 std::map<GLFWwindow*, Display*> DisplayManager::displays;
 
 void DisplayManager::addDisplay(Display& display)
